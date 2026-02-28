@@ -33,6 +33,14 @@ You can specify floating-point literals with the exponential (or scientific) not
 10.e7 # without decimal part
 ```
 
+Into the numbers, especially for long numbers, you can use the underscore (`_`) to make the code more readable:
+
+```python
+1_000
+1_500_000
+10_000.10_23_24
+```
+
 Python supports the complex number also. A complex number is a number with a real part and a imaginary part. The imaginary part always ends with `j`. A complex number cannot have any real part.
 
 ```python
