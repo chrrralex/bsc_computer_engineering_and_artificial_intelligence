@@ -83,15 +83,57 @@ print(a[-3:-1]) # ll
 ```
 
 ### 09.03. Escape Characters
-<!-- to do -->
 
-### 09.04. Unicode Characters
-<!-- to do -->
+To insert characters that are illegal in a string, use an escape character. An escape character is a backslash `\` followed by the character you want to insert. An example of an illegal character is a double quote inside a string that is surrounded by double quotes:
 
-### 09.05. Concatenation
-<!-- to do -->
+```python
+"This is an " illegal string" # ERROR!
+```
 
-### 09.06. Methods
+You must use an escape character:
+
+```python
+"This is an \" illegal string"
+```
+
+Some of the most commons escape characters are the following:
+
+- `\n`: new line.
+- `\r`: carrige return.
+- `\a`: alert, or "beep".
+- `\t`: horizontal tab.
+- `\v`: vertical tab.
+- `\\`: backslash.
+- `\"` double quote.
+- `\'`: single quote.
+- `\b`: backspace.
+
+Python allows you to specify a Unicode character with three octal digits, or two hexadecimal digits:
+
+- `\ooo`: where `ooo` are the three octal digits. This value starts from `000` to `777`.
+- `\xhh`: where `hh` are the two hexadecimal digits. This value starts from `00` to `FF` (or `ff`).
+
+### 09.04. Concatenation
+
+You can use the concatenation operator (`+`) to concatenate two, or more strings:
+
+```python
+a = "Hello"
+b = "World"
+print(a + " " + b + "!") # Hello, World!
+```
+
+In Python, in function of the context where the `+` operator is used, it operates in a different way:
+
+- If two operands are numbers (integer, or floating-point), `+` is the sum operator.
+- If two operands are strings, `+` is the concatenation operator.
+
+```python
+print(10 + 5) # 15
+print("Hello, " + "World!") # Hello, World!
+```
+
+### 09.05. Methods
 
 Disclaimer: all the following methods don't modify the original string, but they create a copy of original string and operate on it, so they return a new string (the original string is unchanged). In Python, strings are immutable.
 
@@ -221,4 +263,30 @@ str = "I love pizza"
 print(str.replace("pizza", "pasta")) # I love pasta
 ```
 
-<!-- to do -->
+`rfind()` searches the string for a specified value and returns the last position of where it was found, otherwise it returns `-1`:
+
+```python
+str = "Pizza Pizza Pizza"
+print(str.rfind("Pizza")) # 12
+```
+
+`rstrip()` returns a right trim version of the string:
+
+```python
+str = "   Hello   "
+print(str.rstrip()) # "   Hello"
+```
+
+`split()` splits the string at the specified separator, and returns a list:
+
+```python
+fruits = "apple,orange,cherry,kiwi"
+print(fruits.split(",")) # [ 'apple', 'orange', 'cherry', 'kiwi' ]
+```
+
+`zfill()` fills the string with a specified number of `0` values at the beginning:
+
+```python
+str = "50"
+print(str.zfill(10)) # 0000000050
+```
