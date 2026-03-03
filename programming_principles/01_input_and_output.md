@@ -30,3 +30,28 @@ lastName = input("Last name: ")
 ```
 
 Meanwhile the `print()` function prints to the standard output, the `input()` function accepts from the standard input. Tipically the standard input is the keyboard (but it can be a file, or a network connection). Standard output refers to console, or monitor (but it can be a file, or other).
+
+Comments can be used to explain Python code. A comment can be used to make the code more readable. Comments can be used to prevent execution when testing code. In Python, any comments is introduced by the `#` character and are completely ignored by the interpreter.
+
+You can use a single-line comment like this:
+
+```python
+# This is a comment
+print("Hello, World!")
+```
+
+or you can specify a comment immediately after a line of code:
+
+```python
+print("Hello, World!") # This is a comment
+```
+
+A comment doesn't have to be text that explains the code, it can also be used to prevent Python from executing code. Here's an example:
+
+```python
+# print("Hello, World!")
+print("Cheers, Mate!"
+```
+
+
+
