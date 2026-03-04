@@ -35,4 +35,38 @@ Example #3: an expression with comparison and arithmetic operators. Airthmetic o
 # Step 3: 48.0 >= 13.0 =
 # Step 4: True
 ```
-<!-- to do -->
+
+Example #4: an expression with comparison, arithmetic and boolean operators. Boolean operators have a lower precedence than the comparison operators and comparison operators have a lower precedence than the arithmetic operators.
+
+```python
+a = 15
+10 + 5 > 3 and 15 == a
+# Step 1: (10 + 5) > 3 and (15 == a)
+# Step 2: (15 > 3) and True
+# Step 3: True and True
+# Result: True
+```
+
+Here's the precedence table of all the operators of the Python language programming:
+
+| Precedenza | Operatori | Descrizione |
+|---|---|---|
+| 1 | `()` `[]` `{}` | Raggruppamento, accesso a indice, slicing, literal |
+| 2 | `x.attribute` | Accesso ad attributo |
+| 3 | `f(...)` | Chiamata di funzione |
+| 4 | `await x` | Await expression |
+| 5 | `**` | Potenza |
+| 6 | `+x` `-x` `~x` | Operatori unari (positivo, negativo, bitwise NOT) |
+| 7 | `*` `@` `/` `//` `%` | Moltiplicazione, matrix multiplication, divisione, floor division, modulo |
+| 8 | `+` `-` | Addizione e sottrazione |
+| 9 | `<<` `>>` | Shift bitwise |
+| 10 | `&` | AND bitwise |
+| 11 | `^` | XOR bitwise |
+| 12 | `\|` | OR bitwise |
+| 13 | `in` `not in` `is` `is not` `<` `<=` `>` `>=` `!=` `==` | Operatori di confronto |
+| 14 | `not x` | NOT logico |
+| 15 | `and` | AND logico |
+| 16 | `or` | OR logico |
+| 17 | `if ... else ...` | Espressione condizionale (ternaria) |
+| 18 | `lambda` | Espressione lambda |
+| 19 | `:=` | Walrus operator (assegnazione in espressione) |
