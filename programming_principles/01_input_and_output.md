@@ -53,5 +53,23 @@ A comment doesn't have to be text that explains the code, it can also be used to
 print("Cheers, Mate!"
 ```
 
+In Python, when you write code, you can make two types of mistakes:
 
+- Logic error: when the code syntaxt is correct, but there is something wrong about the implemented functionality. For example, if you write the code that prompts two numbers to the user to make a division, if the user insert `0` as second number, it will occur a runtime error (division by zero). Logic errors are more difficult to recognize and, sometimes, to fix. These errors may cause the end of the program (for example, a division by zero, if it isn't handled correctly).
+- Syntaxt error: when the code syntaxt is wrong and the Python interpreter returns the specific violated rule. Syntaxt errors are easy to recognize and to fix. This errors prevent the program execution.
 
+Both errors are possibile, even if you're a professional developer.
+
+An example of syntaxt error is when you forgive a round bracket at the end of the `print()` function:
+
+```python
+print("Hello, World!" # ERROR! SyntaxError: '(' was never closed
+```
+
+Here's an example of logic error:
+
+```python
+print(10 / 0) # ERROR! ZeroDivisionError: division by zero
+```
+
+The good news is that errors are fisiological to learn a programming language! Keep practicing and learning from mistakes!
