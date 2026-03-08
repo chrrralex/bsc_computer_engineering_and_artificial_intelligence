@@ -45,17 +45,26 @@
 ### 19.14. Inheritance and the `super()` Method
 <!-- to do -->
 
-### 19.15. Method Overriding with `@override`
+### 19.15. Multiple Inheritance
 <!-- to do -->
 
-### 19.16. MRO (Method Resolution Order)
+### 19.16. Method Overriding with `@override`
 <!-- to do -->
 
-### 19.17. Polymorphism
+### 19.17. MRO (Method Resolution Order)
 <!-- to do -->
 
-### 19.18. Abstract Classes and `@abstractmethod` 
+### 19.18. Polymorphism
 <!-- to do -->
 
-### 19.19. Dataclasses with `@dataclass`
+### 19.19. Abstract Classes and `@abstractmethod` 
+<!-- to do -->
+
+### 19.20. Dataclasses with `@dataclass`
+<!-- to do -->
+
+### 19.21. Aggregation Relationship
+<!-- to do -->
+
+### 19.22. Composition Relationship
 <!-- to do -->
