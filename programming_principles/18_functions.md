@@ -273,43 +273,107 @@ The first argument we've passed, the string literal `"Atzeni"`, is binded to the
 Python docs refers to the named parameters with the term kwargs (contraction of  keyword arguments).
 
 ### 17.08. Default Parameters
-<!-- to do -->
+
+You can set a default value for one, or more parameters. Dwefault parameters are also called optional parameters, cause when you try to call the function you can pass, or not these parameters. For example, this is the `sum()` function we've already shown previous, but with default parameters:
+
+```python
+def sum(a = 0, b = 0):
+    return a + b
+```
+
+You can call `sum()` in one of the following ways:
+
+```python
+sum() # a = 0, b = 0
+sum(10) # a = 10, b = 0
+sum(10, 20) # a = 10, b = 20
+sum(a = 10, b = 20) # a = 10, b = 20
+sum(b = 20) # a = 0, b = 20
+```
+
+If you don't pass any value, the default parameter assumes the default value automatically.
 
 ### 17.09. Mixing Keyword and Positional Parameters
+
+You can use both positional and named parameters. You can use their with default parameters also. Here's an example:
+
+```python
+def sum(a = 0, b = 0):
+    return a + b
+
+sum() # using default parameters for both a and b
+sum(10) # using positional parameter for a, default parameter for b
+sum(10, 20) # using positional parameters for both a and b
+sum(a = 10, b = 20) # using named parameters for both a and b
+sum(b = 20) # using named parameter for b and default parameter for a
+sum(b = 20, a = 10) # using named parameter for both a and b, but in different order
+```
+
+If your intention is to allow positional-only parameters, you can use the slash operator (`/`). This operator must be used at the end of the parameters list. Positional-only parameters must be passed by position, not by keyword. Here's an example:
+
+```python
+def func(a, b, c, /):
+    print(a, b, c)
+
+func(10, 20, 30) # correct
+func(a = 10, 20, 30) # incorrect: you cannot use named parameters in a positional-only parameters function
+```
+
+If your intention is to allow keyword-only parameters, you can use the star operator (`*`). This operator must be used at the start of the parameters list. Keyword-only parameters must be passed by name, not by position. Here's an example:
+
+```python
+def func(*, a, b, c):
+    print(a, b, c)
+
+func(10, c = 20, b = 30) # incorrect: you cannot use positional parameters in a keyword-only parameters function
+func(a = 10, b = 20, c = 30) # correct
+```
+
+Finally, you can mix positional-only and named-only parameters. The rules are two:
+
+- Immediately after the positional-only parameters must be present the slash operator (`/`).
+- Immediately before the keyword-only parameters must be present the star operator (`*`).
+
+The following version of the `sum()` function has six parameters:
+
+```python
+def sum(a, b, c, /, *, d, e, f):
+    return a + b + c + d + e + f
+```
+
+The first three parameters are positional-only parameters, meanwhile the last three parameters are keyword-only parameters. It means when you invoke `sum()`:
+
+- `a`, `b` and `c` must be used as positional-only parameters;
+- `d`, `e` and `f` must be used as keyword-only parameters.
+
+You can invoke the `sum()` function in this way:
+
+```python
+sum(10, 20, 30, f = 60, d = 40, e = 50)
+```
+
+If you try to use keyword-only parameters for the first three parameters, Python will throw an error similar to `SyntaxError: positional argument follows keyword argument`. If you try to use positional-only parameters for the last three parameters, Python will throw an error similar to `TypeError: sum() takes 3 positional arguments but 6 were given`.
+
+### 17.10. Arbitrary Positional and Keyword Arguments with `*args` and `**kwargs`
 <!-- to do -->
 
-### 17.10. Positional-Only and Keyword-Only Arguments
+### 17.11. Function Metadata
 <!-- to do -->
 
-### 17.11. Mixing Positional-Only and Keyword-Only Arguments
+### 17.12. Decorators
 <!-- to do -->
 
-### 17.12. Arbitrary Positional Arguments with `*args`
+### 17.13. Lambda Functions
 <!-- to do -->
 
-### 17.13. Arbitrary Keyword Arguments with `**kwargs`
+### 17.14. Recursive Functions
 <!-- to do -->
 
-### 17.14. Using both `*args` and `**kwargs`
+### 17.15. Generator Functions and the `yeld` Keyword
 <!-- to do -->
 
-### 17.15. Function Metadata
+### 17.16. Global and Local Variables
 <!-- to do -->
 
-### 17.16. Decorators
-<!-- to do -->
-
-### 17.17. Lambda Functions
-<!-- to do -->
-
-### 17.18. Recursive Functions
-<!-- to do -->
-
-### 17.19. Generator Functions and the `yeld` Keyword
-<!-- to do -->
-
-### 17.20. Global and Local Variables
-<!-- to do -->
-
-### 17.21. Variable Shadowing and the `global` Keyword
+### 17.17. Variable Shadowing and the `global` Keyword
 <!-- to do -->
