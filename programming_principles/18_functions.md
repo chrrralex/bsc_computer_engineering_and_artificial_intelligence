@@ -196,10 +196,81 @@ sum(10, "15") # logical error: + cannot handle different types (like an integer 
 Remember: you should pay attention to how a function should be called in terms of parameters, their order, their types, their default values and their names. In the following paragraph we'll see many other properties of the functions in Python.
 
 ### 17.06. Positional Parameters
-<!-- to do -->
+
+Normally, when you define a function and declare the parameters list, Python uses the positional parameters. Positional parameters means that the parameters list has an order and each parameter in that list defines how the function can be called. For example, if you have a function called `max()` defined in the following code:
+
+```python
+def max(a, b, c):
+    m = a
+    if b > m:
+        m = b
+    if c > m:
+        m = c
+    return m
+```
+
+you can invoke the function in this way:
+
+```python
+print(max(10, 20, 30)) # 30
+```
+
+The binding of the positional parameters exploits the order of the parameters. In our case:
+
+- the integer literal `10` is binded to the formal parameter `a`;
+- the integer literal `20` is binded to the formal parameter `b`;
+- and the integer literal `30` is binded to the formal parameter `c`.
+
+`m`, in the previous function, is a local variable, only visible ed usable into the `max()` function.
+
+The positional parameters has a greather impact when the parameters have different types, like in this case:
+
+```python
+def func(a, b):
+    print("Str is: " + b, a)
+
+func(10, "Hello!") # Str is: Hello! 10
+```
+
+In the previous function, the integer literal `10` is binded with the `a` formal parameter, meanwhile the string literal `"Hello!"` is binded with the `b` formal parameter. What happens if we exchange the two literals?
+
+```python
+func("Hello!", 10) # ERROR! TypeError: can only concatenate str (not "int") to str
+```
+
+Python, during execution, will throw a `TypeError`, cause the Python interpreter cannot convert automatically an integer literal (in our case, `10`) in a string. For this reason it's very important to respect the order and type expected for each parameter specified in the function parameter list.
 
 ### 17.07. Keyword Parameters
-<!-- to do -->
+
+A convenient alternative to the positional parameters are the named parameters (also called keyword parameter). Positional and named parameters are very similar when you define a function: both are a list of identifiers, separated by the comma (`,`). But the difference is in how the function is called:
+
+```python
+def greet(firstName, lastName):
+    print("Hello, " + firstName + " " + lastName + "!")
+
+# calling greet() by using positional parameters
+greet("Christian", "Atzeni") # "Hello, Christian Atzeni!"
+
+# calling greet() by using named parameters
+greet(firstName = "Christian", lastName = "Atzeni") # "Hello, Christian Atzeni!"
+```
+
+The syntaxt to follow when you call a function by using the named parameters is `key = value`, where `key` is the identifier specified in the parameters list (in the function declaration), meanwhile the `value` is a literal, or a variable. When you use the named parameter, all expected parameter are required. But you can call a function specifying a different order. For example, both the following calls are valid:
+
+```python
+greet(firstName = "Christian", lastName = "Atzeni")
+greet(lastName = "Atzeni", firstName = "Christian")
+```
+
+But you pay attention to how you pass value for a specific parameter. A simple example, the following code produces a `TypeError`:
+
+```python
+greet("Atzeni", firstName = "Christian") # ERROR! TypeError: greet() got multiple values for argument 'firstName'
+```
+
+The first argument we've passed, the string literal `"Atzeni"`, is binded to the first formal parameters `firstName`. But immediately after we use the named parameter for `firstName`: this cause a multiple-value assignment to the `firstName` parameter, among other things, leaving the lastName parameter empty.
+
+Python docs refers to the named parameters with the term kwargs (contraction of  keyword arguments).
 
 ### 17.08. Default Parameters
 <!-- to do -->
