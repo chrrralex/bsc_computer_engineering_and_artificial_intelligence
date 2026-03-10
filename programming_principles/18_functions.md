@@ -476,21 +476,123 @@ func(**d)
 ```
 
 ### 17.11. Function Metadata
+
+Function metadata is information about a function, not the function’s execution itself. Python automatically stores several attributes about every function. Remember that every things, in Python, is an object; Python is an OOP (Object-Oriented Programming) programming language, as we'll see in the next chapter. Most important attributes about a function are:
+
+- `__name__`: function name;
+- `__doc__`: documentation (docstring);
+- `__module__`: module where it was defined;
+- `__defaults__`: default arguments;
+- `__annotations__`: annotations (type hints).
+
+For example, if we have the following function:
+
+```python
+def greet(name: str = "Guest") -> str:
+    """Return a greeting message."""
+    return f"Hello, {name}!"
+```
+
+we can access its function metadata with these lines of code:
+
+```python
+print(greet.__name__) # greet
+print(greet.__doc__) # Return a greeting message.
+print(greet.__module__) # __main__
+print(greet.__defaults__) # ( 'Guest', )
+print(greet.__annotations__) # { 'name': <class 'str'>, 'return': <class 'str'> }
+```
+
+Note that `greet.__defaults__` is a tuple and `greet.__annotations__` is a dict.
+
+### 17.12. Lambda Functions
+
+A lambda function in Python is a small anonymous function. An anonymous function is a function without a name, specified inline of the code. It is usually used for short, simple operations that you don't want to define with a full def function.
+
+To create a simple lamba function you must follow this syntaxt:
+
+```python
+lambda arguments: expression
+```
+
+where:
+
+- `lambda` is the Python keyword for the lambda function;
+- `arguments` is the parameters list (identifiers separated by the comma `,`, without any round brackets);
+- `expression` is a valid Python expression, or statement that returns a value from the lambda function.
+
+To understend in a better way the lambda function, cosider the following `add()` function defined normally:
+
+```python
+def add(a, b):
+    return a + b
+```
+
+We can easily convert the previous function in a lambda function in this way:
+
+```python
+add = lambda a, b: a + b
+```
+
+A lambda function can be assigned to a variable, in our case the variable called `add`. You can invoke the lambda function like a normal function:
+
+```python
+print(add(10, 20)) # 30
+```
+
+A lambda function with one parameter is more shorter:
+
+```python
+square = lambda x: x**2
+print(square(3)) # 9
+print(square(10)) # 100
+```
+
+If you surround the lambda function with the round brackets, you can invoke it directly inline, by passing all the expected arguments inside the round brackets. Something like this:
+
+```python
+print((lambda a, b: a + b)(10, 20))
+```
+
+A lambda function used in this way can also used in any other expression where the return value of the lambda function is the expected in the expression.
+
+Lambda functions have some limitations:
+
+- a lambda function cannot have more than one statement;
+- a lambda function cannot include loops (like `while`, or `for`), or assignments;
+- a lambda function is designed to be ready-to-read: if it's too long, the code may results difficult to read.
+
+### 17.13. Recursive Functions
 <!-- to do -->
 
-### 17.12. Decorators
-<!-- to do -->
+### 17.14. Generator Functions and the `yeld` Keyword: a short introduction
 
-### 17.13. Lambda Functions
-<!-- to do -->
+Generators are functions that can pause and resume their execution. When a generator function is called, it returns a generator object, which is an iterator. The code inside the function is not executed yet, it is only compiled. The function only executes when you iterate over the generator. Generators use the `yeld` keyword to return a value at a specific execution, not the `return` keyword.
 
-### 17.14. Recursive Functions
-<!-- to do -->
+Here's an example:
 
-### 17.15. Generator Functions and the `yeld` Keyword
-<!-- to do -->
+```python
+def generator():
+  yield 1
+  yield 2
+  yield 3
 
-### 17.16. Global and Local Variables
+for value in generator():
+  print(value) # 1, 2, 3
+```
+
+Let's analyze what happens with the previous code:
+
+1. The first time the `generator()` function is called, it returns `1` (`yeld 1`).
+2. The second time the `generator()` function is called, it returns `2` (`yeld 2`).
+3. The second time the `generator()` function is called, it returns `3` (`yeld 3`).
+4. At this point, `generetor()` function finished their values, so the `for` loop ends.
+
+The `yield` keyword is what makes a function a generator in Python. When yield is encountered, the function's state is saved, and the value is returned. The next time the generator is called, it continues from where it left off.
+
+This was just a simple introduction to generators. For more information, consult the official Python documentation directly, which is certainly much more exhaustive.
+
+### 17.15. Global and Local Variables
 
 A global variable is a variable defined outside any function, tipically at the start of the file. A global variable has a scope extended to the entire program, from the line where it's defined to the end. For example, the variable `x` defined in the following snippet is a global variable, cause it's visible and usable by all defined functions:
 
