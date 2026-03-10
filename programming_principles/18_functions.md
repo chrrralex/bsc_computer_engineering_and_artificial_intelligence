@@ -355,7 +355,125 @@ sum(10, 20, 30, f = 60, d = 40, e = 50)
 If you try to use keyword-only parameters for the first three parameters, Python will throw an error similar to `SyntaxError: positional argument follows keyword argument`. If you try to use positional-only parameters for the last three parameters, Python will throw an error similar to `TypeError: sum() takes 3 positional arguments but 6 were given`.
 
 ### 17.10. Arbitrary Positional and Keyword Arguments with `*args` and `**kwargs`
-<!-- to do -->
+
+In most common programming language there isn't any functionality about var args (contraction of variable arguments). Variable arguments means you can pass zero, one, or more arguments to the function and it can handle it without any problem. This functionality is also called arbitrary positional arguments. In Python, to create a function with arbitrary positional arguments you can use `*args` in this way:
+
+```python
+def printNumbers(*args):
+    for n in args:
+        print(n)
+
+printNumbers()
+printNumbers(10) # 10
+printNumbers(10, 20) # 10, 20
+printNumbers(10, 20, 30) # 10, 20, 30
+printNumbers(10, 20, 30, 40, 50, 60, 70) # 10, 20, 30, 40, 50, 60, 70
+```
+
+To create a function that accepts an arbitrary positional arguments, you must use the star operator as prefix with the identifier you can use inside the function to refer the arguments list. In the previous snippet, we've used `args` as identifier, but it can be different. For example, the previous function can be modified in this way:
+
+```python
+def printNumbers(*numbers):
+    for n in numbers:
+        print(n)
+```
+
+You can invoke the function with zero, one, or more parameters:
+
+```python
+printNumbers()
+printNumbers(10) # 10
+printNumbers(10, 20) # 10, 20
+printNumbers(10, 20, 30) # 10, 20, 30
+printNumbers(10, 20, 30, 40, 50, 60, 70) # 10, 20, 30, 40, 50, 60, 70
+```
+
+`*numbers` is a tuple containing all actual parameters passed to the function at the invocation.
+
+If you want to exploit the arbitrary keyword arguments (also called arbitrary named parameters), the prefix for the identifier specified into the round brackets is a double-star operator (`**`). For example, you can define a function with `**kwargs` parameter in this way:
+
+```python
+def printNumbers(**kwargs):
+    for k, n in kwargs.items():
+        print(k + ": " + str(n))
+```
+
+Now, `printNumbers()` accepts arbitrary keyword arguments, it means you can pass zero, one, or more named parameters by exploiting the syntaxt `key = value`. Each pair is separated from the next with the comma (`,`). You can call the `printNumbers()` function in one of the following way:
+
+```python
+printNumbers()
+printNumbers(a = 10) # a: 10
+printNumbers(a = 10, b = 20) # a: 10, b: 20
+printNumbers(a = 10, b = 20, c = 30) # a: 10, b: 20, c: 30
+```
+
+`**kewargs` is a dict where the keys are the identifiers of the named parameters, meanwhile the values are the value of the named parameters.
+
+Can you mix `*args` with `**kwargs`? Absolutely yes! You can use both `*args` and `**kwargs` in the same parameters list, but there are some rules you need to follow:
+
+- First, you must specify the regular parameters (positional, or named).
+- Second, you can specify the `*args` identifier for arbitrary positional parameters.
+- Third, you can specify the `**kwargs` identifier for arbitrary keyword parameters.
+
+Here's an example:
+
+```python
+def func(p1, p2, p3, *args, **kwargs):
+    pass
+```
+
+You can invoke `func()` in so many ways:
+
+```python
+func(10, 20, 30) # only expected positional arguments
+func(10, 20, 30, "a", "b", "c") # expected positional arguments with *args: "a", "b" and "c" are part of the *args parameter
+func(10, 20, 30, "a", "b", "c", a = 10.5, b = 20.5) # expected positional arguments with *args and **kwargs: "a", "b" and "c" are part of the *args parameter, meanwhile a = 10.5 and b = 20.5 are part of the **kwargs parameter
+```
+
+There is another syntaxt called arguments unpacking you can use in Python. If you have a list like this:
+
+```python
+l = [ 1, 2, 3 ]
+```
+
+and a function defined like this:
+
+```python
+def func(a, b, c):
+    pass
+```
+
+You can use the star operator before the `l` identifier of the list to unpack all elements of the list (`1`, `2` and `3`) to bind automatically `a` parameter with the first element of `l` (`1`), `b` parameter with second element of `l` (`2`) and `c` parameter with third element of `l` (`3`).
+
+```python
+func(*l)
+```
+
+The length of the list must be the same of the length of the parameters list (in our case, the length must be `3`). If you try to use a list with more elements, Python will throw an error:
+
+```python
+l = [ 1, 2, 3, 4 ] # l has 4 elements
+func(*l) # ERROR! TypeError: func() takes 3 positional arguments but 4 were given
+```
+
+The same principle you can use with named parameters by using the double-star operator (`**`). If you have a function defined like this:
+
+```python
+def func(a, b, c):
+    pass
+```
+
+and a dict defined like this:
+
+```python
+d = { "a": 1, "b": 2, "c": 3 }
+```
+
+you can use `**` before the identifier of the dict, `d`, to unpack the key-value pairs: each key of the dict must be equal to the identifier of the paramter and each value of the dict is the value of each parameter.
+
+```python
+func(**d)
+```
 
 ### 17.11. Function Metadata
 <!-- to do -->
@@ -373,7 +491,79 @@ If you try to use keyword-only parameters for the first three parameters, Python
 <!-- to do -->
 
 ### 17.16. Global and Local Variables
-<!-- to do -->
 
-### 17.17. Variable Shadowing and the `global` Keyword
-<!-- to do -->
+A global variable is a variable defined outside any function, tipically at the start of the file. A global variable has a scope extended to the entire program, from the line where it's defined to the end. For example, the variable `x` defined in the following snippet is a global variable, cause it's visible and usable by all defined functions:
+
+```python
+x = 10
+
+def f1():
+    print(x)
+
+f1() # 10 - global x is visible into f1()
+
+def f2():
+    print(x)
+
+x = 5
+
+f2() # 5 - global x, after it is changed, is visible into f2()
+```
+
+You can define a variable with the same identifier in a function: in this case, the global variable is shadowed by the local variable. A local variable (defined into a function) has a scope extended only to the function where it's defined, from the line of its delcaration to the end of the function. Here's another example:
+
+```python
+x = 10
+
+def f1():
+    x = 50
+    print(x)
+
+f1() # 50 - local x of f1() shadows global x, so 50 is printed to the standard output
+
+print(x) # 10
+
+def f2():
+    x = 100
+    print(x) # 100
+
+f2() # 100 - local x of f2() shadows global x, so 100 is printed to the standard output
+
+x = 20
+
+print(x) # 20
+```
+
+In the first line we define a variable called `x`, a global variable. Into the `f1()` function another variable called `x` is defined: this is a local variable and it hasn't nothing to do with the global `x` variable. So, when we call `f1()`, the `50` value is printed to the standard output. Same topic about the `f2()` function: a local `x` variable is defined and its value is `100`, so when we call `f2()`, `100` is printed to the standard output. The last line overwrite the global `x` variable value with `20`, and the last `print()` prints to the standard output the `20` value.
+
+To summarize:
+
+- A global variable is a variable visible from the line it's defined to the end of the file. It has a global scope.
+- A local variable is a variable visible from the line it's defined to the end of the function, or the block. It has a local scope.
+
+Another examples of local variable are the variables defined in the header of a `for` loop:
+
+```python
+for i in range(5):
+    print(i)
+```
+
+The `i` variable is visible only into the `for` block.
+
+Python has a keyword to allow the developer to refer to a global variable instead of a local variable. The keyword is `global` and you can use it before the identifier of the global variable. This is an example:
+
+```python
+x = 100
+
+print(x) # 100
+
+def f1():
+    global x
+    x = 200
+
+f1()
+
+print(x) # 200
+```
+
+We've defined the `x` global variable with the value `100` at the first line. Into the `f1()` function, we have used `global` keyword, so into the `f1()` function any ref with the `x` identifier is, really, the global variable `x`, defined at the first line. In the next line of code, we changed the variable of the `x` variable with the value `200`, and after we call `f1()`. The last line of code prints `200` (the new value of the global `x` variable, modified by the `f1()` function).
