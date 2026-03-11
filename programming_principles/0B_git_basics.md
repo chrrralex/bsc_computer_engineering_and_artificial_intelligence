@@ -1,4 +1,4 @@
-# 0B. Git --- Basic Concepts and Commands
+# 0B. Git Basics
 
 ## 0B.01. What is a version control system?
 
