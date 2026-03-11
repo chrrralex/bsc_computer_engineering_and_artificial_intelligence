@@ -68,3 +68,12 @@
 
 ### 19.22. Composition Relationship
 <!-- to do -->
+
+### 19.23. Reflection
+<!-- to do -->
+
+### 19.24. Introspection
+<!-- to do -->
+
+### 19.25. Singleton
+<!-- to do -->
