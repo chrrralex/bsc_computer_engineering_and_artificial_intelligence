@@ -563,7 +563,72 @@ Lambda functions have some limitations:
 - a lambda function is designed to be ready-to-read: if it's too long, the code may results difficult to read.
 
 ### 17.13. Recursive Functions
-<!-- to do -->
+
+A recursive function is a function calling itself. This is perfectly handled by the Python interpreter through the stack. Recursion is useful when a problem can be broken into smaller versions of the same problem. Every recursive function needs two key parts:
+
+- The base case: a condition where the recursion stops (the function stops calling itself).
+- The recursive case: the part where the function calls itself with a smaller or simpler input.
+
+In general, a recursive function assumes the following form:
+
+```
+def identifier(parameters):
+    if base_case_condition:
+        return result
+    else:
+        return identifier(smaller_problem)
+```
+
+The most common example of a recursive function is the factorial. The factorial of a specific number `n` is indicated with `n!` and it's the product between the `n` self and the `n - 1`. We can indicate the factorial in this way: `n! = n * (n - 1)!`, this is a recursive formula. The extended formula is: `n! = n * (n - 1) * (n - 2) * ... * 2 * 1`. For convention, `1! = 0! = 1`. In Python, we can write the `factorial()` function in both recursive and iterative ways:
+
+```python
+def factorial_recursive(n):
+    if n <= 1:
+        return 1
+    else:
+        return n * factorial_recursive(n - 1)
+```
+
+The corrisponding iterative version is:
+
+```python
+def factorial_iterative(n):
+    f = 1
+    while n >= 1:
+        f *= n
+        n -= 1
+    return f
+```
+
+But let's analyze the recursive version of the factorial. The `factorial_recursive()` function accepts one argument called `n`, a number. Inside this function we have a selection statement, an `if...else` statement:
+
+- the condition of the `if` clause is the base case condition, where we check if the value of `n` has reached `1`, or is lower;
+- the `else` clause contains the recursive case, a recursive call (function calling itself), but passing a smaller problem, that for the factorial is `n - 1`.
+
+Effectively, `n - 1` is a smaller problem than `n`, cause `n - 1` is lower than `n`. But how Python handles the recursive function? Really, there are nothing speacil for Python to use the recursive functions: it handles recursive functions always using the same stack that it uses for the normal functions. It changes the way the stack behaves with the recursion. For example, if you pass the value `3` to `factorial_recursive()`, this is the flow of the stack:
+
+1. `factorial_recursive(3)` is called.
+    - the base case isn't executed (`3 <= 1` is `False`, so the `if` clause is ignored);
+    - the recursive case is executed by passing `3 - 1 = 2` to the second call of `factorial_recursive()`.
+    - meanwhile, the value `3` at the left of the `*` operator is saved.
+2. `factorial_recursive(2)` is called.
+    - the base case isn't executed (`2 <= 1` is `False`, so the `if` clause is ignored);
+    - the recursive case is executed by passing `2 - 1 =12` to the third call of `factorial_recursive()`.
+    - meanwhile, the value `2` at the left of the `*` operator is saved.
+3. `factorial_recursive(1)` is called.
+    - the base case is executed (`1 <= 1` is `True`, so the `if` clause is ignored);
+    - no other calls to `factorial_recursive()`.
+
+Ok, we've finished the calls to `factorial_recursive()`. But how does Python calculate the correct result? Well, through an operation called "unrolling" the stack:
+
+1. First, we consider the value returned from the third call of `factorial_recursive()`, that is `1`.
+2. Second, we consider the value returned from the second call of `factorial_recursive()`. The expression `n * factorial_recursive(n - 1)` in the second call is `2 * factorial_recursive(2 - 1)`, but the third call returns `1`, so the real expression is `2 * 1`. The second call returns `2`.
+3. Third, we consider the value returned from the third call of `factorial_recursive()`. The expression `n * factorial_recursive(n - 1)` in the third call is `3 * factorial_recursive(3 - 1)`, but the second call returns `2`, so the real expression is `3 * 2`. The third call returns `6`.
+4. Finally, the control pass to the function that invoked the `factorial_recursive()` function and the final result is returned.
+
+At each function call, an AR (or SF) is added to the stack. But as the recursive calls are resolved, the corresponding ARs are removed from the stack. At the third call of `factorial_recursive()` there are three AR for `factorial_recursive()`; when the third call returns a value, there are only two ARs; when second call returns a value, there is only one AR in the stack; finally, when the first call returns a value, there isn't any AR for `factorial_recusrive()` in the stack.
+
+The stack is a part of memory that expands and contracts depending on the number of function calls made by the program.
 
 ### 17.14. Generator Functions and the `yeld` Keyword: a short introduction
 
