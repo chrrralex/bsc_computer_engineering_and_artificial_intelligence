@@ -290,3 +290,12 @@ print(fruits.split(",")) # [ 'apple', 'orange', 'cherry', 'kiwi' ]
 str = "50"
 print(str.zfill(10)) # 0000000050
 ```
+
+### 09.06. Formatting with `%` operator
+<!-- to do -->
+
+### 09.07. Formatting with `.format()` method
+<!-- to do -->
+
+### 09.08. Formatting with `f""` (f-strings)
+<!-- to do -->
