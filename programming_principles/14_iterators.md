@@ -76,3 +76,5 @@ it = iter(myNumbers)
 for x in it:
   print(x) # 1, 2, 3, 4, 5
 ```
+
+<!-- to do - generative comprehension expressions -->

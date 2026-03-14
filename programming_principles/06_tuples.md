@@ -1,6 +1,6 @@
 # 06. Tuples
 
-# 06.01. Overview
+### 06.01. Overview
 
 A tuple is a collection type used to store multiple values. A tuple is an unchangeable data structure, it means the elements cannot be modified. A tuple is an ordered data structure, like lists in Python. A tuple is defined by the round brackets `()`.
 
@@ -46,7 +46,7 @@ type(t) # <class 'tuple'>
 
 Python provides the `tuple()` built-in function, also called tuple constructor. It accepts any iterable (like the `list()` function) and returns a tuple with the same elements of the passed iterable.
 
-# 06.02. Item Access
+### 06.02. Item Access
 
 Like a list, you can access to a specific item of a tuple by using an index. The index is an integer value between `0` and `len(t) - 1`, where `t` is the considered tuple:
 
@@ -87,7 +87,7 @@ t = ( 1, 2, 3 )
 
 Note that the `in` operator always returns a boolean value: `True` if the element is present, `False` otherwise.
 
-# 06.03. Item Update
+### 06.03. Item Update
 
 Once a tuple is created, you cannot change any values. Tuples are uncheangable (or immutable): it means no update operation are allowed. One of the "garbage" ways to change an item of a tuple is:
 
@@ -105,7 +105,7 @@ t = tuple(lt)
 print(t) # ( 1, 2, 30, 4, 5 )
 ```
 
-# 06.04. Unpacking
+### 06.04. Unpacking
 
 The unpack operation means that each value of the tuple can be decomposed from the tuple-self. The syntaxt is very similar to multiple assignment in the case of variables, or constants:
 
@@ -141,7 +141,7 @@ print(others) # [ 'banana', 'cherry', 'orange' ]
 print(kiwi) # "kiwi"
 ```
 
-# 06.05 Joining
+### 06.05. Joining
 
 You can use the plus operator (`+`) to join two, or more tuples:
 
@@ -159,3 +159,6 @@ You can also multiply a tuple with the asterisk operator (`*`). In this case, th
 t = ( 1, 2 )
 print(t * 3) # ( 1, 2, 1, 2, 1, 2 )
 ```
+
+### 06.06. The `zip()` function
+<!-- to do -->
