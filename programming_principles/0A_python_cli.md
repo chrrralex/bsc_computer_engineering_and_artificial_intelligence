@@ -70,6 +70,30 @@ For example:
 pip install --upgrade cowsay
 ```
 
+If you want a list of the installed Python packages, you can use:
+
+```bash
+pip list
+```
+
+If you want details informations about a specific Python package, you can use the `pip show` command, that has the following syntaxt:
+
+```bash
+pip show <packageName>
+```
+
+An example:
+
+```bash
+pip show cowsay
+```
+
+But how pip works? A Python package is an external Python library from your Python installation that you can add to you current installation with pip. pip is the official and the most common package manager for Python. It's based on the PyPI, the official repository of the Python packages: it's a very extended repository and in it you can find so many packages. Which are the main factors you should consider to install a packages?
+
+- Community support and popularity.
+- Frequency of updates.
+- Documentation and ease of use.
+
 ### 0A.04 Use a package with the `import` keyword
 
 In a Python program, you can import and use a package by the `import` statement:
