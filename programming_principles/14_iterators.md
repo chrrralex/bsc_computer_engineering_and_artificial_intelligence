@@ -77,4 +77,25 @@ for x in it:
   print(x) # 1, 2, 3, 4, 5
 ```
 
-<!-- to do - generative comprehension expressions -->
+Generator comprehension expressions (often called generator expressions) in Python are a compact way to create generators. Remember that a generator produces values one at a time (lazily) instead of creating the whole list in memory. This makes them memory-efficient. The basic syntaxt is:
+
+```python
+(expression for item in iterable)
+```
+
+A simple example is the generation of squared numbers between `1` and `5`:
+
+```python
+squared_generator = ( x**2 for x in range(1, 6))
+print(squared_generator) # <generator object <genexpr> at 0x7c041c50dd80>
+```
+
+To print each number, we must use the `for` loop:
+
+```python
+squared_generator = ( x**2 for x in range(1, 6))
+for x in squared_generator:
+  print(x) # 1, 4, 9, 16, 25
+```
+
+Each value is produced only when it is needed: the first iteration of the `for` loop gets the value `1` from the `squared_generator`; the second iteration of the `for` loop gets the value `2`; and so on.

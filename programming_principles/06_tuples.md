@@ -161,4 +161,36 @@ print(t * 3) # ( 1, 2, 1, 2, 1, 2 )
 ```
 
 ### 06.06. The `zip()` function
-<!-- to do -->
+
+The `zip()` function has the main purpose to create a list of tuples bu coupling, element by element, two iterables (like two lists, or two tuples). For example, if you have two lists like the following:
+
+```python
+l1 = [ 1, 2, 3 ]
+l2 = [ "a", "b", "c" ]
+```
+
+You can use the `zip()` function with `l1` and `l2` as positional arguments, in this way:
+
+```python
+results = zip(l1, l2)
+print(results) # [ (1, 'a'), (2, 'b'), (3, 'c') ]
+```
+
+As you can see, each element of the list returned by `zip()` is a tuple. The first tuple has two elements: the first element is the first element of `l1` and the second element is the first element of `l2`. Similarly, the second tuple has two elements also: the first element is the second element of `l1` and the second element is the second element of `l2`. And so on.
+
+You can use the `zip()` function by passing more than two lists:
+
+```python
+l1 = [ 1, 2, 3 ]
+l2 = [ "a", "b", "c" ]
+l3 = [ 0.5, 1.5, 2.5 ]
+
+result = zip(l1, l2, l3)
+print(list(result)) # [ (1, 'a', 0.5), (2, 'b', 1.5), (3, 'c', 2.5) ]
+```
+
+Each tuple has a number of elements equal to the number of arguments you passed to the `zip()` function.
+
+We have tried the `zip()` function with arguments with the same length. What happens if the third (or second, or first) list has more elements? The `zip()` function always takes the min length between the iterables received in input as arguments, so the exceeded elements are ignored by the function. 
+
+For more info about the `zip()` function, please read the official documentation of the Python programming language.
