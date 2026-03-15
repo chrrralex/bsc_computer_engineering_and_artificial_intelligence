@@ -83,3 +83,11 @@ from math import sqrt as s, pow as p
 print(s(4))
 print(p(4, 2))
 ```
+
+<!-- to do -  where module are located (sys.path) and changing sys.path -->
+<!-- to do - PYTHONPATH system variable -->
+<!-- to do - .pth files and sys.prefix -->
+<!-- to do - private variables and private functions of a module -->
+<!-- to do - global, local and built-in namespaces -->
+<!-- to do - binding and local() and globals() functions -->
+<!-- to do - name conflicts -->
