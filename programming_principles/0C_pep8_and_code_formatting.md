@@ -159,4 +159,81 @@ Some guidelines to write efficient comments:
 - Use markers like TODO or FIXME to indicate pending improvements or known issues.
 
 ### 0C.06. Docstrings
-<!-- to do -->
+
+Docstrings are the Python way to document Python modules, classes, functions and methods of classes. Docstrings are string literal starting with the `#` character: they're a semantic comment that the Python interpreter can read when you try to access to the `__doc__` property. The `__doc__` property is automatically accessible when you have a class, a function, a methods of a class, or a module.
+
+For example, if you have the following function declaration:
+
+```python
+def f():
+    pass
+```
+
+You can add a docstring immediately after the function header, in this way:
+
+```python
+def f():
+    """ This is a docstring """
+    pass
+```
+
+And if you try to access to the `__doc__` property, then you will see this output in your console:
+
+```python
+print(f.__doc__) # This is a docstring
+```
+
+By default, the `__doc__` attribute takes the string located in the line of code immediately after the function header, class header, method header, or in the first line of code of a module. For example, if you have a module called `mymodule.py` with this code:
+
+```python
+""" This is a module docstring """
+
+def f():
+    """ This is a function docstring """
+
+class MyClass:
+    """ This is a class docstring """
+
+    def my_method():
+        """ This is a method docstring """
+```
+
+You can access to the documentation of this module by using the `__doc__` attribute of each member of the module:
+
+```python
+import mymodule
+
+print(mymodule.__doc__) # This is a module docstring
+print(mymodule.f.__doc__) # This is a function docstring
+print(mymodule.MyClass.__doc__) # This is a class docstring
+print(mymodule.MyClass.my_method.__doc__) # This is a method docstring
+```
+
+The `help()` built-in function is the same as `__doc__`: it returns the documentation of the object passed as an argument. For example:
+
+```python
+help(mymodule)
+help(mymodule.f)
+help(mymodule.MyClass)
+help(mymodule.MyClass.my_method)
+```
+
+To summarize, Docstrings are string literals used to document Python modules, classes, functions, and methods and they've the following properties:
+
+- They appear as the first statement inside the object.
+- They are written with triple quotes `"""`.
+- They describe what the code does and how to use it.
+- They are accessible through `help()` and the `__doc__` attribute.
+
+Writing docstrings in your code is the most important best practice when you creating a module, or a library. The following are the most important best practice to follow when you write a docstring (based on the PEP 257):
+
+- Write docstrings for public modules, classes, and functions.
+- Place the docstring immediately after the definition.
+- Use triple double quotes `"""`.
+- Start with a short one-line summary.
+- Use the imperative mood (e.g., `"Return the sum"`, not `"Returns the sum"`).
+- End the summary with a period.
+- Keep the summary short (one line).
+- Add more details in the following lines if needed.
+- Explain parameters and return values when necessary.
+- Focus on what the function does, not how it works internally.

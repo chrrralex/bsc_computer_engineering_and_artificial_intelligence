@@ -260,4 +260,104 @@ from cmath import sqrt # this module uses sqrt() function from cmath module
 ```
 
 ### 21.06. The `os` module
-<!-- to do -->
+
+A particularly important module in Python is the `os` module. The `os` module allows the developer to work with files, directories, environment variables and system information. Thanks to the `os` module, you can:
+
+- Operate with the file system of your local machine, by creating, updating, or removing files and directories.
+- Create a custom path (relative, or absolute), or manipulate existent paths.
+- Operate with environment variables of your local machine, by creating, updating, or removing env vars.
+- Handle one, or more processes of the system.
+
+The `os` module is platform-independent: it means the code necessary to carry out a task is independent if you're using Windows, Mac OS X, or Linux.
+
+To use the `os` module you must first import the module:
+
+```python
+import os
+```
+
+To get the current working directory, use the `getcwd()` function:
+
+```python
+os.getcwd()
+```
+
+You can change the current working directory of the Python script with `chdir()`:
+
+```python
+os.chdir("/scripts/python")
+```
+To list the files in the current directory, use `listdir()`:
+
+```python
+os.listdir()
+```
+
+To create a directory, use `mkdir()`:
+
+```python
+os.mkdir("my_new_folder")
+```
+
+To create a nested directory with `mkdirs()`, exploits the rules of the relative, or absolute paths of your system. For example, the following lines create a parent directory called `parent` and a child directory called `child`:
+
+```python
+os.mkdirs("parent/child")
+```
+
+You can remove a directory with `rmdir()`:
+
+```python
+os.rmdir("my_new_folder")
+```
+
+To rename a file, use `rename()`:
+
+```python
+os.rename("old.txt", "new.txt")
+```
+
+To delete a file, use `remove()`:
+
+```python
+os.remove("new.txt")
+```
+
+You can join two (or more) paths by using the `join()` function:
+
+```python
+os.path.join("path1", "path2")
+```
+
+If you want to check if a file, or a directory exists in your system, you can use the `exists()` function:
+
+```python
+os.path.exists("my_file.txt")
+```
+
+`isdir()` and `isfile()` methods of `os.path` returns a boolean: `True` if the file, or directory exists; `False` otherwise.
+
+```python
+os.path.isfile("my_file.txt")
+os.path.isdir("parent")
+```
+
+You can access to the environment variable of your system with the `os.environ` submodule.
+
+```python
+os.environ["HOME"]
+```
+
+To create a new variable, you can specify its name in the subscript operator and its value after the assignment operator:
+
+```python
+os.environ["NEW_ENV_VAR"] = "This is a new env var"
+```
+
+`os.name` returns the name of the operating system installed on your system, meanwhile through the `os.system()` function you can execute a subprocess, as if you were inside a shell. For example, the following statement:
+
+```python
+os.system("ls")
+```
+
+executes the `ls` command to list files and directories in the current working directory.
