@@ -345,13 +345,224 @@ print(s.DEFAULT_X_POSITION) # bad idea! it takes the value of the object attribu
 ```
 
 ### 19.09. Encapsulation: Protected Attributes and Methods with `_` and Private Attributes and Methods with `__`
-<!-- to do -->
+
+Encapsulation is one of the three main principles of the OOP. Encapsulation in OOP is the concept of bundling data (attributes of an object) and methods (behavior of an object) that operate on that data into a single unit, usually called a class, and restricting direct access to some of the object's components. In short: Encapsulation is about protecting data inside a class, or an object.
+
+To understand completely the encapsulation principles, let's analyze the three its main concepts:
+
+- Data hiding: all object attributes, in a class, should be accessible by only the object. This concepts means attributes and methods should be private, or protected, when they're cannot be exposed outside from the class where they're defined.
+- Public interface: you interact with the object through specific methods (like getters/setters). These methods are called access methods (or, sometimes, accessors also). The set methods can set the value of a specific attribute; the get methods can return the value of a specific attribute.
+- Access control: an attribute, or a method of a class can be qualified by one of three access level: public (member accessible from the outside of the class), protected (member accessible from the same module where the class is defined), or private (member not accessible from the outside of the class).
+
+Previously, we've defined a class called `Shape` representing a generic geometric shape. Previously, we've defined two attributes for the `Shape` objects: `x` and `y`, the coords where the shape is located in a bidimensional plane. Encapsulation involves not making these attributes visible outside the class. So, we modify the `Shape` class in this way:
+
+```python
+class Shape:
+    DEFAULT_X_POSITION = 0
+    DEFAULT_Y_POSITION = 0
+
+    def __init__(self, x = 0, y = 0):
+        self.__x = 0
+        self.__y = 0
+    
+    def to_center(self):
+        self.__x = 0
+        self.__y = 0
+    
+    def move(self, x, y):
+        self.__x = x
+        self.__y = y
+```
+
+Note that we've specified the double-underscore prefix (`__`) before each `x` and `y` identifiers. In Python, the double-underscore prefix has a specific meaning: it makes an attribute a private attribute, that cannot be accessible from the outside of the class. If you try to write something like this:
+
+```python
+s = Shape()
+print(s.__x) # ERROR! AttributeError: 'Shape' object has no attribute '__x'
+```
+
+Python interpreter returns an `AttributeError`, explaining you're trying to access to a non-existing property. If you want to access the `__x`, or the `__y` properties, you need to create the appropriate methods, called access methods (or accessors). The `Shape` class becomes this:
+
+```python
+class Shape:
+
+    # Class Attributes
+    DEFAULT_X_POSITION = 0
+    DEFAULT_Y_POSITION = 0
+
+    # Init Method
+    def __init__(self, x = 0, y = 0):
+        self.__x = 0
+        self.__y = 0
+    
+    # Getters
+    def get_x(self):
+        return self.__x
+    
+    def get_y(self):
+        return self.__y
+    
+    # Setter
+    def set_x(self, x):
+        self.__x = x
+    
+    def set_y(self, y):
+        self.__y = y
+
+    # Methods
+    def to_center(self):
+        self.__x = 0
+        self.__y = 0
+    
+    def move(self, x, y):
+        self.__x = x
+        self.__y = y
+```
+
+Now, you can use the `get_x()` and `get_y()` methods to get the `x` and `y` attributes. You can also use the `set_x()` and `set_y()` methods to set the `x` and `y` attributes. As all other methods, the first argument accepted by the accessors (both getters and setters) are the `self` argument. If you need to add business logic, or checks to ensure the value is correct (for both `__x` and `__y`), you can implement the needed code in the setters methods. If you need to format appropriately the `__x`, or `__y` attribute, you can write this code in the getters methods. This is the best way in Python to respect the principle of encapsulation.
+
+Python allows the developer to specify protected attributes also. Meanwhile the double-underscore prefix indicates a private attribute, or method, the single-underscore prefix indicates a protected attribute, or method. Although the protected attributes are effectively a convention in Python, the single-underscore prefix indicates that the attribute, or the method must be used carefully by other member of the class and its subclasses (yes, in Python you can define nested classes!).
+
+The `Shape` class with protected attributes is:
+
+```python
+class Shape:
+
+    # Class Attributes
+    DEFAULT_X_POSITION = 0
+    DEFAULT_Y_POSITION = 0
+
+    # Init Method
+    def __init__(self, x = 0, y = 0):
+        self._x = 0
+        self._y = 0
+    
+    # Getters
+    def get_x(self):
+        return self._x
+    
+    def get_y(self):
+        return self._y
+    
+    # Setter
+    def set_x(self, x):
+        self._x = x
+    
+    def set_y(self, y):
+        self._y = y
+
+    # Methods
+    def to_center(self):
+        self._x = 0
+        self._y = 0
+    
+    def move(self, x, y):
+        self._x = x
+        self._y = y
+```
+
+And the following code is perfectly interpreted by Python:
+
+```python
+s = Shape(10, 20)
+print(s._x) # 10
+print(s._y) # 20
+```
 
 ### 19.10. Class Methods with `@classmethod`
-<!-- to do -->
+
+So far we have seen instance methods, that is, methods that can be called using an identifier of an object and that modify the state of the object, or perform some operation that has to do with the single instance of the class.
+
+There is another category of methods, called class methods, that cannot be directly binded to a specific instance of the class, but  to the class itself. The class methods can be invoked by specifying the class name, the dot operator and, finally, the identifier of the class method. This is the syntaxt:
+
+```python
+MyClass.classMethodName(parameters)
+```
+
+A class method receives the class itself as the first argument (by convention called `cls`). The `cls` parameter is very similar to the `self` parameter:
+
+- The `cls` parameter is the first argument of a class method and it means "this class".
+- The `self` paramter is the first argument of an instance method, but it means "this object", or "this current instance".
+
+You can use the class methods when you need to modify class attributes, or when you need to execute a task independent of any created object. A class method is decorated by `@classmethod`: it's called decorator, cause it's written immediately before the header of the class method.
+
+For example, the following example shows the `Shape` class with a class method called `from_string()`:
+
+```python
+class Shape:
+
+    # Class Attributes
+    DEFAULT_X_POSITION = 0
+    DEFAULT_Y_POSITION = 0
+
+    # Class Methods
+    @classmethod
+    def from_string(cls, shape_str):
+        x, y = shape_str.split(":")
+        return cls(int(x), int(y))
+    
+    # ... other code of the class ...
+```
+
+The method called `from_str()` takes a string as second argument and `cls` as first argument. It's decorated by the `@classmethod` decorator, so it's a class method. Into this method, we split a string `shape_str` by using the `:` character, so we can have the `x` and the `y` coords stored in two different variables. Made this, we invoke the class's `__init__()` method with the following expression:
+
+```python
+cls(int(x), int(y))
+```
+
+Remember that the `split()` method returns a list of strings, so to invoke the `__init__()` method without any type issues, or problem, we've made a string-to-integer conversion by the `int()` built-in function. You can use this function in this way:
+
+```python
+s = Shape.from_string("10:-10")
+print(s._x) # 10
+print(s._y) # -10
+```
+
+`from_string()` returns an instance of the `Shape` class. Writing `cls()`, or `Shape()` is the same.
 
 ### 19.11. Static Methods with `@staticmethod`
-<!-- to do -->
+
+Differently from a class method, a static method doesn't receive any parameters (`self`, or `cls`). It behaves like a regular function, but lives inside the class where it's defined. A static method is decorated by the `@staticmethod` decorator, located immediately before the header of the method. It's declared and implemented in the class; moreover, it can be called via the `MyClass.staticMethodName(arguments)` syntaxt.
+
+For example, in the `Shape` class we want to track the number of instances created from the start of the Python program. We can use a class attribute to track the instances created and two static methods (both decorated with `@staticmethod`) to increment the counter, or decrement it. Here's an example:
+
+```python
+class Shape:
+    
+    # Class Attributes
+    instances = 0
+    DEFAULT_X_POSITION = 0
+    DEFAULT_Y_POSITION = 0
+
+    # Static Methods
+    @staticmethod
+    def increment_instances():
+        Shape.instances += 1
+
+    @staticmethod
+    def decrement_instances():
+        Shape.instances -= 0 if Shape.instance == 0 else 1
+
+    # ... other code of the class ...
+```
+
+In the previous example, we've defined two static methods: `increment_instances()` and `decrement_instances()`. Both use the `Shape.instances` counter to track the number of the created instances of the class `Shape`. Both are decorated with the `@staticmethod` decorator. Both haven't any argument.
+
+If you write something like this:
+
+```python
+print(Shape.instances) # 0
+
+s1 = Shape()
+Shape.increment_instances()
+
+s2 = Shape()
+Shape.increment_instances()
+
+print(Shape.instances) # 2
+```
+
+the first invocation of the `print()` function prints `0`, the second prints `2`, cause `increment_instances()` has been called two times (and `Shape.instances` is incremented two times).
 
 ### 19.12. Magic Methods: `__str__()`, `__eq__()` and `__repr__()`
 <!-- to do -->
