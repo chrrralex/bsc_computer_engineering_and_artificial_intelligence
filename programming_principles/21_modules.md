@@ -342,6 +342,25 @@ os.path.isfile("my_file.txt")
 os.path.isdir("parent")
 ```
 
+`os.path.isabs()` returns `True` if the specified path is an absolute path:
+
+```python
+os.path.isabs("/bin")
+```
+
+`os.path.samefile()` accepts two arguments and it returns `True` if the two arguments represent the same file:
+
+```python
+os.path.samefile("/bin/an_executable", "/bin/an_executable")
+```
+
+The `os.path` submodule contains two constant particularly useful to the path handling:
+
+- `os.curdir`: returns the symbol of the current operating system used to represent the current directory.
+- `os.pardir`: returns the symbol of the current operating system used to represent the parent directory.
+
+For example, in Linux and Solaris operating systems these sumbols are `.` for the current directory and `..` for the parent directory. To write portable system (a best practice!) you should always use these constants instead of directly the symbols like `.` and `..`.
+
 You can access to the environment variable of your system with the `os.environ` submodule.
 
 ```python
