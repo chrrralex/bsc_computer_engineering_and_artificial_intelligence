@@ -1,5 +1,7 @@
 # 16. `try-except` statement
 
+### 16.01. Overview
+
 Like other programming languages (for example, PHP and Java), Python includes a construct for the error handling called `try-except-finally`. We're going to see the basic form of this construct and, progressively, we'll analyze the caluses can be used with this important statement.
 
 Normally, when an error occurs during the program execution, the Python interpreter catches the error and prints an output starting with `"ERROR! ..."` to explain the error, then it exits from the program. Thanks to the `try-except-finally` block, you can catch one, or more type of errors and you can execute a specific code to try to fix the error, or to take another specific path (such as, for example, having the user re-enter an input).
@@ -37,6 +39,8 @@ except NameError:
 except:
     print("Something else went wrong")
 ```
+
+### 16.02. Clauses of the `try-except-finally` statement
 
 You can use the `else` clause. The statements inside this clause are executed only if no error was thrown:
 
@@ -90,3 +94,15 @@ x = "hello"
 if x != 10:
   raise TypeError("x != 10")
 ```
+
+### 16.03. Warnings, Exceptions and Errors
+<!-- to do -->
+
+### 16.04. Exception Hierarchy in Python
+<!-- to do -->
+
+### 16.05. Define and raise your own Exception
+<!-- to do -->
+
+### 16.06. Accessing the Exception data
+<!-- to do -->
