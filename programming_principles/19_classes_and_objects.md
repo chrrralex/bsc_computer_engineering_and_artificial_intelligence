@@ -704,16 +704,180 @@ print(p.age) # 29
 ```
 
 ### 19.14. Inheritance and the `super()` Method
+
+Inheritance allows us to define a class that inherits all the methods and properties from another class. Inheritance is an is-a relationship: for example, if you have a class called `Shape`, you can create other classes like `Circle` and `Square` that derive from `Shape`. The is-a relationship means that an instance of the `Circle` class is-a `Shape` also; similarly, an instance of the `Square` class is-a `Shape` also. The `Circle` and `Square` classes can access all the protected and public properties of the superclass, `Shape`.
+
+For example, if we have the `Shape` class defined as the following:
+
+```python
+class Shape:
+
+    # Class Attributes
+    DEFAULT_X_POSITION = 0
+    DEFAULT_Y_POSITION = 0
+
+    # Init
+    def __init__(self, x = 0, y = 0):
+        self.__x = x
+        self.__y = y
+
+    # Properties
+    @property
+    def x(self):
+        return self.__x
+
+    @x.setter
+    def x(self, x):
+        self.__x = x
+    
+    @property
+    def y(self):
+        return self.__y
+    
+    @y.setter
+    def y(self, y):
+        self.__y = y
+    
+    # Methods
+    def to_center(self):
+        self.__x = Shape.DEFAULT_X_POSITION
+        self.__y = Shape.DEFAULT_Y_POSITION
+    
+    def move(self, x, y):
+        self.__x = x
+        self.__y = y
+    
+    # Magic Methods
+    def __str__(self):
+        return f"x: {self.__x}, y: {self.__y}"
+    
+    def __eq__(self, shape):
+        return isinstance(shape, Shape) and self.__x == shape.x and self.__y == shape.y
+```
+
+We can create a child class of `Shape`, called `Circle`, by using the following syntaxt:
+
+```python
+class ChildClassName(ParentClassName):
+    body
+```
+
+In our case, `ChildClassName` is `Circle` and `ParentClassName` is `Shape`:
+
+```python
+class Circle(Shape):
+    pass
+```
+
+We can create one, or more instances of the `Circle` class:
+
+```python
+c = Circle()
+print(c) # x: 0, y: 0
+```
+
+Note that all the instances of the `Circle` class inherit all the public and protected attributes and methods of the parent class. Through the `c` instance, we can access the `x` and `y` properties:
+
+```python
+print(c.x) # 0
+print(c.y) # 0
+
+c.x = -20
+c.y = 100
+
+print(c.x) # -20
+print(c.y) # 100
+```
+
+Moreover, thorugh the `c` instance we can access the class attributes defined in the `Shape` class:
+
+```python
+print(c.DEFAULT_X_POSITION) # 0
+print(c.DEFAULT_Y_POSITION) # 0
+```
+
+Some thorugh the `Circle` class name:
+
+```python
+print(Circle.DEFAULT_X_POSITION) # 0
+print(Circle.DEFAULT_Y_POSITION) # 0
+```
+
+And finally, through the `c` instance you can invoke the `to_center()` and `move()` public methods, defined in the body of the `Shape` class:
+
+```python
+c.to_center()
+
+print(c.x) # 0
+print(c.y) # 0
+
+c.move(10, 20)
+
+print(c.x) # 10
+print(c.y) # 20
+```
+
+In this scenario, we can see the `Shape` class as a general class and the `Circle` class as a specialized class. `Circle` can contain attributes and methods specified to handle circles in a bidimensional space. For example, all `Circle`'s instances can use the `area()` and the `perimeter()` method. Moreover, a circle has the own `radius`. We can modify the `Circle` class in this way:
+
 <!-- to do -->
 
-### 19.15. Multiple Inheritance
+### 19.15. Method Overriding with `@override`
 <!-- to do -->
 
-### 19.16. Method Overriding with `@override`
+### 19.16. Multiple Inheritance
 <!-- to do -->
 
 ### 19.17. MRO (Method Resolution Order)
-<!-- to do -->
+
+The MRO (Method Resolution Order), in the Python programming language, defines the order in which the Python interpreter looks for methods and attributes in a class hierarchy, especially with multiple inheritance. When you call a method, Python searches classes in a specific order and this order is stored in the MRO List, a special list containing the list of classes composing the complete hierarchy of the class of the current instance.
+
+The MRO List is a structure very useful in Python for both single and multiple inheritance. For example, we consider the following script:
+
+```python
+class A:
+    def hello(self):
+        print("A")
+
+class B(A):
+    pass
+
+class C(A):
+    def hello(self):
+        print("C")
+
+class D(B, C):
+    pass
+```
+
+We have four classes: `A` is the superclass (or the root class) of all other classes. `C` and `B` are direct children of the `A` class, meanwhile `D` exploits the multiple inheritance and it derives from `B` and `C`. Now, we'll create an object of the `D` class and we'll call the `hello()` method, defined in both `C` and `A` classes:
+
+```python
+d = D()
+d.hello() # "C"
+```
+
+Why is called the `hello()` method defined in the `C` class, instead of the `hello()` method defined in the `A` class? The cause is simply the MRO List. You can check the MRO List of the `D` class by calling the `mro()` class method:
+
+```python
+print(D.mro()) # [ D, B, C, A, object ]
+```
+
+The first element of the MRO List is the `D`, it means the Python interpreter searches for a method called `hello()` in the `D` class. There isn't any method with this name, so the Python interpreter goes up a hierarchy level, by examining the two superclasses of `D`: first `B` and second `C`, in the order they're specified in into the round brackets, at the header of the `D` class declaration. `B` hasn't any method called `hello()`, so the Python interpreter checks for a method called `hello()` in the `C` class.The match is foun in the `C` class, so the method `hello()` of `C` is really called and it prints `"C"` to the standard output.
+
+If we try to create an instance of the `B` class and if we try to invoke the `hello()` method, we'll get this on the standard output:
+
+```python
+b = B()
+b.hello() # "A"
+```
+
+Why `A.hello()` and not `C.hello()`? The cause is always the MRO List, but in this case of the `B` class:
+
+```python
+print(B.mro()) # [ B, A, object ]
+```
+
+Cause `B` hasn't any method called `hello()`, the Python interpreter searches for a method called `hello()` in the `A` class and there's a match, so `hello()` of `A` has been called and an `"A"` is printed on the standard output.
 
 ### 19.18. Polymorphism
 <!-- to do -->
