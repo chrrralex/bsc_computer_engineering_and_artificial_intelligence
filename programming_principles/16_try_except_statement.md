@@ -95,14 +95,100 @@ if x != 10:
   raise TypeError("x != 10")
 ```
 
-### 16.03. Warnings, Exceptions and Errors
-<!-- to do -->
+### 16.03. Exceptions and Errors
+
+During the program execution, at runtime, two types of situations can be happen:
+
+- Error: is a problem occurs during the program execution that cause it to faill.
+- Exception: is a problem occurs during the program execution that can be resolved by repeating an action, or directly by the Python code, or in other ways, that sometimes only partially stop a functionality.
+
+Meanwhile errors cause the program fail, exception can be successfully handled, for example with the `try-except-finally` statement we've seen in the previous paragraphs. A common example of exception is the `ZeroDivisionError`, that happens when in your Python code appears a division by `0`, like `10 / 0`.
 
 ### 16.04. Exception Hierarchy in Python
-<!-- to do -->
+
+The exception hierarchy is a tree of all built-in exceptions in Python. All exceptions inherit from the base class `BaseException`, the parent of all errors and exceptions classes. Common children of the `BaseException` are:
+
+- `Exception`: is the base class of the most common user-level errors. It has so many children, classes like `ArithmeticError` and `LookupError`.
+- `GeneratorExit`: raised when a generator is closed (e.g., when `close()` is called or it is garbage collected).
+- `KeyboardInterrupt`: raised when the user interrupts program execution, usually by pressing Ctrl+C, or Ctrl+Z.
+- `SystemExit`: raised when the program exits, typically via `sys.exit()`.
 
 ### 16.05. Define and raise your own Exception
-<!-- to do -->
+
+You can define your custom exception thanks to the OOP (Object-Oriented Programming) paradigm, that in Python allows the developer to create one, or more classes extending the `Exception` base class. For example, the following code defines a new type of exception through a class called `MyCustomError`, that extends the `Exception` base class:
+
+```python
+class MyCustomError(Exception):
+    pass
+```
+
+Next, maybe in another portion of the program, or inside a function, you can raise the previous exception by using the `raise` keyword:
+
+```python
+raise MyCustomError("Something went wrong")
+```
+
+And you can catch the raised custom exception with the `try-except-finally` statement:
+
+```python
+try:
+    raise MyCustomError()
+except MyCustomError as error:
+    print(error)
+else:
+    print("No error occurred")
+finally:
+    print("That's it!")
+```
+
+The previous code prints the following two lines of output:
+
+```bash
+Something went wrong
+That's it!
+```
 
 ### 16.06. Accessing the Exception data
-<!-- to do -->
+
+In the previous snippet of code we've used a particular form of the `except` clause, that follows this syntaxt:
+
+```python
+except ExceptionName as identifier:
+```
+
+where:
+
+- `ExceptionName` is the name of the exception type (`ZeroDivisionError`, or `TypeError`, or `IndexError`, or other).
+- `identifier` is the object that represents the data about the raised exception.
+
+This form of the `except` clause allows you to access the data of the exception. You can capture exception details using the `as` keyword in the `except` clause. For example:
+
+```python
+try:
+    x = int("abc")
+except ValueError as error:
+    print(error) # invalid literal for int() with base 10: 'abc'
+```
+
+You can use `str(error)` for a human-readable string about the error. The `repr(error)` returns a detailed error. A particular attribute you can access of the `error` object in the previous example is `error.args`, a tuple containing all the argument passed to the exception:
+
+```python
+try:
+    x = int("abc")
+except ValueError as error:
+    print(error.args) # ("invalid literal for int() with base 10: 'abc'",)
+```
+
+You can also use `error.args` with a custom exception:
+
+```python
+class MyCustomError(Exception):
+    pass
+
+try:
+    raise MyCustomError("Hello!", 1, 3.15, True)
+except MyCustomError as error:
+    print(error.args) # ('Hello!', 1, 3.15, True)
+```
+
+Note that all arguments are passed inside the round brackets, where you raise the exception.

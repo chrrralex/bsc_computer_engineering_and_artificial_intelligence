@@ -565,10 +565,143 @@ print(Shape.instances) # 2
 the first invocation of the `print()` function prints `0`, the second prints `2`, cause `increment_instances()` has been called two times (and `Shape.instances` is incremented two times).
 
 ### 19.12. Magic Methods: `__str__()`, `__eq__()` and `__repr__()`
-<!-- to do -->
+
+Python uses the double-underscore as both prefix and postfix to specify a "special" method (usually called magic method). Three are the most common magic methods you'll implement in your classes:
+
+The `__str__()` method is a special method that controls what is returned when the object is printed. We can add the `__str__()` method to the `Shape` class:
+
+```python
+class Shape:
+    # ... code before __str__() ...
+
+    def __str__(self):
+        return f"x: {self.x}\ny: {self.y}\n"
+
+    # ... code after __str__() ...
+```
+
+The `__str__()` magic method returns a human-readable string of the object. In our case, we use an f-string to print the `x` and `y` properties of the current instance.
+
+Another common used magic method is `__eq__()`. This magic method defines how two objects are compared using the comparator operator (`==`) and it should return a boolean value: `True` if the two compared instance are considered equal, `False` otherwise. The `__eq__()` magic method is used to compare the object content, not identity. Let's add the `__eq__()` magic method in the `Shape` class:
+
+```python
+class Shape:
+    # ... code before __eq__() ...
+
+    def __eq__(self, shape):
+        return isinstance(shape, Shape) and self.x == shape.x and self.y == shape.y
+
+    # ... code after __eq__() ...
+```
+
+The `__eq__()` method accepts another instance of the same class (`Shape` in our case) to compare the current instance with it. Note that the return value of the `__eq__()` magic method is determined by three subconditions, linked by the `and` logical operator:
+
+- First of all, the `shape` parameter must be an instance of the `Shape` class.
+- Second, the `x` attribute of the current instance (`self.x`) must be equal to the `x` attribute of the other instance (`shape.x`).
+- Third, the `y` attribute of the current instance (`self.y`) must be equal to the `y` attribute of the other instance (`shape.y`).
+
+A third magic method is `__repr__()` (a contraction of "representation"). Differently from `__str__()`, the `__repr__()` magic method is used to return a detailed representation of the current instance. We can define the `__repr__()` magic method in the `Shape` class in this way:
+
+```python
+class Shape:
+    # ... code before __repr__() ...
+
+    def __repr__(self):
+        return f"Shape({self.x}, {self.y})"
+
+    # ... code after __repr__() ...
+```
+
+As you can see, the `__repr__()` defines the official string representation of an object. Now, when you use the `repr()` built-in function of Python by passing an instance of the `Shape` class, for debugging and other things, you can see the output returned by the `__repr__()` magic method. The string returned by the `__repr__()` magic method should be clear and unambiguous. You can see the output of the `__repr__()` magic method as a developer-level representation of the object, useful for documentation.
 
 ### 19.13. Getters and Setters with `@property`
-<!-- to do -->
+
+Previously, we've used the setters and getters method for both `x` and `y` instance attributes in the definition of the class `Shape`. Python has a built-in decorator, called `@property`, allows you to access methods like attributes. It is used to create controlled access (getter/setter) for class attributes and you can see it as a syntactic sugar for getter and setter methods of a particular instance attribute. This decorator helps encapsulate logic while keeping a clean interface.
+
+For example, if we've a class called `Person`:
+
+```python
+class Person:
+    def __init__(self):
+        # to do
+        pass
+```
+
+we can add two private attributes: `__fullName` and `__age`.
+
+```python
+class Person:
+    def __init__(self, fullName = "Bob Parker", age = 18):
+        self.__fullName = fullName
+        self.__age = age
+```
+
+These attributes aren't accessible from the outside of the `Person` class. So, we can use the `@property` decorator to create the getters methods for the `__fullName` and `__age` attributes in thiis way:
+
+```python
+class Person:
+    def __init__(self, fullName = "Bob Parker", age = 18):
+        self.__fullName = fullName
+        self.__age = age
+    
+    @property
+    def fullName(self):
+        return self.__fullName
+    
+    @property
+    def age(self):
+        return self.__age
+```
+
+Note that we've specified two methods: `fullName()` and `age()` and, thanks to the `@property` decorator, we can access indirectly to the `__fullName` and `__age` properties in this way:
+
+```python
+p = Person("Christian Alessandro Atzeni", 25)
+print(p.fullName) # "Christian Alessandro Atzeni"
+print(p.age) # 25
+```
+
+As you can see, we used the fullName and age methods of an instance of type Person as if they were directly accessible properties (but in reality they are still methods).
+
+And for setters? For the setter, Python provides the following syntaxt: `@propertyName.setter`, where the part `propertyName` of the decorator is the same name of the method decorated with the `@property` decorator. For example, if we want to add two setters to the `Person` class, one for the `fullName` property (`__fullName` private attribute) and another for the `age` property (`__age` private attribute), we can write something like this:
+
+```python
+class Person:
+    def __init__(self, fullName = "Bob Parker", age = 18):
+        self.__fullName = fullName
+        self.__age = age
+    
+    @property
+    def fullName(self):
+        return self.__fullName
+    
+    @fullName.setter
+    def fullName(self, fullName):
+        self.__fullName = fullName
+    
+    @property
+    def age(self):
+        return self.__age
+
+    @age.setter
+    def age(self, age):
+        self.__age = age
+```
+
+Note that both getter and setter methods of a property have the same name. You can use the setters methods simply by using `p.fullName` and `p.age` on the left side of the assignment operator, like this:
+
+```python
+p = Person("Christian Alessandro Atzeni", 25)
+
+print(p.fullName) # "Christian Alessandro Atzeni"
+print(p.age) # 25
+
+p.fullName = "Maristella Rossi" # using the setter method for __fullName
+p.age = 29 # using the setter method for __age
+
+print(p.fullName) # "Maristella Rossi"
+print(p.age) # 29
+```
 
 ### 19.14. Inheritance and the `super()` Method
 <!-- to do -->
@@ -598,10 +731,33 @@ the first invocation of the `print()` function prints `0`, the second prints `2`
 <!-- to do -->
 
 ### 19.23. Reflection
-<!-- to do -->
+
+Reflection is the ability of a program to inspect and modify its own structure and behavior at runtime. In Python, this includes dynamically accessing attributes or methods using functions like `getattr()` and `setattr()`. It enables flexible and dynamic code, often used in frameworks and metaprogramming.
+
+The most common reflection functions (all built-in functions) used in Python are:
+
+- `getattr(obj, name)`: return the `name` attribute of the `obj` instance.
+- `setattr(obj, name, value)`: set the `name` attribute to the `value` value of the `obj` instance.
+- `hasattr(obj, name)`: return `True` if the `obj` instance has the `name` attribute, `False` otherwise.
+- `delattr(obj, name)`: deletes the `name` attribute of the `obj` instance.
+
+You can use `getattr()` to call method dynamically, for example:
+
+```python
+method_to_call = getattr(Shape(), "move")
+method_to_call(10, 5) # it calls the move() method defined in the Shape class
+```
+
+The `__dir__` attribute returns a dictionary of the instance where the keys are all the attributes of the instance, meanwhile the values are the value of each key. The same dictionary can be obtained by using the `vars()` built-in function.
 
 ### 19.24. Introspection
-<!-- to do -->
+
+Introspection is the ability to examine objects, types, and their properties at runtime. Python provides tools like `type()`, `dir()`, and `help()` to inspect objects. It is mainly used for debugging, exploration, and understanding code structure.
+
+- `type()` accepts one argument and it returns the type of the accepted argument at runtime.
+- `dir()`: accepts one argument and it returns a list of all the attributes and methods accessible of that argument.
+- `help()`: accepts one argument and it returns some info about the argument.
 
 ### 19.25. Singleton
-<!-- to do -->
+
+A Singleton is a design pattern that ensures a class has only one instance throughout the program. All parts of the code share the same instance, providing a single point of access. It is commonly used for shared resources like configuration, or logging systems. Singleton are particularly used with the OOP languages, like Python, cause it allows the system to save memory and optimize performances during the program execution.
