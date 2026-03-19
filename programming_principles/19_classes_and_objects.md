@@ -819,15 +819,149 @@ print(c.y) # 20
 
 In this scenario, we can see the `Shape` class as a general class and the `Circle` class as a specialized class. `Circle` can contain attributes and methods specified to handle circles in a bidimensional space. For example, all `Circle`'s instances can use the `area()` and the `perimeter()` method. Moreover, a circle has the own `radius`. We can modify the `Circle` class in this way:
 
-<!-- to do -->
+```python
+class Circle(Shape):
 
-### 19.15. Method Overriding with `@override`
-<!-- to do -->
+    # Class Attributes
+    PI = 3.14159
+    
+    # Init
+    def __init__(self, x = 0, y = 0, radius = 0):
+        super().__init__(x, y)
+        self.__radius = radius
 
-### 19.16. Multiple Inheritance
-<!-- to do -->
+    # Properties
+    @property
+    def radius(self):
+        return self.__radius
+    
+    @radius.setter
+    def radius(self, radius):
+        self.__radius = radius
+    
+    # Methods
+    def area(self):
+        return self.__radius * self.__radius * Circle.PI
+    
+    def perimeter(self):
+        return 2 * self.__radius * Circle.PI
+        
+```
 
-### 19.17. MRO (Method Resolution Order)
+Now, we have methods in the `Circle` class that aren't present in the `Shape` class. We can create instances of the `Circle` class in this way:
+
+```python
+c = Circle()
+
+print(c.x, c.y, c.radius) # 0 0 0
+print(isinstance(c, Shape)) # True
+print(isinstance(c, Circle)) # True
+```
+
+Note that the `isinstance()` built-in function returns `True` for both `Shape` and `Circle`: remember that the relationship between the `Shape` class and the `Circle` class is an is-a relationship. A circle is a shape, but the opposite is not said (a shape can also be a square, a rectangle, or a triangle).
+
+You can call an object method defined in the `Circle` class only throughout an instance of the `Circle` class: if you try to call `area()`, or `perimeter()` by using an instance of the `Shape` class, Python throws an error.
+
+```python
+c = Circle(0, 0, 10)
+print(c.area()) # 314.159
+print(c.perimeter()) # 62.8318
+
+s = Shape()
+print(s.area()) # ERROR! AttributeError: 'Shape' object has no attribute 'area'
+print(s.perimeter()) # ERROR! AttributeError: 'Shape' object has no attribute 'perimeter'
+```
+
+This situation perfectly matches what we told previously about the type of the relationship between `Shape` and `Circle` classes. `Shape` doesn't have any method called `area()` in its body (same for `perimeter()`), this is the cause of the error; otherside, `Circle` has the implementation for both `area()` and `perimeter()` methods, so when you call a method through an instance of the `Circle` class, Python don't throw any error.
+
+Of course, you can absolutely access the two methods `to_center()` and `move()` defined in the parent class, `Shape`:
+
+```python
+c.to_center()
+print(c) # x: 0, y: 0
+
+c.move(10, -20)
+print(c) # x: 10, y: -20
+```
+
+### 19.15. Method Overriding
+
+What is an override? It's a concept strictly coupled with the inheritance. We consider the two classes we've defined in the previous paragraph: the superclass `Shape` and the childclass `Circle`. `Circle` inherits all public and protected methods and attributes defined in the `Shape` class and it can refer members of the `Shape` class with `super()`, as we've seen before.
+
+When you define a childclass, like `Circle`, you may have some methods that are the same defined in the sueprclass, like `Shape`, but in the specialized class are specialized, or they've a different implementation. For example, the `Shape` class has two magic methods, `__eq__()` and `__str__()`, but they have a different implementation in the childclass `Circle`:
+
+- for the `__eq__()` magic method, two instance of the `Circle` class must be compared by considering the `radius` property also;
+- for the `__str__()` magic method, the current instance must show the `radius` property also, not only the `x` and `y` properties defined in the `Shape` superclass;
+
+We can use the same header of the method to specify the method we're re-definining in the childclass. A method override is logically the same method we've defined in the superclass, but with a different implementation in the childclass. Here's an example of overriden `__str__()` and `__eq__()` methods defined in the `Circle` childclass:
+
+```python
+class Circle(Shape):
+    # ... code before magic methods ...
+
+    def __str__(self):
+        return f"{super().__str__()}, radius: {self.__radius}"
+
+    def __eq__(self, circle):
+        return super().__eq__(circle) and isinstance(circle, Circle) and self.__radius == circle.radius
+
+    # ... code after magic methods ...
+
+```
+
+Note that we used `super().__eq__()` and `super().__str__()` to avoid the code duplication. This is a great advantage of the inheritance and overriding. `super().__eq__()` calls the `__eq__()` magic method defined in the superclass, in our case `Shape`; the same topic of `super().__str__()`, it calls the `__str__()` magic method defined in the `Shape` superclass.
+
+Now, if you try to print an object of the `Circle` class, in output you can see the `radius` instance attribute also:
+
+```python
+c = Circle(0, 0, 10)
+print(c) # x: 0, y: 0, radius: 10
+```
+
+And if you try to print an object of the `Shape` class, Python interpreter analyze the instance and discover that the correct method call is the `__str__()` magic method defined in the `Shape` superclass, not in the `Circle` childclass:
+
+```python
+s = Shape()
+print(s) # x: 0, y: 0
+```
+
+Same topic about the `__eq__()` magic methods: if you use the equality operator (`==`) with an instance of `Circle`, the `__eq__()` magic method of `Circle` has been called; if you use it with an instance of `Shape`, the `__eq__()` magic method of `Shape` has been called.
+
+```python
+c1 = Circle(0, 0, 10)
+c2 = Circle(0, 0, 10)
+s1 = Shape()
+s2 = Shape()
+
+print (c1 == c2) # True (__eq__() of Circle)
+print (s1 == s2) # True (__eq__() of Shape)
+print (s1 == c1) # False (__eq__() of Shape)
+print (c1 == s1) # False (__eq__() of Circle)
+```
+
+### 19.16. Multiple Inheritance and MRO (Method Resolution Order)
+
+Python allows the multiple inheritance: a class can be a child class of more than one superclass. For example, the following code:
+
+```python
+class A:
+    pass
+
+class B:
+    pass
+
+class C(A, B):
+    pass
+```
+
+defines three empty classes: `A`, `B` and `C`. `A` and `B` are two superclasses of `C`. To use the multiple inheritance, you can use the following syntaxt:
+
+```python
+class ChildClassName(ParentClass1, ParentClass2, ..., ParentClassN):
+    body
+```
+
+`ParentClass1` is the superclass of `ChildClassName`, same for the `ParentClass2`, ..., `ParentClassN`. The child class gets attributes and methods from all parent classes and, to avoid any type of conflicts, Python use the MRO algorithm.
 
 The MRO (Method Resolution Order), in the Python programming language, defines the order in which the Python interpreter looks for methods and attributes in a class hierarchy, especially with multiple inheritance. When you call a method, Python searches classes in a specific order and this order is stored in the MRO List, a special list containing the list of classes composing the complete hierarchy of the class of the current instance.
 
@@ -879,20 +1013,78 @@ print(B.mro()) # [ B, A, object ]
 
 Cause `B` hasn't any method called `hello()`, the Python interpreter searches for a method called `hello()` in the `A` class and there's a match, so `hello()` of `A` has been called and an `"A"` is printed on the standard output.
 
-### 19.18. Polymorphism
+### 19.17. Polymorphism
 <!-- to do -->
 
-### 19.19. Abstract Classes and `@abstractmethod` 
+### 19.18. Abstract Classes and `@abstractmethod` 
 <!-- to do -->
 
-### 19.20. Dataclasses with `@dataclass`
+### 19.19. Dataclasses with `@dataclass`
 <!-- to do -->
 
-### 19.21. Aggregation Relationship
-<!-- to do -->
+### 19.20. Aggregation Relationship
+
+Aggregation is a particular type of relationship where one object contains, or uses one, or more another objects, but both can exist independently. Meanwhile the inheritance is an is-a relationship, the aggregation is an has-a relationship: we consider two classes called `Engine` and `Car`. Any car can exists independently from the existent engines and, viceversa, any engine can exists indipendently from the existent cars. `Car` and `Engine` are in a has-a relationship, where the `Car` class contains an instance attribute called `engine` that can be `None`, or an instance of the class `Engine`. In Python, we can model this relationship with the following code:
+
+```python
+class Engine:
+    def start(self):
+        return "Engine started"
+
+class Car:
+    def __init__(self, engine = None):
+        self.engine = engine # this is an has-a relationship: a car might have an engine
+
+engine = Engine()
+car = Car(engine)
+
+print(car.engine.start())
+```
+
+In this situation, you can create independently both `Car` instances and `Engine` instances:
+
+```python
+e1 = Engine()
+e2 = Engine()
+e3 = Engine()
+
+c1 = Car()
+c2 = Car()
+c3 = Car()
+```
+
+Each object has independent lifecycles and exists independently from others. Moreover, one object references anothe: in our case, an instance of the `Car` class references an instance of the `Engine` class through the `engine` instance attribute. In real-world moeling and in real project, this is a very common situation. To summarize: aggregation is a weak has-a relationship where objects are linked but they can exist independently from the others.
 
 ### 19.22. Composition Relationship
-<!-- to do -->
+
+Composition is a relationship where one object owns and contains another object, it's a stronger relationship than the aggregation, cause there are two type of classes in this scenario:
+
+- The "strong side" is the class containing one, or more instances of the other class. This class is also called a "container" class.
+- The "weak side" is the class of which one, or more instances are contained in the other class. This class is also called a "contained" class.
+
+Sometimes, cause it's a strong relationship, composition is called a part-of relationship, although normally it is still a has-a relationship, but not an optional one. Note that in composition, differently from the aggregation, the lifecycle of the "contained" objects depends on the "container" object: they cannot exist if the "container" object hasn't been created.
+
+For example, we consider the same example analyzed in the previous paragraph about `Engine` and `Car`, but in this case we consider that an engine must be a part of a car. `Car` is the strong side and `Engine` is the weak side of the composition relationship. This istuation can be represented, in Python, in this way:
+
+```python
+class Engine:
+    def start(self):
+        return "Engine started"
+
+class Car:
+    def __init__(self):
+        self.engine = Engine() # this is an part-of (or strong has-a) relationship: a car must have an engine
+
+car = Car()
+print(car.engine.start())
+```
+
+Note this very important difference between aggregation and composition:
+
+- In aggregation, a car MIGHT have an engine. In this scenario, cars and engines can exist independently from the others.
+- In composition, a car MUST have an engine. In this scenario, an engine exists only through its "container" object exists (a car). Engines cannot exist without cars.
+
+In practice: "contained" objects cannot exist independently and they're created and handled by the "container" objects. To summarize: composition is a strong has-a (or parto-of) relationship where one object owns and controls the lifecycle of another.
 
 ### 19.23. Reflection
 
