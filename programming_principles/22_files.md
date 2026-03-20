@@ -301,6 +301,7 @@ Remember that, thanks to a context manager, all resources (files and directories
 <!-- to do -->
 
 ### 23.12. Serialization and Deserialization of data structures and objects
+<!-- to do -->
 
 ### 23.13. Files with `pickle`
 
