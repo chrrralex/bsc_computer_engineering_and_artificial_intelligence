@@ -295,13 +295,85 @@ with tempfile.TemporaryDirectory() as td:
 Remember that, thanks to a context manager, all resources (files and directories) are cleanup automatically when the context manager block ends.
 
 ### 23.10. JSON Files
-<!-- to do -->
+
+JSON (JavaScript Object Notation) is a lightweight text format used to represent structured data with objects and arrays. In Python you can work with JSON files using the standard `json` module: `json.dump()` writes a Python object (typically dicts, lists, strings, numbers, booleans, and `None`) to a file, while `json.load()` reads JSON from a file and converts it back to Python data types. JSON is human‑readable, widely supported, and ideal for data exchange and configuration files.
+
+Here's an example to write JSON to a file:
+
+```python
+import json
+
+data = { "name": "Alice", "age": 30, "skills": ["Python", "SQL"] }
+
+with open("profile.json", "w") as f:
+    json.dump(data, f)
+```
+
+Here's an example to read a JSON from a file:
+
+```python
+import json
+
+with open("profile.json", "r") as f:
+    data = json.load(f)
+    print(data) # { "name": "Alice", "age": 30, "skills": ["Python", "SQL"] }
+```
 
 ### 23.11. CSV Files
-<!-- to do -->
+
+CSV (Comma-Separated Values) is a simple text format for tabular data, where each line is a row and values are separated by a delimiter (comma by default). In Python, the standard `csv` module provides `csv.writer` to write rows and `csv.reader` to read them back. CSV is widely used for data exchange with spreadsheets and databases.
+
+Here's an example of writing a CSV to a file:
+
+```python
+import csv
+
+rows = [
+    ["name", "age"],
+    ["Alice", 30],
+    ["Bob", 25]
+]
+
+with open("people.csv", "w", newline="") as f:
+    writer = csv.writer(f)
+    writer.writerows(rows)
+```
+
+Here's an example of reading a CSV from a file:
+
+```python
+import csv
+
+with open("people.csv", "r", newline="") as f:
+    reader = csv.reader(f)
+    for row in reader:
+        print(row)
+```
 
 ### 23.12. Serialization and Deserialization of data structures and objects
-<!-- to do -->
+
+Serialization is the process of converting a Python object into a format that can be stored or transmitted (for example, JSON text or a binary stream). Deserialization is the reverse process: loading that stored representation back into a Python object. In practice, JSON is commonly used for simple data structures, while `pickle` is used for more complex Python objects.
+
+Example (serialization to JSON):
+
+```python
+import json
+
+data = {"name": "Alice", "scores": [28, 30, 27]}
+
+with open("scores.json", "w") as f:
+    json.dump(data, f)
+```
+
+Example (deserialization from JSON):
+
+```python
+import json
+
+with open("scores.json", "r") as f:
+    data = json.load(f)
+    print(data)
+```
 
 ### 23.13. Files with `pickle`
 
