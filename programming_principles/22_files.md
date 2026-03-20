@@ -300,8 +300,7 @@ Remember that, thanks to a context manager, all resources (files and directories
 ### 23.11. CSV Files
 <!-- to do -->
 
-### 23.12. Serialization and Deserialization
-<!-- to do -->
+### 23.12. Serialization and Deserialization of data structures and objects
 
 ### 23.13. Files with `pickle`
 
@@ -334,4 +333,27 @@ with open("data.pkl", "rb") as f:
 Note that we used the `open()` built-in function with the `rb` mode: in Python, a complex data structure is always loaded as a bytes stream.
 
 ### 23.14. Files with `shelve`
-<!-- to do -->
+
+`shelve` is a module that provides a persistent, dictionary-like object stored on the storage memory. You can access it with keys and values just like a normal dict, but the content is saved between program runs. Under the hood, `shelve` uses `pickle`, so keys must be strings and values must be pickleable Python objects. A shelve database usually creates one or more files depending on the platform and backend.
+
+The recommended way to work with a shelve is the context manager, so it is properly closed and data is written safely.
+
+The following example shows how can be an object serialization with `shelve`:
+
+```python
+import shelve
+
+with shelve.open("students_db") as db:
+    db["student:1"] = {"name": "Alice", "age": 21}
+    db["student:2"] = {"name": "Bob", "age": 22}
+```
+
+Here's an example of deserialization, that is the data loading with `shelve`:
+
+```python
+import shelve
+
+with shelve.open("students_db") as db:
+    alice = db["student:1"]
+    print(alice)
+```
