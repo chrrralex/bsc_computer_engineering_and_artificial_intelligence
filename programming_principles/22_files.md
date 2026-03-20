@@ -169,28 +169,169 @@ Use a context manager has some advantages:
 To summarize, using the `with` keyword ensures files are automatically and safely closed, making code cleaner and more reliable.
 
 ### 23.07. Text and binary files
-<!-- to do -->
+
+A file sotred in a specific path of the file system of a system can be of two types:
+
+- Text file: a text file is seen as a characters stream. Each element of the stream is a character, compatible with the character set and text encoding used in the current system.
+- Binary file: a binary file is seen as a bytes stream. Each element of the stream is a byte, which is a group of 8 bits (in numeric terms, it can be from 0 to 255, 256 possible values in total).
+
+Both types of file are used in Python and which type of file to use depends on the application and the purposes you're implement in Python. These are the main differences between text and binary files:
+
+- Content. A text file is a stream of character. A binary file is a stream of bytes.
+- Readable. A text file is a human-readable file. A binary file is a stream of raw bytes (not human-readable).
+- Encoding. A text file uses a specific encoding, or character set to represent each character. A binary file is seen as a bytes flow: it not use any encoding, or other.
+- Mode. In Python, you can read/write a text file with `r`, or `w` modes. In Python, you can read/write a binary file with `rb`, or `wb` modes.
+- Data Type. In Python, the content of a text file is a string (`str` data type). In Python, the content of a binary file is an array of bytes (`bytes` data type).
+
+Examples of text file are: `.txt`, `.csv` and `.py`. Examples of binary files are: `.mp3`, `.mp4` and `.png`.
 
 ### 23.08. Sequential and random access with `seek()` and `tell()`
-<!-- to do -->
+
+When you open a file to read, or write it, there is a pointer (called current position pointer) to track the last read you've made with `read()`, `readline()`, `readlines()`, `write()`, or `writelines()`. The file object has two useful method to manage the current position pointer: `seek()` and `tell()`.
+
+The `tell()` method returns the current position of the file pointer, as an integer, representing the number of bytes from start. For example, if you write ten characters by using the ASCII encoding (each character is 1 byte, or 8 bits), `tell()` returns the value `10`, cause the next write starts from the 10th byte of the file. For example, the following code opens a file called `text.txt` in write mode and it writes two characters of one byte, so it calls the `tell()` method:
+
+```python
+f = open("text.txt", "w")
+f.write("A\n")
+print(f.tell()) # 2
+```
+
+If we try to write other two character of one byte, this happens:
+
+```python
+f.write("B\n")
+print(f.tell()) # 4
+```
+
+The same topic for file reading:
+
+```python
+f = open("text.txt")
+
+print(f.tell()) # 0
+print(f.readline()) # "A"
+
+print(f.tell()) # 2
+print(f.readline()) # "B"
+
+print(f.tell()) # 4
+```
+
+If you try to call a third time the `readline()` method, it returns an empty result and `f.tell()` always returns `4`, the end of the file (or told in another way, the number of bytes stored in the `text.txt` file).
+
+`seek()` is the complementary method of `tell()`, cause it has the main prupose to locate the current pointer location. The `seek()` method accepts two parameters:
+
+- `offset`: is the number of bytes from the start of the file. It's an integer and it's a required parameter.
+- `whence`: indicates how the offset is related to the current position. There are three pissibility:
+    - `0`: it's the default value and it indicates the offset is referred at the beginning of the file.
+    - `1`: the offset is referred to the current position of the file.
+    - `2`: the offset is referred to the end of the file.
+
+Here's an example:
+
+```python
+f = open("text.txt")
+
+print(f.tell()) # 0
+print(f.readline()) # A
+
+f.seek(0) # equivalent to f.seek(0, 0), or f.seek(0, whence = 0)
+print(f.readline()) # A
+print(f.tell()) # 2
+
+f.seek(0) # equivalent to f.seek(0, 0), or f.seek(0, whence = 0)
+print(f.readline()) # A
+print(f.tell()) # 2
+```
+
+You can position the pointer at the end of the file with this line of code:
+
+```python
+f.seek(0, whence = 2)
+```
+
+or:
+
+```python
+f.seek(0, 2)
+```
 
 ### 23.09. Temporary files
+
+Python has a library called `tempfile` to use the temporary file. Temporary files are files created to store data temporarily during program execution and they're usually used to store data useful for the program (caching, debugging, or testing). A temporary file tipically is created when the program starts its execution and it's deleted when the program ends its execution.
+
+To use a temporary file, in Python, you must import the `tempfile` module:
+
+```python
+import tempfile
+```
+
+You can use `tempfile.TemporaryFile()` to create a new temporary file completely and automatically handled by the `tempfile` module. To use `tempfile.TemporaryFile()`, you should use the context manager (the `with` keyword):
+
+```python
+with tempfile.TemporaryFile() as tf:
+    tf.write(b"Hello")
+    tf.seek(0)
+    print(tf.read()) # "Hello"
+```
+
+In the previous example, `tempfile` module creates a new temporary file and, thanks to the context manager, we rename it as `tf`. Into the context manager block, we've three statements: the first statement writes `"Hello"` string in the file as a bytes flow; the second statement change the pointer of the file to the start (byte `0`); the third reads the content of the written temporary file.
+
+You can use `tempfile.NamedTemporaryFile()`, a temporary file that has a name stored in the `name` property of the file:
+
+```python
+with tempfile.NamedTemporaryFile() as tf:
+    print(tf.name)
+```
+
+You can also create a temporary directory with `tempfile.TemporaryDirectory()`:
+
+```python
+with tempfile.TemporaryDirectory() as td:
+    print(td)
+```
+
+Remember that, thanks to a context manager, all resources (files and directories) are cleanup automatically when the context manager block ends.
+
+### 23.10. JSON Files
 <!-- to do -->
 
-### 23.10. File Permissions
+### 23.11. CSV Files
 <!-- to do -->
 
-### 23.11. JSON Files
+### 23.12. Serialization and Deserialization
 <!-- to do -->
 
-### 23.12. CSV Files
-<!-- to do -->
+### 23.13. Files with `pickle`
 
-### 23.13. Serialization and Deserialization
-<!-- to do -->
+`pickle` is a module used to serialize (save) and deserialize (load) Python objects. It converts objects into a byte stream that can be stored in a file, for this reason `pickle` is used  to save complex data structures (like lists, dicts and objects).
 
-### 23.14. Files with `pickle`
-<!-- to do -->
+The action of object saving is called pickling. In the following code, first we import the `pickle` module by the `import pickle` statement. Second, we create a dict with the keys `"name"` and `"age"`. Finally, we use a context manager to create a binary file called `data.pkl` (note the extension of pickle files: `.pkl`).
 
-### 23.15. Files with `shelve`
+
+```python
+import pickle
+
+data = {"name": "Alice", "age": 30}
+
+with open("data.pkl", "wb") as f:
+    pickle.dump(data, f) # pickling
+```
+
+The function provided by the `pickle` module is `pickle.dump()`: it accepts the complex data structure to serialize (in our case, a dict) as first positional parameter and the pickle file where the data must be serialized as second positional parameter (in our case, the file called `data.pkl`, referred by the `f` identifier). Note that we used the `open()` built-in function with the `wb` mode: in Python, a complex data structure is always saved as a bytes stream.
+
+The action of object loading is called unpickling. The code is very similar to the previous, but we use the `pickle.load()` function to load the serialized data in a specific file into a Python variable:
+
+```python
+import pickle
+
+with open("data.pkl", "rb") as f:
+    data = pickle.load(f) # unpickling
+    print(data)
+```
+
+Note that we used the `open()` built-in function with the `rb` mode: in Python, a complex data structure is always loaded as a bytes stream.
+
+### 23.14. Files with `shelve`
 <!-- to do -->
