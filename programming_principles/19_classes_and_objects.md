@@ -623,7 +623,6 @@ For example, if we've a class called `Person`:
 ```python
 class Person:
     def __init__(self):
-        # to do
         pass
 ```
 
@@ -1014,15 +1013,99 @@ print(B.mro()) # [ B, A, object ]
 Cause `B` hasn't any method called `hello()`, the Python interpreter searches for a method called `hello()` in the `A` class and there's a match, so `hello()` of `A` has been called and an `"A"` is printed on the standard output.
 
 ### 19.17. Polymorphism
-<!-- to do -->
+
+Polymorphism means “many forms”: different objects can expose the same interface and be used interchangeably. In Python this is often achieved through inheritance or simply by defining methods with the same name (duck typing). The benefit is writing code that works with any object that follows the expected behavior.
+
+Example 1 (same method name, different classes):
+
+```python
+class Cat:
+    def speak(self):
+        return "meow"
+
+class Dog:
+    def speak(self):
+        return "woof"
+
+for animal in [Cat(), Dog()]:
+    print(animal.speak())
+```
+
+Example 2 (inheritance and method overriding):
+
+```python
+class Shape:
+    def area(self):
+        return 0
+
+class Rectangle(Shape):
+    def __init__(self, w, h):
+        self.w = w
+        self.h = h
+
+    def area(self):
+        return self.w * self.h
+
+class Circle(Shape):
+    def __init__(self, r):
+        self.r = r
+
+    def area(self):
+        return 3.14159 * self.r * self.r
+
+shapes = [Rectangle(2, 3), Circle(2)]
+for s in shapes:
+    print(s.area())
+```
+
+Example 3 (duck typing with unrelated classes):
+
+```python
+class JsonWriter:
+    def write(self, data):
+        return f"JSON: {data}"
+
+class CsvWriter:
+    def write(self, data):
+        return f"CSV: {data}"
+
+def export(writer, data):
+    return writer.write(data)
+
+print(export(JsonWriter(), "hello"))
+print(export(CsvWriter(), "hello"))
+```
 
 ### 19.18. Abstract Classes and `@abstractmethod` 
-<!-- to do -->
 
-### 19.19. Dataclasses with `@dataclass`
-<!-- to do -->
+An abstract class is a class that cannot be instantiated directly and is meant to be subclassed. It defines a common interface and can include abstract methods that must be implemented by child classes. In Python, abstract classes are created by inheriting from `ABC` (Abstract Base Class) in the `abc` module.
 
-### 19.20. Aggregation Relationship
+An abstract method is declared with the `@abstractmethod` decorator. If a subclass does not implement all abstract methods, Python will raise a `TypeError` when you try to instantiate it. This helps enforce a consistent API across different subclasses.
+
+Here's an example with `Shape` and `Circle` classes:
+
+```python
+from abc import ABC, abstractmethod
+
+class Shape(ABC):
+    @abstractmethod
+    def area(self):
+        pass
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+
+    def area(self):
+        return 3.14159 * self.radius * self.radius
+
+c = Circle(10)
+print(c.area())
+
+s = Shape()  # ERROR: Can't instantiate abstract class
+```
+
+### 19.19. Aggregation Relationship
 
 Aggregation is a particular type of relationship where one object contains, or uses one, or more another objects, but both can exist independently. Meanwhile the inheritance is an is-a relationship, the aggregation is an has-a relationship: we consider two classes called `Engine` and `Car`. Any car can exists independently from the existent engines and, viceversa, any engine can exists indipendently from the existent cars. `Car` and `Engine` are in a has-a relationship, where the `Car` class contains an instance attribute called `engine` that can be `None`, or an instance of the class `Engine`. In Python, we can model this relationship with the following code:
 
@@ -1055,7 +1138,7 @@ c3 = Car()
 
 Each object has independent lifecycles and exists independently from others. Moreover, one object references anothe: in our case, an instance of the `Car` class references an instance of the `Engine` class through the `engine` instance attribute. In real-world moeling and in real project, this is a very common situation. To summarize: aggregation is a weak has-a relationship where objects are linked but they can exist independently from the others.
 
-### 19.22. Composition Relationship
+### 19.20. Composition Relationship
 
 Composition is a relationship where one object owns and contains another object, it's a stronger relationship than the aggregation, cause there are two type of classes in this scenario:
 
@@ -1086,7 +1169,7 @@ Note this very important difference between aggregation and composition:
 
 In practice: "contained" objects cannot exist independently and they're created and handled by the "container" objects. To summarize: composition is a strong has-a (or parto-of) relationship where one object owns and controls the lifecycle of another.
 
-### 19.23. Reflection
+### 19.21. Reflection
 
 Reflection is the ability of a program to inspect and modify its own structure and behavior at runtime. In Python, this includes dynamically accessing attributes or methods using functions like `getattr()` and `setattr()`. It enables flexible and dynamic code, often used in frameworks and metaprogramming.
 
@@ -1106,7 +1189,7 @@ method_to_call(10, 5) # it calls the move() method defined in the Shape class
 
 The `__dir__` attribute returns a dictionary of the instance where the keys are all the attributes of the instance, meanwhile the values are the value of each key. The same dictionary can be obtained by using the `vars()` built-in function.
 
-### 19.24. Introspection
+### 19.22. Introspection
 
 Introspection is the ability to examine objects, types, and their properties at runtime. Python provides tools like `type()`, `dir()`, and `help()` to inspect objects. It is mainly used for debugging, exploration, and understanding code structure.
 
@@ -1114,6 +1197,6 @@ Introspection is the ability to examine objects, types, and their properties at 
 - `dir()`: accepts one argument and it returns a list of all the attributes and methods accessible of that argument.
 - `help()`: accepts one argument and it returns some info about the argument.
 
-### 19.25. Singleton
+### 19.23. Singleton
 
 A Singleton is a design pattern that ensures a class has only one instance throughout the program. All parts of the code share the same instance, providing a single point of access. It is commonly used for shared resources like configuration, or logging systems. Singleton are particularly used with the OOP languages, like Python, cause it allows the system to save memory and optimize performances during the program execution.
