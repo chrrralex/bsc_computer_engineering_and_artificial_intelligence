@@ -26,6 +26,7 @@
 <!-- to do - audios with lossy coding: MP3 and AAC -->
 <!-- to do - videos with lossless coding: FLAC and Lagarith -->
 <!-- to do - videos with lossy coding: AVC and MPEG-4 -->
+<!-- to do - metric units -->
 
 ### 00.03. Von Neumann Architecture
 <!-- to do - definition of digital computer -->
@@ -37,37 +38,7 @@
 <!-- to do - the I/O Devices -->
 <!-- to do - the system bus: data bus, address bus and control bus -->
 
-### 00.04. Electronics Basics
-<!-- to do - definition of circuit, nodes, branchesand meshes -->
-<!-- to do - electrical quantities: voltage, resistence, current intensity, energy and power -->
-<!-- to do - ideal and real voltage source component -->
-<!-- to do - ideal and real current source component -->
-<!-- to do - resistor component -->
-<!-- to do - equivalent resistance: series resistors, parallel resistors and both -->
-<!-- to do - capacitor component -->
-<!-- to do - equivalent capacity: series capacitors, parallel capacitors and both -->
-<!-- to do - inductor component -->
-<!-- to do - equivalent inductance: series inductors, parallel inductors and both -->
-<!-- to do - RC circuits: the basics -->
-<!-- to do - RLC circuits: the basics -->
-<!-- to do - Ohm's law -->
-<!-- to do - Kirchhoff’s laws: KCL and KVL -->
-<!-- to do - Thevenin transformation -->
-<!-- to do - Norton transformation -->
-
-### 00.05. Beyond digital abstraction: a bit of electronics
-<!-- to do - insulators, conductors and semiconductors -->
-<!-- to do - intrinsic and extrinsic semiconductors -->
-<!-- to do - charge carriers: electrons and holes -->
-<!-- to do - PN junction -->
-<!-- to do - diode component: forward operation, reverse-bias operation, I-V characteristic, diode as a switch, basic diode logic -->
-<!-- to do - BJT (Bipolar Junction Transistor) components: structure, operating regions (cutoff, active, saturation), BJT as a switch, BJT as inverter -->
-<!-- to do - MOS (Metal-Oxide Semiconductor) components: structure, MOSFET (MOS Field-Effect Transistor) structure, threshold voltage, operating regions (cutoff, triode, saturation), MSFET as a switch, NMOS and PMOS as inverter -->
-<!-- to do - CMOS (Complementary MOS) components: inverter structure and inverter operation -->
-<!-- to do - TTL logic vs CMOS logic -->
-<!-- to do - characteristics of CMOS-based circuits VTC (Voltage Transfer Characteristic), noise margins, static and dynamic power consumption, propagation delay, rise time and fall time, fin-in and fan-out, pull-up and pull-down networks -->
-
-### 00.06. Modern Digital Computer
+### 00.04. Modern Digital Computer
 <!-- to do - language definition -->
 <!-- to do - machine language, low-level language, mid-level language and high-level language -->
 <!-- to do - interpretation vs translation -->
@@ -81,16 +52,25 @@
 <!-- to do - layer 4 overview: assembler layer -->
 <!-- to do - layer 5 overview: applications and problem-oriented languages layer -->
 
-### 00.07. Architectures Types
+### 00.05. Architectures Types
 <!-- to do - definition of CPU, processor, multiprocessor and core -->
 <!-- to do - Flynn's taxonomy: SISD, SIMD, MISD and MIMD architectures -->
 <!-- to do - memory architectures: Von Neumann, Harvard and Modified Harvard architectures -->
 <!-- to do - parallel computing architectures: scalar processors, vector processors, array processors, multiprocessors systems, multicore systems -->
 <!-- to do - processing organization: centralized systems, parallel systems and distribuited systems -->
-<!-- to do - types of computers: embedded systems, personal computers, workstations, mainframes and supercomputers -->
+<!-- to do - types of computers: embedded systems, personal computers, mobile and game computers, workstations, mainframes, supercomputers, clusters -->
 
-### 00.08. History of the Multilevel Machines
+### 00.06. History of the Multilevel Machines
 <!-- to do - the birth of the microprogramming (1940s) -->
 <!-- to do - the rise of the operating system (1960s) -->
 <!-- to do - the expansion of the ISA (1970s) -->
 <!-- to do - the elimination of the microprogramming (1980s) -->
+<!-- to do - Moore's law -->
+
+### 00.07. History of the Computer Architectures
+<!-- to do - zeroth generation: mechanical computers (1642-1945) -->
+<!-- to do - first generation: vacuum tubes (1945-1955) -->
+<!-- to do - second generation: transistors (1955-1965) -->
+<!-- to do - third generation: integrated circuits (1975-1985) -->
+<!-- to do - fourth generation: VLSI (Very Large Scale Integration) (1965-Today) -->
+<!-- to do - fifth generation: low-power and invisible computers (1990-Today) -->
