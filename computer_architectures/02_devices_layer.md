@@ -104,4 +104,21 @@
 <!-- to do - power-velocity tradeoff -->
 
 ### 02.10. ICs (Integrated Circuits) Basics
-<!-- to do -->
+<!-- to do - definition of integrated circuits (ICs) -->
+<!-- to do - advantages of integrated circuits vs discrete components -->
+<!-- to do - levels of integration: - SSI (Small-Scale Integration), MSI (Medium-Scale Integration), LSI (Large-Scale Integration), VLSI (Very Large-Scale Integration) and ULSI (Ultra-Large-Scale Integration) -->
+<!-- to do - digital vs analog integrated circuits -->
+<!-- to do - mixed-signal integrated circuits --> 
+<!-- to do - semiconductor technologies overview: BJT technology, MOS technology and CMOS technology -->
+<!-- to do - basic IC structure: substrate, diffusion regions, polysilicon, metal interconnect layers -->
+<!-- to do - logic families overview: TTL, NMOS logic, PMOS logic, CMOS logic -->
+<!-- to do - CMOS as dominant digital IC technology -->
+<!-- to do - IC packaging concepts: DIP, QFP, BGA -->
+<!-- to do - pin configuration and pinout diagrams -->
+<!-- to do - power supply pins: VDD, VSS, GND -->
+<!-- to do - propagation delay in ICs -->
+<!-- to do - power dissipation in ICs: static power, dynamic power -->
+<!-- to do - fan-in and fan-out concepts -->
+<!-- to do - noise margins in digital ICs -->
+<!-- to do - scaling trends in integrated circuits (Moore’s Law overview) -->
+<!-- to do - reliability considerations in ICs: heat dissipation, signal integrity and process variations -->
