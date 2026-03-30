@@ -123,17 +123,12 @@ to do - NAND memory: SSD (Solid State Disk)
 -->
 
 ### 01.05. I/O Devices
-<!-- to do - keyboards -->
-<!-- to do - mouses -->
-<!-- to do - monitors -->
+<!-- to do - keyboards: mechanical, membrane, rubber dome, scissor-switch and capacitive -->
+<!-- to do - mouses: mechanical (rubber ball, internal rollers), optomechanical (ball and ecnoder wheels, LED and photodectectors), optical (early-optical, LED, laser), wireless (infrared, RF and bluetooth) and touch-based -->
+<!-- to do - monitors: CRT (Cathode Ray Tube), LCD (Liquid Crystal Display), LED (Light Emitting Diode), OLED (Organic LED) and plasma -->
+<!-- to do - printers: inject, bubble-jet, laser, LED, direct thermal, thermal transfer, dot-matrix -->
 <!-- to do - speakers -->
-<!-- to do - game consoles -->
-<!-- to do - modems -->
-<!-- to do - USB keys -->
 <!-- to do - digital cameras -->
-<!-- to do - printers -->
-<!-- to do - scanners -->
-<!-- to do - microphones -->
 
 ### 01.06. System Bus
 <!-- to do - definition of system bus -->
@@ -144,5 +139,6 @@ to do - NAND memory: SSD (Solid State Disk)
 <!-- to do - performance parameters: width, latency, frequency, throughput -->
 <!-- to do - architectures: single-bus, multiple-bus and hierarchical bus -->
 <!-- to do - modern bus standards: memory bus, FSB (Front-Side Bus), BSB (Block-Side Bus) -->
-<!-- to do - PCI and PCIe (PCI express) -->
-<!-- to do - SoC (System on Chip): northbridge and southbridge -->
+<!-- to do - PCI (Pheripheral Components Interconnect) and PCIe (PCI express) -->
+<!-- to do - ISA (Industry Standard Architecture) -->
+<!-- to do - Chipset: northbridge and southbridge -->
