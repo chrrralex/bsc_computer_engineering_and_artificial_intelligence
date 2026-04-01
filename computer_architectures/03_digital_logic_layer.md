@@ -14,13 +14,133 @@
 
 **Functionally Complete Set**: as any other branch of the mathemtatics, in boolean algebra is considered a functionally complete set a set of boolean operators that can be used to express any boolean expression. A set of logic operations is functionally complete if every Boolean expression can be built using only those operations. Often, in boolean algebra the most common functionally complete set is: `AND`, `OR`, `NOT`. Another functionally complete set is the `NAND` gate alone and another also is the `NOR` alone: both the two previous sets are commonly used for the VLSI (Very Large Scale Integration) digital circuits implementation.
 
-<!-- to do - truth tables -->
-<!-- to do - main logical operations: NOT, AND, OR -->
-<!-- to do - derived logical operations: NAND, NOR, XOR, XNOR -->
+**Boolean Expression**: is a mathematical expression used in the boolean algebra that combines boolean literals (`0` or `1`) using logic operations like `AND`, `OR`, and `NOT` to produce a result that is also a boolean value between `0` and `1`. For example, the following is a boolean expression:
+
+```
+Y = AB + C(!D) + !(E + !(A))
+```
+
+Where: `A`, `B`, `C`, `D` and `E` are all boolean variables. `!` is the `NOT` (or inverter) operator; `+` is the `OR` (or logical disjunction) operator; `x` (often not indicated) is the `AND` (or logical conjunction) operator. These three boolean operators are basically the main boolean operators. The previous expression is also called boolean function of five boolean variables and is also indicated in this way:
+
+```
+Y = f(A, B, C, D, E) = AB + C(!D) + !(E + !(A))
+```
+
+We'll see in details how the basic boolean algebra operators works.
+
+**Turth Table**: a turth table is the main way to describe the relationship between a set of boolean variables and a boolean expression. Given a boolean expression, its turth table is composed by an header and a body. The header defines at least N + 1 columns, where N is the number of the boolean variables present in the boolean expression and the remaining column is the result of that boolean expression. For example, consider the following expression:
+
+```
+Y = !(AB) + AB(!C) + A
+```
+
+In this example three boolean variables appear: `A`, `B` and `C`. So the tirth table has `3 + 1` columns. The body of the turth table has 2^N rows: in this case, cause we have three boolean variables, the turth table has 2^3 = 8 rows. For each row appear a specific combination of the `A`, `B` and `C` boolean variables. Normally, the combinations follow the binary count and in the our example we start from `000` and we and to `111`. The following is the turth table of the previous boolean expression, without values for the `Y` column:
+
+| A | B | C | Y |
+|---|---|---|---|
+| 0 | 0 | 0 |   |
+| 0 | 0 | 1 |   |
+| 0 | 1 | 0 |   |
+| 0 | 1 | 1 |   |
+| 1 | 0 | 0 |   |
+| 1 | 0 | 1 |   |
+| 1 | 1 | 0 |   |
+| 1 | 1 | 1 |   |
+
+Note that, in decimal, each combination varying from `0` to `2^N - 1`, in our case from `0` (`000`) to `7` (`111`). When you creating a turth table for a complex boolean expression, it's useful to add some columns to track the values of the subexpressions, like `!(AB)`, or `AB(!C)`, or `A`. For example, we can add four other columns in the previous turth table, each with intermediate values:
+
+| A | B | C | !C | AB | !(AB) | AB(!C) | Y |
+|---|---|---|----|----|-------|--------|---|
+| 0 | 0 | 0 | 1  | 0  |   1   |   0    |   |
+| 0 | 0 | 1 | 0  | 0  |   1   |   0    |   |
+| 0 | 1 | 0 | 1  | 0  |   1   |   0    |   |
+| 0 | 1 | 1 | 0  | 0  |   1   |   0    |   |
+| 1 | 0 | 0 | 1  | 0  |   1   |   0    |   |
+| 1 | 0 | 1 | 0  | 0  |   1   |   0    |   |
+| 1 | 1 | 0 | 1  | 1  |   0   |   1    |   |
+| 1 | 1 | 1 | 0  | 1  |   0   |   0    |   |
+
+Finally, we can easily calculate the values for the `Y` column (the result of the boolean expression):
+
+| A | B | C | !C | AB | !(AB) | AB(!C) | Y |
+|---|---|---|----|----|-------|--------|---|
+| 0 | 0 | 0 | 1  | 0  |   1   |   0    | 1 |
+| 0 | 0 | 1 | 0  | 0  |   1   |   0    | 1 |
+| 0 | 1 | 0 | 1  | 0  |   1   |   0    | 1 |
+| 0 | 1 | 1 | 0  | 0  |   1   |   0    | 1 |
+| 1 | 0 | 0 | 1  | 0  |   1   |   0    | 1 |
+| 1 | 0 | 1 | 0  | 0  |   1   |   0    | 1 |
+| 1 | 1 | 0 | 1  | 1  |   0   |   1    | 1 |
+| 1 | 1 | 1 | 0  | 1  |   0   |   0    | 0 |
+
+As we'll see in the next paragraphs, this expression is a NAND of the following three boolean variables: `A`, `B` and `C`. 
+
+**NOT operator**: the inverter operator is a one-operand boolean operator that performs a complement of the input and it's indicated with `!`. The turth table of the `NOT` operator is:
+
+| A | !A |
+|---|---|
+| 0 | 1 |
+| 1 | 0 |
+
+**AND operator**: the logical conjunction operator is a two-operands boolean operator that returns `1` only if both inputs are `1` and it's indicated with `x` (often implicit, like in the classic algebra). The `AND` boolean operator follows the same rules of the product operator used in the classic algebra: any value multiplied by `0` returns `0` as a result. The turth table of the `AND` operator is:
+
+| A | B | AB |
+|---|---|---|
+| 0 | 0 | 0 |
+| 0 | 1 | 0 |
+| 1 | 0 | 0 |
+| 1 | 1 | 1 |
+
+**OR operator**: the logical disjunction operator is a two-operands boolean operator that returns `1` if at least one input, or both inputs are `1` and it's indicated with `+`. The `OR` boolean operator follows the same rule of the sum operator (`+`) of the classic algebra, but there is an exception: `1 + 1` is `1`, not `10`. Remember that the plus symbol, in boolean algebra, is used to indicate the `OR` logical operator. The turth table of the `OR` operator is:
+
+| A | B | A + B |
+|---|---|---|
+| 0 | 0 | 0 |
+| 0 | 1 | 1 |
+| 1 | 0 | 1 |
+| 1 | 1 | 1 |
+
+**NAND operator**: the `NAND` operator is a derived logical operator with two-operands that returns `0` only if both the inputs are `0` and it's indicated with the expression `!(AB)`. The turth table of the `NAND` operator is the same of the `AND`, excepts the result column, that is the complement:
+
+| A | B | !(AB) |
+|---|---|---|
+| 0 | 0 | 1 |
+| 0 | 1 | 1 |
+| 1 | 0 | 1 |
+| 1 | 1 | 0 |
+
+**NOR operator**: the `NOR` operator is a derived logical operator with two-operands that returns `1` only if both the inputs are `0` and it's indicated with the expression `!(A + B)`. The turth table of the `NOR` operator is the same of the `OR`, excepts the result column, that is the complement:
+
+| A | B | !(A + B) |
+|---|---|---|
+| 0 | 0 | 1 |
+| 0 | 1 | 0 |
+| 1 | 0 | 0 |
+| 1 | 1 | 0 |
+
+**XOR operator**: the `XOR` operator is a derived logical operator with two-operands that returns `1` only if the inputs are different: one is `0` and the remaning is `1`. It's indicated with the circled-sum operator: `⊕`. The turth table of the `XOR` operator is the same of the `OR`, excepts the last row of the result column, that is `0`:
+
+| A | B | A ⊕ B |
+|---|---|---|
+| 0 | 0 | 0 |
+| 0 | 1 | 1 |
+| 1 | 0 | 1 |
+| 1 | 1 | 0 |
+
+**XNOR operator**: the `XNOR` operator is a derived logical operator with two-operands that returns `1` only if the inputs are equal: one both are `0`, or both are `1`. It's indicated with the circled-sum operator and this expression: `!(A ⊕ B)`. The turth table of the `XNOR` operator is the complement of the `XOR`:
+
+| A | B | A ⊕ B |
+|---|---|---|
+| 0 | 0 | 1 |
+| 0 | 1 | 0 |
+| 1 | 0 | 0 |
+| 1 | 1 | 1 |
+
 <!-- to do - one-variable principles -->
 <!-- to do - two-variables principles -->
 <!-- to do - de morgan laws -->
 <!-- to do - minterms and maxterms -->
+<!-- to do - implicating and implicated -->
 <!-- to do - fist canonic form and SOP (Sum Of Products) -->
 <!-- to do - second canonic form and POS (Product Of Sums) -->
 <!-- to do - two-variable k-maps -->
