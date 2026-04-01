@@ -40,7 +40,7 @@
 
 The NOT gate is represented in the following figure:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The NOT logical gate with A input and Y output*
 
 
@@ -53,7 +53,7 @@ The NOT gate is represented in the following figure:
 
 The BUF gate is represented in the following figure:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The BUF logical gate with A input and Y output*
 
 But for which reason a BUF logical gate should be used? Normally, in the digital logical circuits, the length of a cable and the noise affects the digital signal and slowly degenreate it. The BUF logical gate is very useful to regenerate the signal (in terms of voltage and current). This is a common application when a digital signal must be delivered to one, or more devices, or circuits.
@@ -69,12 +69,12 @@ But for which reason a BUF logical gate should be used? Normally, in the digital
 
 The AND gate is represented in the following figure:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The AND logical gate with A and B inputs and Y output*
 
 An AND gate can have more than two inputs, but the gate delay introduced by its circuitry depends in a linear way by the number of the inputs accepted. For example, an AND3 gate (AND gate with 3 inputs) has a lower delay than an AND8 (AND gate with 8 inputs). Here's an example of an AND4 gate:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The AND4 logical gate with four inputs and Y output*
 
 **OR gate**: the OR gate is a basic logic gate that produces the OR logical function of its input. The basic gate accepts two inputs and it produces an output. The boolean relationship between the input `A` and the output `Y` is `Y = A + B`, where the OR function is representend by the sum operator (`+`), like in the classic algebra. The OR logical gate has the following turth table:
@@ -88,12 +88,12 @@ An AND gate can have more than two inputs, but the gate delay introduced by its 
 
 The OR gate is represented in the following figure:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The OR logical gate with A and B inputs and Y output*
 
 An OR gate can have more than two inputs, but the gate delay introduced by its circuitry depends in a linear way by the number of the inputs accepted. For example, an OR3 gate (OR gate with 3 inputs) has a lower delay than an OR8 (OR gate with 8 inputs). Here's an example of an OR4 gate:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The OR4 logical gate with four inputs and Y output*
 
 **NAND gate**: the NAND gate is a basic logic gate that produces the complement of the AND logical function of its input. The basic gate accepts two inputs and it produces an output. The boolean relationship between the `A` and `B` inputs and the output `Y` is `Y = !(A x B)`, often abbreviated in `Y = !(AB)`, like in the classic algebra. The NAND logical gate has the following turth table:
@@ -107,12 +107,12 @@ An OR gate can have more than two inputs, but the gate delay introduced by its c
 
 The NAND gate is represented in the following figure:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The NAND logical gate with A and B inputs and Y output*
 
 An NAND gate can have more than two inputs, but the gate delay introduced by its circuitry depends in a linear way by the number of the inputs accepted. For example, a NAND3 gate (NAND gate with 3 inputs) has a lower delay than a NAND8 (NAND gate with 8 inputs). Here's an example of a NAND4 gate:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The NAND4 logical gate with four inputs and Y output*
 
 **NOR gate**: the NOR gate is a basic logic gate that produces the complement of the OR logical function of its input. The basic gate accepts two inputs and it produces an output. The boolean relationship between the `A` and `B` inputs and the output `Y` is `Y = !(A + B)`, where the sum operator (`+`) represents the OR function in the boolean algebra, like in the classic algebra. The NOR logical gate has the following turth table:
@@ -126,12 +126,12 @@ An NAND gate can have more than two inputs, but the gate delay introduced by its
 
 The NOR gate is represented in the following figure:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The NOR logical gate with A and B inputs and Y output*
 
 An NOR gate can have more than two inputs, but the gate delay introduced by its circuitry depends in a linear way by the number of the inputs accepted. For example, a NOR3 gate (NOR gate with 3 inputs) has a lower delay than a NOR8 (NOR gate with 8 inputs). Here's an example of a NOR4 gate:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The NOR4 logical gate with four inputs and Y output*
 
 **XOR gate**: the XOR gate (eXclusive OR) is a basic logic gate that produces the `1` logical output only if the number of inputs set to `1` is odd. The basic gate accepts two inputs and it produces an output. The boolean relationship between the `A` and `B` inputs and the output `Y` is `Y = A ⊕ B`, where the circled sum operator (`⊕`) represents the XOR function in the boolean algebra. The XOR logical gate has the following turth table:
@@ -145,12 +145,12 @@ An NOR gate can have more than two inputs, but the gate delay introduced by its 
 
 The XOR gate is represented in the following figure:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The XOR logical gate with A and B inputs and Y output*
 
 An XOR gate can have more than two inputs, but the gate delay introduced by its circuitry depends in a linear way by the number of the inputs accepted. For example, a XOR3 gate (XOR gate with 3 inputs) has a lower delay than a XOR8 (XOR gate with 8 inputs). Here's an example of a XOR4 gate:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The XOR4 logical gate with four inputs and Y output*
 
 The XOR gate is also called "diversity gate", cause a XOR with two inputs returns an output euqal to the `1` logical value only if the two inputs are different (`A = 0` and `B = 1`, or viceversa).
@@ -166,12 +166,12 @@ The XOR gate is also called "diversity gate", cause a XOR with two inputs return
 
 The XNOR gate is represented in the following figure:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The XNOR logical gate with A and B inputs and Y output*
 
 An XNOR gate can have more than two inputs, but the gate delay introduced by its circuitry depends in a linear way by the number of the inputs accepted. For example, a XNOR3 gate (XNOR gate with 3 inputs) has a lower delay than a XNOR8 (XNOR gate with 8 inputs). Here's an example of a XNOR4 gate:
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - The XNOR4 logical gate with four inputs and Y output*
 
 The XNOR gate is also called "equality gate", cause a XNOR with two inputs returns an output euqal to the `1` logical value only if the two inputs are equal (`A = 0` and `B = 0`, or `A = 1` and `B = 1`).
@@ -187,7 +187,7 @@ The XNOR gate is also called "equality gate", cause a XNOR with two inputs retur
 
 The following figure represents two types of the TRI gate (active high and active low):
 
-<!-- to do -->
+<!-- to add - image -->
 *In Figure - On the left: a TRI logical gate with E active high. On the right: a TRI logical gate with !E active low*
 
 Like the BUF gate, TRI is used to regenerate a digital signal, or to provide a clean digital signal to one, or more digital circuits. But TRI is also used to enable, or disable a specific circuit (like a portion of the central memory, or a I/O lines) in the modern system architectures.
