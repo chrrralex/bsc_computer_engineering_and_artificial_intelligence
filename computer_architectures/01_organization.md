@@ -1,29 +1,114 @@
 # 01. Organization
 
 ### 01.01. Processor
-<!-- to do - definition of CPU (Central Processing Unit) -->
-<!-- to do - definition of processor -->
-<!-- to do - definition of multicore processor -->
-<!-- to do - definition of multiprocessors -->
-<!-- to do - definition of multicore and multiprocessors -->
-<!-- to do - definition of multicomputers -->
-<!-- to do - system clock -->
-<!-- to do - CU (Control Unit) -->
-<!-- to do - ALU (Arthmetic-Logic Unit) -->
-<!-- to do - definition of data path -->
-<!-- to do - registers: PC (Program Counter), IR (Instruction Register), GPRs (General Purposes Registers), MAR (Memory Address Register), MDR (Memory Data Register), MBR (Memory Buffer Register), SP (Stack Pointer), AC (ACcumulator), SR (Status Register) -->
-<!-- to do - fetch-decode-execute cycle: IF (Instruction Fetch), ID (Instruction Decode), EXE (EXEcute), WB (Write Back), ST (STore) -->
-<!-- to do - RISC (Reduced Instruction Set Computer) -->
-<!-- to do - CISC (Complex Instruction Set Computer) -->
-<!-- to do - RISC and CISC comparison -->
-<!-- to do - NUMA (Non-Uniform Memory Access) architecture -->
-<!-- to do - SMP (Simmetric Multi-Processor) architecture -->
-<!-- to do - AMP (Asymmetric Multi-Processor) architecture -->
+
+**CPU (Central Processing Unit)**: from the logical point of view, a CPU is the brain of a digital system. It's the hardware dedicated to the computation and to the instructions execution. Often, the term "CPU" isn't used to indicate the hardware chip (processor, or microprocessor) in the computer, but it's used to indicate the processing unit of the system from a logical point of view. From the logical point of view, a CPU is composed by the following subcomponents:
+
+- CU (Control Unit): a component internal to the processor that coordinates the signal from and to the CPU.
+- ALU (Arithmetic-Logic Unit): a component internal to the processor that performas calculations and process one, two, or more operands.
+- Registers: small memory directly installed in the same chip of the ALU and the CU. The ALU can access directly and quickly to each register. Each register has a limitated capacity, often between 8 and 512 bits (or 1 and 64 Bytes).
+
+We use the term "CPU" to indicate a generic computation unit from the logical point of view (it can be a processor, a singlecore processor, a multicore processor, or a multicomputer system).
+
+**Data Path**: the ALU of a processor is an highly-structured component. The ALU is structured as a data path: a path followed by the data during the execution of a specific instruction. The data path starts from the registers, where the operands and the partial results are stored, fetched and inserted into the ALU's buses. The ALU's buses are tipically called bus A and bus B and, sometimes, there is a third bus called bus C. The ALU has two, or three registers as inputs: bus A carries the first operand (A operand) from a register to the first input of the ALU; bus B carries the second operand (B operand) from a register to the second input of the ALU. Systems equipped with the bus C has an ALU accepting a third operand (C operand) and this bus carries the third operand from a register to the third input of the ALU.
+
+The following figure represents two types of data path:
+
+<!-- to add -->
+*In Figure - On left side: a data path with bus A and bus B (ALU with two operands). On right side: a data path with bus A, bus B and bus C (ALU with three operands)*
+
+After the ALU executes the current instruction of the program (stored in the central memory), the result is stored in the output register of the ALU. For example, if the current instruction is the sum between A, B and C operands, the output register of the ALU has the following result: A + B + C. Another bus of the ALU carries the output of the current instruction to a specific register, or in a specific location of the central memory (it depends of the executed instruction).
+
+**Registers**: a register is a small and quick memory located near the ALU. Modern ALUs have different types of registers:
+
+- PC (Program Counter): a relative poiner register indicates the next instruction to fetch and execute. Each time a new instruction is fetched for its execution, the PC is incremented by one. Exist some isntructions that allow the program to add a different offset than 1 to the PC (for example, for the jump instruction).
+- IR (Instruction Register): contains the current instruction in the execution phase. An instruction can have zero, one, two, or more operands. 
+- ACC (ACCumulator): a counter register, or accumulator register used by one, two, or more instructions.
+- GPRs (General Purposes Registers): working registers used to store operands and partial results. GPRs follow a specific nomenclature: tipically each register is called Rn, where "n" is a number that starts from 0 and ends to the number of GPRs installed in the chip, decremented by one. For example, if the CPU has 64 GPRs (also called working registers), there are from R0 to R63 registers.
+- A register: the A operand of the ALU.
+- B register: the B operand of the ALU.
+- C register: the C operand of the ALU (for ALU that can operates with more than two operands simultaneously).
+- Status register (or flags register): a register where each bit indicates a specific situation after the execution of the last instruction. A status regsiter is composed by the following flags:
+    - Zero flag (Z): Z = 1 if the last instruction returns 0, otherwise Z = 0.
+    - Carry flag (C): C = 1 if the last instruction returns a result with carry, otherwise C = 0.
+    - Sign flag (S): S = 1 if the last instruction returns a negative number, otherwise S = 0.
+    - Overflow flag (O): O = 1 if the last instruction caused an overflow, otherwise O = 0.
+    - Parity flag (P): P = 1 if the last result is an odd number, otherwise P = 0. 
+- MAR (Memory Address Register): stores the address of the memory location that the CPU wants to access. It's used during read and write operations.
+- MDR (Memory Data Register), or MBR (Memory Buffer Register): stores the data being transferred to, or from the memory. Also this register is used during the read and write operations.
+
+**Fetch-Decode-Execution Cycle**: the machine cycle, also called fetch-decode-execution cycle, is a loop continuously executed by the hardware of the CPU. The machine cycle consists in executing the following steps, in the listed order:
+
+1. IF (Instruction Fetch): fetch the next instruction, indicated by the PC register, from the main memory.
+2. PCI (Program Counter Increment): increment the PC, so it this way it can point to the next instruction.
+3. ID (Instruction Decode): decode the instruction by considering its opcode. An opcode (operation code) is a unique code for a particular architecture that indicates the type of the instruction.
+4. OPF (OPerands Fetch): if the current instruction needs one, two, or more operands from the main memory, in this phase the CPU fetches all the operands.
+5. EXE (EXEcute, or EXEcution): the ALU executes the fetched instruction with the fetched operands.
+6. WB (Write Back): after the calculation, the ALU first stores the result in the output register, then a bus of the CPU carries the result to a GPRs.
+7. MEM (MEMory, or MEMory write): if the result is a total result, it is stored to the main memory.
+
+In reality, the machine cycle is not necessarily continuously executed by the system's hardware. For example, in the Java language there is a virtual machine called JVM (Java Virtual Machine) that executes the machine cycle via sofwtare.
+
+**Processor**: it's the chip installed on the computer. The term "processor" is tipically used to indicate the physical chip of the system. A processor has own pins and own signals, but there are several standards that describe how the processor must communicate with the other peripherals in the system. A processor is also called microprocessor, also known as µP, or uP.
+
+**Core, Single-Core Processro, Multi-Core Processor and Multicomputer**: an independent processing unit inside a processor that can execute instructions on its own. Each core can fetch instructions dirctly from the central memory, perform calculations (for example with integers numbers, or floating-point numbers), run programs and manage tasks from the operating systems. A processor with one core can execute only one task at a time; a processor with two cores can execute two tasks in parallel; a processor with N cores can execute ideally N tasks in parallel. Multiple cores allow your computer to handle programs simultaneously and smoothly.
+
+A processor can be:
+
+- Single-Core: it has only one execution unit installed on the chip. Intel Pentium III and Intel Pentium 4 are examoples of single-core processors.
+- Dual-Core: it has two execution units installed on the chip. Intel Core 2 Duo and AMD Athlon 64 X2 are examples of dual-core processors.
+- Multi-Core: it has more than two execution units installed on the chip. Intel Xeon Clearwater Forest (with 288 cores) and AMD EPYC 9965 Zen 5 Dense Cores (with 192 cores) are two processors that support an high level of parallelism with the highest number of core existing today
+
+A processors with two, or more cores is called multicore processor. A processor with one core is called singlecore processor, or simply processor. If a system has two, or more processors (intended as multiple processor chips connected to each other), is called multicomputer. A multicomputer allows to obtain a much greater degree of parallelism.
+
+The following image represents two types of system: a processor with single core and a processor with more cores.
+
+<!-- to add -->
+*In Figure: a singlecore and multicore processors*
+
+**Tightly Coupled Processors**: a tightly coupled sustem consists of two, or more processors with a shared memory. Each processor tipically works with same instruction, or with same data, and this gives rise to different parallel execution modes on the same system:
+
+- SISD (Single Instruction, Single Data): used fundamentally used by a processor, that executes the own instruction with the own data.
+- SIMD (Single Instruction, Multiple Data): where more processors execute the same instruction for different set of data. This model is tipically used by the GPU (Graphic Processor Unit), or by TPU (Tensor Processor Unit).
+- MISD (Multiple Instruction, Single Data): very similar to the previous; in this context more processors excecute different instruction by considering the same set of data. It's typical in simulations systems, or in performing large computations. 
+- MIMD (Multiple Instruction, Multiple Data): this is the most gade of parallelism between two, or more processors, where each processor executes the own program with the own data. Multicore systems uses MIMD.
+
+In the following figure is represented the GPU Nvidia Fermi, an example of a SIMD model:
+
+<!-- to add -->
+*In Figure: the Nvidia Fermi GPU, that follows the SIMD (Single Instruction, Multiple Data) model*
+
+**Loosely Coupled Processors**: a loosely coupled system consists of processors with separate local memories, connected through a communication network, as shown in the following figure:
+
+<!-- to add -->
+*In Figure: an example of a loosely coupled procesors, a multicomputer*
+
+In a loosely coupled system each processor has the own lifecycle and the own memory. Each processor can execute the own instruction and the own program, without interfering with others. There isn't any shared global memory and each processor operates independently. Loosely coupled systems are easily scalable and suitable for parallel architectures. Examples of lossely coupled systems are: distribuited systems, cloud computing systems and supercomputers. A loosely coupled processor is basically a multicomputer system.
+
+**RISC (Reduced Instruction Set Computer)**: it a type of ISA (Instruction Set Architecture) with a reduced number of instructions. The philosophy behind the RISC approach is very simple: each instruction should be as simple as possible and it should be executed as fast as possible (fewest possible number of clock cycles). Tipically, in a RISC ISA, each instruction has one, or two operands; it is difficult to have instructions with more than two operands in a RISC architecture. Often, RISC architecture have a maxium of 128, or 256 instructions; moreover, each opcode is designed to be as simple as possible to interpret. All instructions have follows the same format and has the same length (number of bit, or Byte), rarely bigger than 16, 32, or 64 bits. Compilers and interpreters of programming languages play an important role in the code optimization. RISC allows tipically a low hardware complexity. For example, the following image shows the RISC ISA ARMv7-A:
+
+<!-- to add -->
+*In Figure: an example of the ARMv7-A ISA*
+
+**CISC (Complex Instruction Set Computer)**: it's a type of ISA (Instruction Set Architecture) with an hugh number of instructions. The philosophy behind the CISC approach is: each instruction must be as independent as possible and must be as close as possible to the way human beings think. A CISC architecture reduces the gap between the machine level and the human level. Tipically, in a CISC ISA, each instruction has one, two, or more operands (some instruction three, four, or more operands). CISC architecture have an high number off instructions, 512, OR 1024 instructions in some architecture. Unfortunately, CISC architecture doesn't improve the hardware optimization; viceversa, often the hardware of the CPU and the ALU are more complex than the hardware needed by a RISC architecture. In a CISC architecture there are different formats and different lengths (an instruction can easily reach a length of 64, 128, or 256 Bytes also). Each instruction can be executed in an higher number of clock cycles (often 4, 8, 16 or more for the more complex insutrctions). Intel 8088 (like the Intel Core i9) is an example of CISC architecture. The following image shows the various format of the 8088 ISA:
+
+<!-- to add -->
+*In Figure: different formats of the Intel 8088 ISA*
+
+**HISC (Hybrid Instruction Set Computer)**: an hybrid architecture uses both CISC and RISC ISAs to find a compromise between simplicity and independence of instructions. Modern architecture, Intel and AMD included, uses a RISC architecture for the most common and frequently used instruction (like `ADD`, `MOV`, `SUB`, `MUL`, `DIV`, `JMP` and others) and uses a CISC architecture for the most complex instruction (for example, for some vectorial instructions, or some calculation of floating-point numbers). This compromise is somewhere in between pure RISC architectures and pure CISC architecturess: HISC is faster than CISC, but slower than RISC.
+
+**NUMA (Non-Uniform Memory Access) architecture**: <!-- to do -->
+
+**SMP (Simmetric Multi-Processor) architecture**: <!-- to do -->
+
+**AMP (Asymmetric Multi-Processor) architecture**: <!-- to do -->
+
 <!-- to do - real and emulated parallelism -->
 <!-- to do - introduction of ILP (Instruction-Level Parallelism): Pipelines, Superscalar Architectures -->
 <!-- to do - introduction of PLP (Processor-Level Parallelism): SIMD (Single Instruction, Multiple Data), Vector Processors, Multiprocessor and Multicomputer  -->
 <!-- to do - memory hierarchy: cache memories, primary memories, secondary memories and external memories -->
 <!-- to do - parameters of memory herarchy: access time, storage capacity, cost per bit (or cost per byte), memory types -->
+<!-- to do - system clock -->
 
 ### 01.02. Cache Memory
 <!-- to do - definition of cache -->
