@@ -119,14 +119,28 @@ As you can see, a NUMA architecture with N processors has N chips of memory also
 <!-- to add -->
 *In Figure: organization of an AMP architecture*
 
-<!-- to do - real and emulated parallelism -->
-<!-- to do - introduction of ILP (Instruction-Level Parallelism): Pipelines, Superscalar Architectures -->
-<!-- to do - introduction of PLP (Processor-Level Parallelism): SIMD (Single Instruction, Multiple Data), Vector Processors, Multiprocessor and Multicomputer  -->
-<!-- to do - memory hierarchy: cache memories, primary memories, secondary memories and external memories -->
-<!-- to do - parameters of memory herarchy: access time, storage capacity, cost per bit (or cost per byte), memory types -->
-<!-- to do - system clock -->
+**Real and Emulated Parallelism**: by emulated parallelism we mean the impression that the user has of the activity carried out by the computer. The processor may not support parallelism at the hardware level, however its execution speed and high system clock allow the processor to execute multiple programs in a very short time, even one at a time and with frequent context switches. By real parallelism we mean a system that can actually handle the simultaneous (or concurrent) execution of multiple running programs, for example by having multiple hardware cores, or by supporting hardware threads and using techniques such as pipelining. There are basically two types of real parallelism: ILP (Instruction-Level Parallelism) and PLP (Processor-Level Parallelism):
+
+- ILP (Instruction-Level Parallelism): is a form of real parallelism that works by executing multiple instructions simultaneously within a single processor. Useful techniques of ILP are: pipelines, superscalar architectures, out-of-order execution, register renaming and speculative execution.
+- PLP (Processor-Level Parallelism): is a form of real parallelism that works by executing tasks across multiple processors, or cores simultaneously. Architectures with the PLP supports are: multicore processors, vector processors and vector registers, SMP, AMP, NUMA, distribuited systems, clusters and cloud computing.
+
+**System Clock**: the system clock is a digital circuit that use an opportune hardware (tipically a ring oscillator, or a quartz crystal oscillator) to generate a digital, periodic and cyclic signal. The digital signal continuously alternates between an high voltage (1.2 V, or 3.3 V, or 5 V) and low voltage (- 5 V, or 0 V). The system clock is the most important circuit of synchronous digital systems (like a computer), because it defines the various moments where each component executes some task. The following figure shows how a system clock is structured:
+
+<!-- to add -->
+*In Figure: an example of system clock*
+
+The frequency is the key parameter of a system clock: it defines the clock cycles in a second. Modern digital systems have system clock of 4, or more GHz, it means that the system clock has a period of 1 / 4 000 000 000 seconds, or 0.25 ns (nanosecond, where ns = 10^(-9) seconds). The system clock is the "fastest" circuit in the system, as it marks the various time instants where each peripheral performs its task. Remember that the period, indicated by T, or P, is the inverse of the frequency, measured in Hz (Hertz) and indicated by f:
+
+```
+f = 1 / T
+T = 1 / f
+```
+
+For example, the Intel Core i9 9900 processor has a base frequency of 3.1 GHz, or a period of 1 / 3 100 000 000 seconds (0.323 ns), but with Turbo Boost the system clock can be increased to 5 GHz, with a period of 1 / 5 000 000 00 seconds (0.2 ns).
 
 ### 01.02. Cache Memory
+<!-- to do - memory hierarchy: cache memories, primary memories, secondary memories and external memories -->
+<!-- to do - parameters of memory herarchy: access time, storage capacity, cost per bit (or cost per byte), memory types -->
 <!-- to do - definition of cache -->
 <!-- to do - cache levels: L1, L2, L3, split cache and unified cache -->
 <!-- to do - temporal and spatial locality principles -->
