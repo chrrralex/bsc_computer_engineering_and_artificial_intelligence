@@ -97,11 +97,27 @@ In a loosely coupled system each processor has the own lifecycle and the own mem
 
 **HISC (Hybrid Instruction Set Computer)**: an hybrid architecture uses both CISC and RISC ISAs to find a compromise between simplicity and independence of instructions. Modern architecture, Intel and AMD included, uses a RISC architecture for the most common and frequently used instruction (like `ADD`, `MOV`, `SUB`, `MUL`, `DIV`, `JMP` and others) and uses a CISC architecture for the most complex instruction (for example, for some vectorial instructions, or some calculation of floating-point numbers). This compromise is somewhere in between pure RISC architectures and pure CISC architecturess: HISC is faster than CISC, but slower than RISC.
 
-**NUMA (Non-Uniform Memory Access) architecture**: <!-- to do -->
+**NUMA (Non-Uniform Memory Access) architecture**: it's an architecture used for multiprocessor and for tightly coupled processors where the access time to the memory depends on its location and its distance from the processor that is accessing it. The following figure shows how a NUMA system with four processors is organized:
 
-**SMP (Simmetric Multi-Processor) architecture**: <!-- to do -->
+<!-- to add -->
+*In Figure: a NUMA system with four processors*
 
-**AMP (Asymmetric Multi-Processor) architecture**: <!-- to do -->
+NUMA is the natural evolution of the UMA (Uniform Memory Access) architecture, where there is only one chip of the main memory and the access time is the same for all processors installed on the system. The following figure shows how an UMA system with four processor is organized:
+
+<!-- to add -->
+*In Figure: an UMA system with four processors*
+
+As you can see, a NUMA architecture with N processors has N chips of memory also, one for each processor. Each processor accesses to the its memory throughout a dedicated memory bus with high transfer rate. All processors of a NUMA architecture are linked with a common bus and each processor can access to another memory throughout the common bus, by sending a message to another processor (in this case there is more latency). If the work between all the processors is coordinated well by a centralized arbiter, the NUMA architecture allows more bandwidth than the UMA architecture; moreover, NUMA is optimized for real-time and time-critical applications. 
+
+**SMP (Simmetric Multi-Processor) architecture**: it's an architecture where there is a global memory (main memory, or central memory) shared to all processors: each processor can access to the shared memory by a common bus (also called system bus). There is a centralized arbiter collecting the access request made by all processors. According to a specific policy, such as a FIFO (First In, First Out) policy, each request is accepted and satisfied by the bus arbiter. Between the system bus and the processor there is a cache. Each processor has the own cache (it can be unified, or splitted: data cache and instruction cache). The SMP architecture is an example of a tightly coupled multiprocessor system, because there is a unique shared memory. The following figure represents the organization of a SMP architecture:
+
+<!-- to add -->
+*In Figure: organization of a SMP architecture*
+
+**AMP (Asymmetric Multi-Processor) architecture**: is a multiprocessor system in which processors do not have equal roles, one processor (called the master) controls the system, while the other processors (called slaves) execute specific assigned tasks. The master processor controls the operating system, schedule tasks, manages I/O and handles system and program interrupts. The slave processors execute assigned computations and don't execute directly the operating system. Each slave can run different program. Communication often occurs through shared memory, or message passing through a common bus. Typical program executed by the slaves are graphic computations, signal processing and user-oriented applications. The following figure shows how an AMP is organized:
+
+<!-- to add -->
+*In Figure: organization of an AMP architecture*
 
 <!-- to do - real and emulated parallelism -->
 <!-- to do - introduction of ILP (Instruction-Level Parallelism): Pipelines, Superscalar Architectures -->
