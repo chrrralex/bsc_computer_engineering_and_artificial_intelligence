@@ -140,7 +140,7 @@ For example, the Intel Core i9 9900 processor has a base frequency of 3.1 GHz, o
 
 ### 01.02. Cache Memory
 <!-- to do - memory hierarchy: cache memories, primary memories, secondary memories and external memories -->
-<!-- to do - parameters of memory herarchy: access time, storage capacity, cost per bit (or cost per byte), memory types -->
+<!-- to do - parameters of memory herarchy: access time, storage capacity, cost per bit (or cost per byte), memory types     -->
 <!-- to do - definition of cache -->
 <!-- to do - cache levels: L1, L2, L3, split cache and unified cache -->
 <!-- to do - temporal and spatial locality principles -->
