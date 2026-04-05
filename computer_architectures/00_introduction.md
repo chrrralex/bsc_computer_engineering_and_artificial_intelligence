@@ -492,7 +492,37 @@ As you can see by osserving the line, here's some considerations:
 - The highest number (`+3` for the 2-complement coding with `3` bits) has all bits set to `1`, except the sign bit, that is `0`.
 - `0` has one and only one representation, with all bits set to `0`.
 
-<!-- to do - floating-point numbers with IEEE 754 -->
+**Coding of decimal numbers (floating-point numbers) with IEEE 754**: IEEE 754 (where IEEE is the acronym of Institute of Electrical and Electronics Engineers) is the most common used standard to represent decimal numbers in a digital system. Decimal numbers are also konwn as floating-point number. Originally enstabilished in 1985, IEEE 754 defines how a floting-point number with a specific precision should be represented and how the airthmetic between two, or more floating-point numbers works in a digital system. The IEEE 754 defines the various formats, interchange formats, rounding rules and various arithmetic operations (sum and product included). Standards defines the exception handling also, like division by `0`. The last update of the IEEE 754 happens in 2020 by the ISO (International Standardization for Organization) and it's called ISO/IEC 60559:2020.
+
+Before analyzing the IEEE 754 standard, we talk about the scientific (or exponential) notation. This notation follows the following rule:
+
+```
+M * B^N
+```
+
+where:
+
+- `M` is called mantissa.
+- `B` is the base of the positional numeric system used to represent the number (for binary system, `B = 2`; for decimal system, `B = 10`).
+- `N` is called exponent.
+
+The previous notation is often abbreviated in `MeN`, or `MEN`. The decimal number is the result of the following operation: `M * B^N`. 
+
+A floating-point number compliant with the IEEE 754 standard can have different formats, the three most used formats are:
+
+- Single-precision floating-point number: uses 32 bits, or 4 Bytes, organized in this way:
+    - `S`: `1` bit for the sign, called sign bit. It's equal to `1` if the mantissa is negative, `0` if the mantissa is positive.
+    - `M`: `23` bits for the mantissa. The mantissa is part of a number in scientific notation, or a floating-point number, consisting of its significant digits. A mantissa is called normalised where it's one with only one 1 to the left of the decimal.
+    - `E`: `8` bits for the exponent. The exponent is the number by which the mantissa must be multiplied. This number appears as an exponent of the base of the number represented (2 in the case of the binary system, 10 in the case of the decimal system).
+- Double-precision floating-point number: uses 64 bits, or 8 Bytes, organized in this way:
+    - `S`: `1` bit for the sign, called sign bit. It's equal to `1` if the mantissa is negative, `0` if the mantissa is positive.
+    - `M`: `52` bits for the mantissa. The mantissa is part of a number in scientific notation, or a floating-point number, consisting of its significant digits. A mantissa is called normalised where it's one with only one 1 to the left of the decimal.
+    - `E`: `11` bits for the exponent. The exponent is the number by which the mantissa must be multiplied. This number appears as an exponent of the base of the number represented (2 in the case of the binary system, 10 in the case of the decimal system).
+- Quadruple-precision floating-point number: uses 64 bits, or 8 Bytes, organized in this way:
+    - `S`: `1` bit for the sign, called sign bit. It's equal to `1` if the mantissa is negative, `0` if the mantissa is positive.
+    - `M`: `113` bits for the mantissa. The mantissa is part of a number in scientific notation, or a floating-point number, consisting of its significant digits. A mantissa is called normalised where it's one with only one 1 to the left of the decimal.
+    - `E`: `15` bits for the exponent. The exponent is the number by which the mantissa must be multiplied. This number appears as an exponent of the base of the number represented (2 in the case of the binary system, 10 in the case of the decimal system).
+
 <!-- to do - textual data with ASCII and EASCII -->
 <!-- to do - textual data with Unicode -->
 <!-- to do - images with lossless coding: PNG, GIF and BMP -->
