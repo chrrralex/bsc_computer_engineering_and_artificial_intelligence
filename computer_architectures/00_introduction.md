@@ -299,20 +299,199 @@ This conversion is possible cause there is a direct correspondence between each 
 | 1110 | E (or e) | 14 |
 | 1111 | F (or f) | 15 |
 
-**Binary Sum**: <!-- to do -->
+**Binary Sum**: the sum between two binary numbers is the most common operation executed by a digital system, or a CPU. The sum of two binary numbers follows the same rules of the sum between two decimal numbers. Here's an example:
 
-**Binary Difference**: <!-- to do -->
+```
+A: 1101
+B: 0101
 
-**Binary Product**: <!-- to do -->
+A   1 1 0 1 +
+B   0 1 0 1 =
+--------------
 
-**Binary 1-Complement**: <!-- to do -->
+Step 1:
+1 + 1 = 0 with carry
 
-**Binary 2-Complement**: <!-- to do -->
+        1
+A   1 1 0 1 +
+B   0 1 0 1 =
+--------------
+           0
+
+Step 2:
+1 + 0 + 0 = 1 without carry
+
+        1
+A   1 1 0 1 +
+B   0 1 0 1 =
+--------------
+        1 0
+
+Step 3:
+1 + 1 = 0 with carry
+
+    1   1
+A   1 1 0 1 +
+B   0 1 0 1 =
+--------------
+      0 1 0
+
+Step 4:
+1 + 1 + 0 = 0 with carry
+
+    1   1
+A   1 1 0 1 +
+B   0 1 0 1 =
+--------------
+  1 0  0 1 0
+
+Results: 10010
+```
+
+**Binary 1-Complement**: 1-complement is a binary operation in which each binary digit takes on the inverse of its value. If a digit is `1`, it's converted to `0`; viceversa, if a digit is `0`, it's converted to `1`. Here's an example:
+
+```
+Binary:             10 10 00 11
+1-complement:       01 01 11 00
+```
+
+The 1-complement operation is very useful to represent negative number in the module-and-sign number representation in a memory of a digital system. We'll analyze the various coding techniques of numbers in the next paragraph. 
+
+**Binary 2-Complement**: 2-complement is a binary operation in which each binary digit takes on the inverse of its value and, after all digits are changed, 1 is added to the result. 2-complement consists in two steps:
+
+1. Calculate the 1-complement of the number.
+2. Add 1 to the 1-complement of the number. This is the 2-complement. 
+
+Here's an example:
+
+```
+Binary:             10 10 00 11
+
+Step 1:
+1-complement:       01 01 11 00
+
+Step 2:
+Add 1:              01 01 11 00 +
+                    00 00 00 01 =
+                    -------------
+                    01 01 11 01
+```
+
+The 2-complement operation is very useful to represent negative number in the 2-complement number representation in a memory of a digital system. We'll analyze the various coding techniques of numbers in the next paragraph. 
+
+**Binary Product**: the product between two binary numbers is one of the most common operation executed by a digital system, or a CPU. The product of two binary numbers follows the same rules of the product between two decimal numbers. Here's an example:
+
+```
+A: 1101
+B: 0101
+
+A   1 1 0 1 +
+B   0 1 0 1 =
+--------------
+
+Step 1:
+Multiply 1 * 1101
+
+A       1 1 0 1 +
+B       0 1 0 1 =
+-----------------
+        1 1 0 1
+
+Step 2:
+Multiply 0 * 1101
+
+A       1 1 0 1 +
+B       0 1 0 1 =
+-----------------
+        1 1 0 1
+      0 0 0 0  
+
+Step 3:
+Multiply 1 * 1101
+
+A       1 1 0 1 +
+B       0 1 0 1 =
+-----------------
+        1 1 0 1
+      0 0 0 0
+    1 1 0 1
+
+Step 4:
+Multiply 1 * 1101
+
+A       1 1 0 1 +
+B       0 1 0 1 =
+-----------------
+        1 1 0 1
+      0 0 0 0
+    1 1 0 1
+  0 0 0 0
+
+Step 5:
+Sum of all partial results
+
+A       1 1 0 1 +
+B       0 1 0 1 =
+-----------------
+        1 1 0 1
+      0 0 0 0
+    1 1 0 1
+  0 0 0 0
+-----------------
+  1 0 0 0 0 0 1
+
+Results: 1000001
+```
 
 ### 00.04. Data Representation
-<!-- to do - integer numbers without sign -->
-<!-- to do - integer numbers with sign with one-complement -->
-<!-- to do - integer numbers with sign with two-complement -->
+
+**Coding of natural numbers (unsigned integers)**: binary encoding is normally used to represent natural numbers, or positive integers (including zero) within a computer's memory. All bits are reserved to represent the magnitude of the number. With `N` bit it's possible to represent all the numbers between `0` and `2^N - 1`, with a total of `2^N` possible values. Positive integers are also called number without sign, cause there is no bit to track the sign (if the number is positive, or negative). Modern digital systems, with x32 and x64 architectures, can represent integers without sign with 32, or 64 bits, or more (128, 256). Programming languages like Python, for example, allows the developer to store integer without sign (or unsigned integers) with arbitrary size, based on memory availability.
+
+This is the natural number line that can be represented with `3` bits in the binary coding:
+
+```
+                |-----|-----|-----|-----|-----|-----|-----|----->
+Decimal:        0     1     2     3     4     5     6     7
+Binary:         000   001   010   011   100   101   110   111
+```
+
+**Coding of relative numbers (signed integers) with 1-complement**: 1-complement (or one-complement) encoding is normally used to represent relative numbers, or integers with sign (including zero) within a computer's memory. Integers with sign are also called signed integers. With `N` bits, `N - 1` bits are reserved to represent the magnitude of the number and the msb (most significant bit) is used to represent the sign: `0` if the number is positive, `1` if the number is negative. With `N` bit it's possible to represent:
+
+- all the positive integers between `+ 0` and `+ 2^(N - 1) - 1`,
+- all the negative integers between `- 0` and `- 2^(N - 1) + 1`.
+
+Why `2^(N - 1)` and not `2^N`? Because one bit is reserved to the sign. 1-complement is a strange coding, cause there are two representations for the zero: `-0` is the negative zero and `+0` is the positive zero (both represent the same number: zero). Moreover, sums and products between two, or more numbers coded with 1-complement are difficult to process, or calculate. Note that, also with 1-complement coding there is one bit for the sign (the sign bit), we can still represent `2^N` different numbers, even if zero has two representations (so in reality `2^N - 1`).
+
+This is the relative number line that can be represented with `3` bits in the 1-complement coding:
+
+```
+                |-----|-----|-----|-----|-----|-----|-----|----->
+Decimal:        -3    -2    -1    -0    +0    +1    +2    +3
+Binary:         111   110   101   100   000   001   010   011
+```
+
+**Coding of relative numbers (signed integers) with 2-complement**: 2-complement (or two-complement) encoding is normally used to represent relative numbers, or integers with sign (including zero) within a computer's memory. Integers with sign are also called signed integers. With `N` bits, `N - 1` bits are reserved to represent the magnitude of the number and the msb (most significant bit) is used to represent the sign: `0` if the number is positive, `1` if the number is negative. With `N` bit it's possible to represent:
+
+- all the positive integers between `+ 0` and `+ 2^(N - 1) - 1`,
+- all the negative integers between `- 0` and `- 2^(N - 1)`.
+
+Why `2^(N - 1)` and not `2^N`? Because one bit is reserved to the sign. Another thing to consider is that with the 2-complement coding for the relative numbers, one more negative number can be represented than positive numbers, as this coding eliminates the double representation for zero: all 0 bits are the only possible representation for this number. This makes the coding itself much less strange and more consistent. For example, the 2-complement coding with `4` bit has one and only one representation for the zero: all bits set to `0` (`0000`). The representation of zero is unique in the 2-complement coding. Sums and products between two, or more numbers coded with 2-complement are very simple to process, because both sum and product can be executed as for the binary number. Note that, also with 2-complement coding there is one bit for the sign (the sign bit), we can still represent `2^N` different numbers.
+
+This is the relative number line that can be represented with `3` bits in the 2-complement coding:
+
+```
+                |-----|-----|-----|-----|-----|-----|-----|----->
+Decimal:        -4    -3    -2    -1    +0    +1    +2    +3
+Binary:         100   101   110   111   000   001   010   011
+```
+
+As you can see by osserving the line, here's some considerations:
+
+- `-1` has all bits set to `1`, included the sign bit.
+- The lower number (`-4` for the 2-complement coding with `3` bits) has all bits set to `0`, except the sign bit, that is `1`.
+- The highest number (`+3` for the 2-complement coding with `3` bits) has all bits set to `1`, except the sign bit, that is `0`.
+- `0` has one and only one representation, with all bits set to `0`.
+
 <!-- to do - floating-point numbers with IEEE 754 -->
 <!-- to do - textual data with ASCII and EASCII -->
 <!-- to do - textual data with Unicode -->
