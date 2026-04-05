@@ -523,6 +523,13 @@ A floating-point number compliant with the IEEE 754 standard can have different 
     - `M`: `113` bits for the mantissa. The mantissa is part of a number in scientific notation, or a floating-point number, consisting of its significant digits. A mantissa is called normalised where it's one with only one 1 to the left of the decimal.
     - `E`: `15` bits for the exponent. The exponent is the number by which the mantissa must be multiplied. This number appears as an exponent of the base of the number represented (2 in the case of the binary system, 10 in the case of the decimal system).
 
+In the IEEE 754 standard, some values are particular:
+
+- The `0` number is represented with all bits of `M` set to `0` and all bits of `E` set to `0`.
+- The `Infinity` quantity is represented with all bits of `M` set to `0` and all bits of `E` set to `1`. This quantity tipically represent an overflow, cause the bits are not enough to represent the result, or the number.
+- The `NaN` (Not a Number) case is represented with `M` different from `0` and all bits of `E` set to `1`. This value represent an error during a calculation.
+- A denormalised mantissa has `M` different from `0` and the exponent `E` has all bits set to `0`. In this case, the number doesn't have an assumed leading one before the binary point.
+
 <!-- to do - textual data with ASCII and EASCII -->
 <!-- to do - textual data with Unicode -->
 <!-- to do - images with lossless coding: PNG, GIF and BMP -->
@@ -534,14 +541,32 @@ A floating-point number compliant with the IEEE 754 standard can have different 
 <!-- to do - metric units -->
 
 ### 00.03. Von Neumann Architecture
-<!-- to do - definition of digital computer -->
-<!-- to do - definition of program -->
-<!-- to do - definition of process -->
-<!-- to do - basic structure of a digital computer: the Von Neumann architecture -->
-<!-- to do - the CPU component: ALU, CU and Registers -->
-<!-- to do - the RAM component and the memory address -->
-<!-- to do - the I/O Devices -->
-<!-- to do - the system bus: data bus, address bus and control bus -->
+
+**Digital Computer**: a digital computer is a digital systems, a general purposes and electronic device that processes digital signals. A digital signal is a signal that can assume a specific set of values, or discrete values: a digital computer uses the binary system with binary digits (`0` and `1`) to represent data and instructions. A digital computer operates with `0` and `1` digits and processes one, or more programs during his lifecycle. It performs logical and arithmetic operations (like sum, comparison, logical AND, logical OR, logical NOT and some others). A digital computer is an automatic electronic device: it produces accurate and repeatable results. Moreover, a digital computer is a deterministic machine: the same inputs cause the same outputs. A digital computer cannot be a stochastic system (probability based).
+
+**Program and Process**: program and process have an intimate relationship, very important both in the context of computer architecture and in the context of operating systems.
+
+A program is an ordered set of instructions stored by the main memory of the system. A memory is an electronic device that allows the digital system to execute one, or more programs by storing each through certain physical principles, which electronics exploits to store bits. Remember that, in a computer (and digital systems in general), all is considered a bit, or a group of bits. A program is a static entity normally stored in the secondary memory (like HD -Hard Disk-, or SSD -Solid State Disk-). A program is an ordered set of machine-level or high-level instructions stored in memory and executed by the CPU to accomplish a computation or control operation.
+
+A process is a dynamic entity stored in the main memory (also called central memory) of the computer that can assume different statuses during its execution. A process is a program in execution: a program is the blueprint, meanwhile the processs it's his instance. A program can be executed more than one times. Moreover, multiple processes can arise from a program and they're multiple instances of the same program, but which describe a different execution of the same. The CPU, the brain of the computer, executes the each instructions of the program.
+
+**Von Neumann Architecture**: Von Neumann architecture is a computer design, proposed in 1945 by the Hungarian and American mathematician, physicist, computer scientist and engineer Jhon Von Neumann. This architecture is characterized by a shared memory and a shared system bus for both data and instructions. The followin figure shows how a typical Von Neumann system is organized:
+
+<!-- to add -->
+*In Figure: a typical Von Neumann system*
+
+As you can see by osserving the figure, the CPU is composed by CU (Control Unit), ALU (Arithmetic-Logic Unit) and registers. Two of the most important registers are PC (Program Counter) and IR (Instruction Register): the first contains a pointer (a memory address) to the next instruction to execute, the second contains the current instruction in the execution phase. The CU is an internal component of the CPU that controls the CPU's interface with the outside and governs the signals inside it. The ALU is the internal component of the CPU that performs calculation, like logical AND, arithmetic sum, and so on.
+
+The Von Neumann architecture is the foundation of the modern digital systems. All modern devices are based on the Von Neumann architecture. The key concepts of this architecture are:
+
+- First of all, both data and instructions are stored into the same memory, called main (or central) memory. Program can be modified exactly like data. There is one space only for both data and instructions. The main memory is also called RAM (Random Access Memory): a memory that provides a fast and direct access to each memory cell, or location.
+- A system bus allows the direct communication between CPU and memory (and viceversa) and between the CPU and the various I/O devices (and viceversa). System bus is the backbone of the entire system and it has three types of buses:
+  - Address bus: it carries memory addresses (for read and write operations). It also carries the addresses of external memories, or devices that can be treated as memories.
+  - Data bus: it carries data that the CPU requests, or delivers to a specific peripheral, or to memory.
+  - Control bus: it carries control signals to govern communications, or to detect any malfunctions.
+- CPU fetch the program from the memory, instruction by instruction, and execute it. CPU execute one instruction a time and it uses the PC register to track the next instruction to execute. The PC is a small and quick register directly accessible by the ALU, the internal component of the CPU that performs calculations. Instructions are executed one after another and the execution is controlled by the PC register.
+
+In the next chapters we'll analyze in detail how each component of the Von Neumann architecture.
 
 ### 00.04. Modern Digital Computer
 <!-- to do - language definition -->
