@@ -313,14 +313,154 @@ The following figure represents two types of the TRI gate (active high and activ
 Like the BUF gate, TRI is used to regenerate a digital signal, or to provide a clean digital signal to one, or more digital circuits. But TRI is also used to enable, or disable a specific circuit (like a portion of the central memory, or a I/O lines) in the modern system architectures.
 
 ### 03.03. Combinational Circuits
-<!-- to do - definition of combinational circuits -->
-<!-- to do - first canonic form with NOT, AND and OR -->
-<!-- to do - second canonic form with NOT, AND and OR -->
+
+**Minterms and Maxterms**: a minterm is a product (AND combination) of all variables in a boolean function, each appearing exactly once in either complemented or uncomplemented form, that evaluates to `1` for exactly one input combination. A maxterm is a sum (OR combination) of all variables in a boolean function, each appearing exactly once in either complemented or uncomplemented form, that evaluates to `0` for exactly one input combination.
+
+**Implicant and Prime Implicant**: an implicant is a product term of a Boolean function that implies the function value 1 for all input combinations covered by that term. A prime implicant is an implicant that cannot be combined with another implicant to eliminate a variable and still remain an implicant of the function.
+
+**Implicate and Prime Implicate**: an implicate is a sum term (OR combination of literals) that is true whenever the Boolean function is true, meaning the function logically implies that term. A prime implicate is an implicate that cannot be simplified further by removing literals without changing the function.
+
+**Combinational Circuit**: a circuit called combinational is a digital circuit (or digital network) where the outputs depend only and only from the current inputs. A combinational circuit can have zero, one, or more inputs and can have zero, one, or more outputs. The logical gates analyzed in the previous paragraph are all examples of the simplest combinational circuits. The following figure shows an example of combinational circuit:
+
+<!-- to add -->
+*In Figure: an example of a combinational circuit*
+
+The following rules defines how a combinational circuit can be implemented:
+
+- Each element of a combinational network is combinational.
+- Each node of a combinational network is an input of the network, or it's linked to a single output of a network.
+- A combinational network doesn't contain any cyclic link.
+
+The following figure shows some examples of a non-combinational networks: the (a) network isn't combinational cause there is a cyclic link; the (b) network isn't combinational cause the outputs of two different elements is linked to the same input of a combinational element; the (c) network isn't combinational, but it's a particular sequential network (we'll analyze the sequential networks in the next paragraph).
+
+**First Canonic Form**: the boolean algebra allows the designer to completely describe a combinational network. The FCF (First Canonic Form), also called SOP (Sum of Products), consists of an OR of products, where each product is an AND. Given a combinational circuit, like the circuit shown in the following figure:
+
+<!-- to add -->
+*In Figure: an example of combinational circuit that can be described with the SOP form*
+
+we can create the turth table by following the same rules analyzed at the start of the present chapter. The following turth table is the relationship between the inputs `A`, `B` and `C` and the output `Y`:
+
+| A | B | C | Y | Minterms |
+| - | - | - | - | -------- |
+| 0 | 0 | 0 | 0 | m0 |
+| 0 | 0 | 1 | 1 | m1 |
+| 0 | 1 | 0 | 0 | m2 |
+| 0 | 1 | 1 | 0 | m3 |
+| 1 | 0 | 0 | 0 | m4 |
+| 1 | 0 | 1 | 0 | m5 |
+| 1 | 1 | 0 | 1 | m6 |
+| 1 | 1 | 1 | 1 | m7 |
+
+The first step to create a SOP form of the combinational circuit is to consider the rows of the turth table where `Y = 1`. The rows `1`, `6` and `7` are the rows where `Y = 1`. This means that we consider the following minterms: `m0`, `m6` and `m7`. We can write the `Y` output is `1` where at least one of the previous specified minterms is `1`:
+
+```
+Y = f(A, B, C) = m0 + m6 + m7
+```
+
+Or, equivalently:
+
+```
+Y = f(A, B, C) = ∑(m0, m6, m7)
+```
+
+Or, in another way:
+
+```
+Y = f(A, B, C) = ∑(0, 6, 7)
+```
+
+Where:
+
+- The `m0` minterm is the product `!(A)!(B)!(C)`.
+- The `m6` minterm is the product `AB!(C)`.
+- The `m7` minterm is the product `ABC`.
+
+The previous boolean formula is equivalent to the following:
+
+```
+Y = !(A)!(B)!(C) + AB!(C) + ABC
+```
+
+The following figure shows the two-level combinational circuit described by the previous formula:
+
+<!-- to add -->
+*In Figure: two-level combinational circuit described by the formula `Y = !(A)!(B)!(C) + AB!(C) + ABC`*
+
+Note that to write the SOP form you can take each boolean variable in straight form if it's `1`, in negated form if it's `0`. The SOP form is an example of two-levels logic: the first level is a set of AND gates, the second level is a "big" OR with all minterms accepted as inputs.
+
+**Second Canonic Form**: the boolean algebra allows the designer to completely describe a combinational network. The SCF (Second Canonic Form), also called POS (Product of Sums), consists of an AND of sums, where each sum is an OR. Given a combinational circuit, like the circuit shown in the following figure:
+
+<!-- to add -->
+*In Figure: an example of combinational circuit that can be described with the POS form*
+
+we can create the turth table by following the same rules analyzed at the start of the present chapter. The following turth table is the relationship between the inputs `A`, `B` and `C` and the output `Y`:
+
+| A | B | C | Y | Maxterms |
+| - | - | - | - | -------- |
+| 0 | 0 | 0 | 0 | M0 |
+| 0 | 0 | 1 | 1 | M1 |
+| 0 | 1 | 0 | 0 | M2 |
+| 0 | 1 | 1 | 0 | M3 |
+| 1 | 0 | 0 | 0 | M4 |
+| 1 | 0 | 1 | 0 | M5 |
+| 1 | 1 | 0 | 1 | M6 |
+| 1 | 1 | 1 | 1 | M7 |
+
+The first step to create a POS form of the combinational circuit is to consider the rows of the turth table where `Y = 0`. The rows `0`, `2`, `3`, `4` and `5` are the rows where `Y = 0`. This means that we consider the following minterms: `M0`, `M2`, `M3`, `M4` and `M5`. We can write the `Y` output is `1` where all the previous specified maxterms is `0`:
+
+```
+Y = f(A, B, C) = M0 * M2 * M3 * M4 * M5
+```
+
+Or, equivalently:
+
+```
+Y = f(A, B, C) = Π(M0, M2, M3, M4, M5)
+```
+
+Or, in another way:
+
+```
+Y = f(A, B, C) = Π(0, 2, 3, 4, 5)
+```
+
+Where:
+
+- The `M0` minterm is the product `A + B + C`.
+- The `M2` minterm is the product `A + !(B) + C`.
+- The `M3` minterm is the product `A + !(B) + !(C)`.
+- The `M4` minterm is the product `!(A) + B + C`.
+- The `M5` minterm is the product `!(A) + B + !(C)`.
+
+The previous boolean formula is equivalent to the following:
+
+```
+Y = (A + B + C)(A + !(B) + C)(A + !(B) + !(C))(!(A) + B + C)(!(A) + B + !(C))
+```
+
+The following figure shows the two-level combinational circuit described by the previous formula:
+
+<!-- to add -->
+*In Figure: two-level combinational circuit described by the formula `Y = (A + B + C)(A + !(B) + C)(A + !(B) + !(C))(!(A) + B + C)(!(A) + B + !(C))`*
+
+Note that to write the POS form you can take each boolean variable in straight form if it's `0`, in negated form if it's `1` (basically the opposite of the SOP form). Also the POS form is an example of two-levels logic: the first level is a set of OR gates, the second level is a "big" AND with all maxterms accepted as inputs.
+
+**NAND-only and NOR-only Implementations**: most common IC (Integrated Circuits) and most common commercial chips uses a NAND-only implementation, or a NOR-only implementation.
+
+NAND-only implementation uses the NAND logical gate only to implement any other logical gate. The following figure shows how each logical gate can be implemented by using NAND basic gate:
+
+<!-- to add -->
+*In Figure: NAND gate used to implement NOT, AND and OR logical gates*
+
+NOR-only implementation uses the NOR logical gate only to implement any other logical gate. The following figure shows how each logical gate can be implemented by using NOR basic gate:
+
+<!-- to add -->
+*In Figure: NOR gate used to implement NOT, AND and OR logical gates*
+
+Both NAND-only and NOR-only implementations are used in the modern VLSI (Very Large Scale Integration) IC. NAND and NOR gates need a less number of transistors (nMOS, pMOS, or CMOS): this is the main reason that the modern CPUs, caches and other chips are based on NAND-only, or NOR-only logical gates.
+
 <!-- to do - multilevel logic circuits -->
-<!-- to do - NAND-only implementation -->
-<!-- to do - NOR-only implementation -->
 <!-- to do - don't care conditions -->
-<!-- to do - implicants, prime implicants and essential prima implicants -->
 <!-- to do - delays: raise time, fall time, propagation delay, contamination delay, path delay, critical path delay -->
 
 ### 03.04. Combinational Blocks
