@@ -174,10 +174,45 @@ As you can see by observing the previous figure, there are some parameters of a 
 
 Respecting these two principles means having greater coherence between cache and main memory, guaranteeing fast access to data or instructions by the CPU and boasting efficient use of memory.
 
-<!-- to do - cache lines: tag, index and offset -->
-<!-- to do - cache hit and cache miss -->
-<!-- to do - performance indexes: hit ratio, miss rate, hit time and miss penalty, AMAT (Average Memory Access Time) -->
-<!-- to do - mapping strategies: direct-mapped, set-associative and fully associative -->
+**Cache Hit and Miss**: when a CPU generates a memory address already present into one of the cache levels (L1, L2, or L3), a cache hit happens. Cache hit happens when the CPU requests data that is already present in the cache, effectively accessing it now in a very short time. On the contrary, when the CPU requests data that isn't already present in the cache, the request is propagated to the main memory (or to the next level of the cache): in this case a cache miss happens. Cache hit and cache miss are very important to control the performances of the cache. From these two situations the following performance parameters for caches arise:
+
+- Hit Ratio: is a number between `0` and `1` (a percentage) which represents the ratio between cache hits and cache misses. A value close to `1` represents an high cache hit (and conseguently a low cache miss), meanwhile a value close to `0` represents an high cache miss (and conseguently a low cache hit). We indicates the hit ratio with `r`. If we indicate total number of cache hits with `h` and total number of cache misses with `m`, then the hit ratio is calculated with this formula: `r = h / (h + m)`. Normally, modern caches reach a value of `r` between 95% (`0.95`) and 100% (`1.00`).
+- Miss Rate: is a number between `0` and `1` (a percentage) which represents the ratio between cache misses and cache hits. From the conceptual point of view, it's the inverse of the hit ratio. A value close to `1` represents an high cache miss (and conseguently a low cache hit), meanwhile a value close to `0` represents an high cache hit (and conseguently a low cache miss). We indicates the miss rate with `l`. If we indicate total number of cache hits with `h` and total number of cache misses with `m`, then the miss rate is calculated with this formula: `l = m / (m + h)`. Normally, modern caches reach a value of `l` between 5% (`0.05`) and 0% (`0.00`). Another way to calculate the miss rate is `l = 1 - r` and, similarly, another way to calculate the hit ratio is `r = 1 - l`.
+- Hit Time: is the time required to access data from the cache memory when the requested data is already present in the cache (cache hit). Normally, a cache hit is resolved in few nanoseconds.
+- Miss Penalty: is the extra time required to retrieve data from the next level of the memory hierarchy (L2, L3, or main memory) when the requested data is not found in the cache (cache miss).
+
+**AMAT (Average Memory Access Time)**: it's very complex to calculate, but we can try to consider the simple formula. We can consider the following memory hierarchy (for each memory, we indicate the access time)
+
+- Cache, with the following levels:
+    - L1, made with the SRAM technology. `tl1` is the access time, `ml1` is the miss rate. 
+    - L2, made with the SRAM technology. `tl2` is the access time, `ml2` is the miss rate. 
+    - L3, made with the SRAM technology. `tl3` is the access time, `ml3` is the miss rate. 
+- Main Memory, made with the DRAM technology. `tmm` is the access time, `mmm` is the miss rate. 
+- Two Secondary Memories:
+    - First is an SSD, made with the NAND-flash technology. `tssd` is the access time, `mssd` is the miss rate.
+    - Second is an HD, made with both VLSI and mechanical technologies. `thd` is the access time.
+
+The CPU can access the various memories in the following order:
+
+```
+CPU → L1 → L2 → L3 → Main Memory → SSD → HDD
+```
+
+There are the basic AMAT formulas based on where the requested data is present:
+
+- Data stored in the L1: `tl1`
+- Data stored in the L2: `tl1 + (ml1 * tl2)`
+- Data stored in the L3: `tl1 + (ml1 * (tl2 + (ml2 * tl3)))`
+- Data stored in the main memory: `tl1 + (ml1 * (tl2 + (ml2 * (tl3 + (ml3 * tmm)))))`
+- Data stored in the SSD: `tl1 + (ml1 * (tl2 + (ml2 * (tl3 + (ml3 * (tmm + (mmm * tssd)))))))`
+- Data stored in the HD: `tl1 + (ml1 * (tl2 + (ml2 * (tl3 + (ml3 * (tmm + (mmm * (tssd + (mssd * thd)))))))))`
+
+As you can see, the more complex the memory hierarchy, the longer the average memory access time.
+
+**Cache Lines**: a cache line is the basic unit of data transferred between cache and main memory and is identified using three address fields: tag, index, and offset. The index selects the cache set (or line) where the data may reside, the **tag** identifies whether the required memory block is present in that location, and the offset selects the specific byte or word within the cache line. These fields are extracted from the memory address to enable fast cache lookup and access.
+
+**Mapping Strategies**: cache mapping strategies determine how memory blocks are placed into cache lines. In direct-mapped caches, each memory block maps to exactly one cache line, making access fast but increasing conflict misses. In set-associative caches, each block can be placed in any line within a selected set, balancing flexibility and hardware complexity. In fully associative caches, a memory block can be placed in any cache line, minimizing conflict misses but requiring more complex and slower hardware search mechanisms.
+
 <!-- to do - replacement strategies: FIFO (First-In, First-Out), LRU (Last Recently Used), Random Replacement, LFU (Last Frequently Used) -->
 <!-- to do - write strategies: write-through, write-back, write-allocate and no write-allocate -->
 <!-- to do - cache in multiprocessor systems: cache coherence problem, shared data consistency, snooping protocols and directory-based protocol -->
