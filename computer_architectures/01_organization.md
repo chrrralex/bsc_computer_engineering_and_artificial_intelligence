@@ -138,12 +138,42 @@ T = 1 / f
 
 For example, the Intel Core i9 9900 processor has a base frequency of 3.1 GHz, or a period of 1 / 3 100 000 000 seconds (0.323 ns), but with Turbo Boost the system clock can be increased to 5 GHz, with a period of 1 / 5 000 000 00 seconds (0.2 ns).
 
+**Memory Hierarchy**: modern digital systems like computers, servers and smartphones have more memories the CPU can access to find data to calculate and instructions to execute. Fundamentally, there are five categories of memories you can find in a modern digital device:
+
+- Registers: small and very quick memories directly installed on the same chip of the ALU. They're very close to the CPU and they're a part of the data path. The access time is almost instantaneous: often, the ALU can access to one, or more registers simultaneously in 1 ns. It is difficult to estimate how many registers a CPU has: it depends on how the chip was built and the type of architecture.
+- Cache Memory: it's the smallest category of memory in terms of chip size and capacity, no larger than a few dozen MB. A cache is organized in various levels (some of this levels are located directly into the same chip of the CPU, or even within each core for multicore CPUs). The access time is very low, of the order of a few ns, or at most 20 ns.
+- Primary Memory (or Main Memory): it's a fair compromise between the chip size and the provided capacity, normally between 512 MB and 64 GB (or more for servers and clusters). Tipically the most common main memory is called "RAM", an acronym of "Random Access Memory", indicating the data access is quick and position-independent. The cost per GB is high, but the access time is still low, of the order of a 20 ns, or at most 60 ns.
+- Secondary Memory (or Storage Memory): these memories have a larger chip size and the provided capacity, between 128 GB and 1 TB. Two of the most common storage memories are SSD (Solid State Disk) and HD (Hard Disk). Today, SSDs have far surpassed the performance of HDDs, providing access times in the order of a hundred ns or so. HDDs, on the other hand, offer even lower access times, as they rely on mechanical (not just electrical) parts, and can reach up to several milliseconds. The cost per GB is medium for SSD, low for HD. The access time is high, or very high of the order of a 100 ns (for the SSD), or at most 20 ms (for the HD).
+- Tertiary Memory (or External Memory): these memories have a larger chip size and the provided capacity, between 128 GB and 1 TB (the same as the secondary memory). Both SSD and HD can be used as external memories and the performances are practically the same. The cost per GB is medium for SSD, low for HD. The access time is still very high, of the order of a 20 ns, or at most 60 ns. Also other types of memories can be used, like CDs (Compact Disks), DVDs (Digital Versatile Disks), Blu-Ray, USB Pen-Driv (or USB Key) and so on.
+
+The following figure shows the memory hierarchy:
+
+<!-- to add -->
+*In Figure: how's organized the memory hierarchy*
+
+As you can see by observing the previous figure, there are some parameters of a memory which vary as you move from bottom to top (or viceversa) in the memory hierarchy:
+
+- Access time: as you move down the hierarchy, it progressively increases. This fact means registers are significantly faster than the main memory, in turn much faster than secondary and external memories.
+- Storage capacity: as you move down the hierarchy, it progressively increases. This fact means registers are significantly smaller than the main memory, in turn much smaller than secondary and external memories.
+- Cost per bit: as you move down the hierarchy, it progressively decreases. This fact means main mamories are significantly more expensive than the secondary, or external memory.
+
 ### 01.02. Cache Memory
-<!-- to do - memory hierarchy: cache memories, primary memories, secondary memories and external memories -->
-<!-- to do - parameters of memory herarchy: access time, storage capacity, cost per bit (or cost per byte), memory types     -->
-<!-- to do - definition of cache -->
-<!-- to do - cache levels: L1, L2, L3, split cache and unified cache -->
-<!-- to do - temporal and spatial locality principles -->
+
+**Cache**: is a very fast memory with a low capacity, tipically realized with the SRAM (Static Random Access Memory) technology. SRAM is a type of volatile semiconductor memory that stores data using bistable flip-flop circuits, typically implemented with 6 transistors per cell (one cell per bit). SRAM doesn't require periodic refresh, which makes it faster but more expensive and less dense. It provides low access latency and high speed, for this reason it is commonly used for caches and not for main memories. However, SRAM consumes more silicon area and has higher cost per bit. A cache can be unified, or splitted. An unified cache contains both data and instructions, meanwhile a splitted cache is divided into two caches: the instructions cache contains the instructions that the CPU is executing.
+
+**Cache Levels**: cache memory is organized in levels and each level provides a specific capacity and specific size. Normally, a common computer has three levels of cache: L1, L2 and L3. More expensive (and powerful) systems have up to seven levels of cache, from L1 to L7. The first three levels of a cache are organized in this way: 
+
+- The L1 Cache (or simply L1) is located in each processor's chip, or in each core's chip. Each computation unit has the own L1. L1 provides faster access time, but at the price of a smaller size, tipically between 16 KB and 128 KB per core. Most common L1s are a splitted cache: there is an L1d (for L1 data) and L1i (for L1 instructions). 
+- The L2 Cache (or simply L2) is located in each processor's chip, rarely in each core's chip (it means that in multicores systems there is only one L2 for all cores). Each computation unit has the own L1. Most common L2s are a unified cache. L2 provides slower access time than the L1, but its size is increased, tipically between 256 KB and 2 MB.
+- The L3 Cache (or simply L3) is located out from the processor's chip, but very close to it. Each computation unit has a shared L3. L3s are typical an unified cahce. L3 provides slower access time than the L2, but its size is increased, tipically between 2 MB and 128 MB.
+
+**Temporal and Spatial Locality Principles**: caches and main memories work based on two fundamental principles:
+
+- Temporal locality principle: if a memory location is accessed once, it is likely to be accessed again in the near future.
+- Spatial locality principle: if a memory location is accessed, nearby memory locations are likely to be accessed soon.
+
+Respecting these two principles means having greater coherence between cache and main memory, guaranteeing fast access to data or instructions by the CPU and boasting efficient use of memory.
+
 <!-- to do - cache lines: tag, index and offset -->
 <!-- to do - cache hit and cache miss -->
 <!-- to do - performance indexes: hit ratio, miss rate, hit time and miss penalty, AMAT (Average Memory Access Time) -->

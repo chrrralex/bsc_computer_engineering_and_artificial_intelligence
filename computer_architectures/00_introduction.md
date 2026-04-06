@@ -530,15 +530,27 @@ In the IEEE 754 standard, some values are particular:
 - The `NaN` (Not a Number) case is represented with `M` different from `0` and all bits of `E` set to `1`. This value represent an error during a calculation.
 - A denormalised mantissa has `M` different from `0` and the exponent `E` has all bits set to `0`. In this case, the number doesn't have an assumed leading one before the binary point.
 
-<!-- to do - textual data with ASCII and EASCII -->
-<!-- to do - textual data with Unicode -->
-<!-- to do - images with lossless coding: PNG, GIF and BMP -->
-<!-- to do - images with lossy coding: JPEG and AVIF -->
-<!-- to do - audios with lossless coding: WAV and AIFF -->
-<!-- to do - audios with lossy coding: MP3 and AAC -->
-<!-- to do - videos with lossless coding: FLAC and Lagarith -->
-<!-- to do - videos with lossy coding: AVC and MPEG-4 -->
-<!-- to do - metric units -->
+**ASCII and EASCII**: ASCII (American Standard Code for Information Interchange) is a `7` bits standard created in the 1963 by the ANSI (American National Standards Institute) for representing a particular set of `95` (English language focused) printable and `33` control characters, for a total of `128` code points. A valid ASCII binary string consists in a `7` bits. Each combination of these `7` bits is a number between `0` and `2^7 - 1`, or between `0` and `127`: each number is called code point and it identifies a specific character uniquely. A variant of the ASCII coding is the EASCII (Extended ASCII). It extends the length of a code point from `7` to `8` bits, so it can represent numbers between `0` and `2^8 - 1`, or between `0` and `255`.
+
+**Unicode and UTF-8**: Unicode, also called TUS (The Unicode Standard) is a character encoding standard maintained by the Unicode Consortium and designed to support the use of text all of the world's writing systems. Unicode has a very high number of code points. Unicode supports Chinese, Arabic, Japanese characters, emoji, many mathematical and cultural symbols and many other types of characters. It is truly a universal encoding that is updated daily by the Unicode Consortium.
+
+Unicode defines two mapping methods: the UTF (Unicode Transformation Format) encodings, and the UCS (Universal Coded character Set) encodings. An encoding maps (possibly a subset of) the range of Unicode code points to sequences of values in some fixed-size range, called code units. All UTF encodings map code points to a unique sequence of bytes. The numbers in the names of the encodings indicate the number of bits per code unit (for UTF encodings) or the number of bytes per code unit (for UCS encodings and UTF-1). There are the following UTF encodings used by Unicode:
+
+- UTF-8 (Uniform Transformation Format, 8 bits): it uses 8 bits units per code point, and has maximal compatibility with ASCII. Each code point can have from one, to four units. This is the most common used encoding for the web documents.
+- UTF-16 (Uniform Transformation Format, 16 bits): it uses 16 bits units per code point.
+- UTF-32 (Uniform Transformation Format, 32 bits): it uses 32 bits units per code point.
+
+**Lossless coding for images**: PNG, GIF, and BMP are image formats that use lossless compression (or no compression in the case of BMP), meaning no information is lost during storage. PNG supports high-quality images and transparency with efficient compression. GIF supports up to 256 colors and simple animations. BMP typically stores raw pixel data and is mainly used for compatibility rather than compression efficiency.
+
+**Lossy coding for images**: JPEG and AVIF are image formats that use lossy compression to significantly reduce file size by removing less perceptible visual details. JPEG is widely used for photographs due to its good compression-performance tradeoff. AVIF provides higher compression efficiency than JPEG with better image quality at smaller sizes. Both formats are commonly used for web and multimedia applications.
+
+**Lossless coding for audios**: WAV and AIFF are lossless audio formats that store uncompressed or minimally compressed digital audio signals. They preserve the original recording quality without any loss of information. These formats are commonly used in professional audio editing and production environments. However, they require significantly more storage space compared to compressed formats.
+
+**Lossy coding for audios**: MP3 and AAC are lossy audio compression formats designed to reduce file size by removing perceptually less important sound information. MP3 is one of the most widely used audio formats for music distribution. AAC provides better sound quality than MP3 at similar bitrates and is widely used in streaming services and mobile devices. Both formats are optimized for efficient storage and transmission.
+
+**Lossless coding for videos**: FLAC and Lagarith are lossless compression codecs that preserve the original data without degradation. FLAC is primarily used for lossless audio compression, while Lagarith is used for lossless video compression in editing workflows. These codecs maintain exact original quality but produce larger files than lossy formats. They are commonly used in archival storage and professional media processing.
+
+**Lossy coding for videos**: AVC (H.264) and MPEG-4 are lossy video compression standards designed to efficiently reduce video file size while maintaining acceptable visual quality. AVC is widely used in streaming platforms, Blu-ray discs, and video conferencing applications. MPEG-4 supports multimedia compression for video, audio, and interactive content. These codecs enable efficient transmission and storage of digital video.
 
 ### 00.03. Von Neumann Architecture
 
