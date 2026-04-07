@@ -213,11 +213,17 @@ As you can see, the more complex the memory hierarchy, the longer the average me
 
 **Mapping Strategies**: cache mapping strategies determine how memory blocks are placed into cache lines. In direct-mapped caches, each memory block maps to exactly one cache line, making access fast but increasing conflict misses. In set-associative caches, each block can be placed in any line within a selected set, balancing flexibility and hardware complexity. In fully associative caches, a memory block can be placed in any cache line, minimizing conflict misses but requiring more complex and slower hardware search mechanisms.
 
-<!-- to do - replacement strategies: FIFO (First-In, First-Out), LRU (Last Recently Used), Random Replacement, LFU (Last Frequently Used) -->
-<!-- to do - write strategies: write-through, write-back, write-allocate and no write-allocate -->
-<!-- to do - cache in multiprocessor systems: cache coherence problem, shared data consistency, snooping protocols and directory-based protocol -->
-<!-- to do - prefetching and victim cache -->
-<!-- to do - inclusive vs exclusive cache hierarchies -->
+**Replacement Strategies**: cache replacement strategies determine which cache line is replaced when a new memory block must be loaded and the cache (or set) is already full. The choice of strategy affects cache performance by influencing the miss rate. The most common used strategies are:
+
+- FIFO (First In, First Out): replaces the cache line that has been in the cache the longest time. It is simple to implement but does not consider how frequently or recently data is used (and this can decrease the hit ratio, or equivalenlty it can inrease the miss rate).
+- LRU (Last Recently Used): replaces the cache line that has not been accessed for the longest time. It exploits temporal locality and generally provides better performance than FIFO, but requires more hardware complexity.
+- Random Replacement: selects a cache line randomly for replacement. It is simple and fast to implement and can perform reasonably well in practice.
+- LFU (Last Frequently Used): replaces the cache line that has been accessed the fewest times. It tracks usage frequency but is more complex to implement and less common in hardware caches.
+- Pseudo LRU (Last Recently Used): an approximation of LRU used in modern processors to reduce hardware complexity while maintaining near-LRU performance. It's the most common used technique in the modern digital systems.
+
+**Write Strategies**: in a write-through policy, every write operation updates both the cache and the main memory simultaneously. This ensures memory consistency and simplifies coherence but increases memory traffic and can reduce performance due to slower write operations. In a write-back (or copy-back) policy, write operations update only the cache initially, and modified data (dirty blocks) are written to main memory only when they are replaced. This reduces memory traffic and improves performance but requires additional hardware to track modified cache lines. In a write-allocate policy, when a write miss occurs, the corresponding memory block is first loaded into the cache and then updated. This strategy is commonly used together with write-back caches because future writes to the same block are likely (temporal locality). In a no write-allocate policy, when a write miss occurs, the data is written directly to main memory without loading the block into the cache. This reduces cache pollution and is typically used together with write-through cahces.
+
+There is a lot more to say about caches, but unfortunately there isn't enough space to talk about it. We refer you to more in-depth texts.
 
 ### 01.03. Primary Memory
 <!-- to do - RAM (Random Access Memory), SRAM (Static RAM) and DRAM (Dynamic RAM) -->

@@ -1,15 +1,122 @@
 # 02.01. Devices Layer
 
 ### 02.01. Electrical Quantities
-<!-- to do - atom model -->
-<!-- to do - voltage -->
-<!-- to do - current quantity -->
-<!-- to do - current intensity -->
-<!-- to do - energy -->
-<!-- to do - power -->
-<!-- to do - resistance -->
-<!-- to do - conductance -->
-<!-- to do - electrical effects: thermal, luminous and magnetic effects -->
+
+**Atom Model**: the atom is the basic particle of a chemical element and it's the fundamental building block of matter. An atom consists of a nucleus (where there is the 99.94% of the atom mass) of the two subparticles protons and neutrons, surrounded by an electromagnetically bound swarm of electrons (another type of subparticles). The electrons of an atom are attracted to the protons in an atomic nucleus by the electromagnetic force, meanwhile the protons and neutrons in the nucleus are attracted to each other by the nuclear force: both are very important for the atom stability (and, at the global level, for the matter stabiliy). An atom is composed by three main elements (in reality there are more elements and the atom's structure is very complex, but we will simplify everything):
+
+- Protons: indicated with `p+` (or simply `p`), which have a negative charge.
+- Neutrons: indicated with `n` (or simply `n`), which have a neutral charge.
+- Electrons: indicated with `e-` (or simply `e`), which have a negative charge.
+
+Different numbers of `p+` in the nucleus defines different chemical elements. Atoms with the same number of `p+`, but a different number of `n` are called isotopes of the same element. Atoms are extremely small, typically around 100 pm (picometers) across (1 pm = 10^(-12) m). Aroms are so small that accurately predicting their behavior using classical physics is not possible due to quantum effects.
+
+The following figure shows the current models accepted for the atom:
+
+<!-- to add -->
+*In Figure: the accepted model of the atom*
+
+The following is the Bhor's model (also known as Rutherford–Bohr model), not accepted in quantum physics, but considered generally a valid model when it comes to electric current and electricity:
+
+<!-- to add -->
+*In Figure: Rutherford–Bohr model, a simplified model*
+
+Electrons are the main protagonists of the electric current: it's in fact defined as a flow of negative electric charges that flow from one area to another within a given material. In an atom, `p+` have a positive charge of `+1.602 * 10^(-19)`, meanwhile `e-` have a symmettric negative charge of `-1.602 * 10^(-19)`.
+
+**Voltage**: is the difference in electric potential between two points in an electrical circuit that causes electric charge to flow. It represents the energy per unit charge available to move electrons through a conductor. The voltage `V` is the ratio between the work (or energy) `W` and the electric charge `Q`, also kown as electric quantity:
+
+```
+V = W / Q
+1 V = 1 J / 1 C
+```
+
+where:
+
+- `V` is expressed in Volt (`V`),
+- `W` is expressed in Joule (`J`),
+- `Q` is expressed in Coulombs (`C`).
+
+**Current Quantity and Intensity**: intensity of the electric current is the rate at which electric charge flows through a conductor. Quantity of the electri current is the product between the intensity of the electric current and the time difference (normally one second, or 1 s). It measures how much charge passes through a point in a circuit per unit time. Electric quantity is described by the following formula:
+
+```
+Q = I x Δt
+1 C = 1 A x 1 s
+```
+
+where:
+
+- `Q` is expressed in Coulomb (`C`),
+- `I` is expressed in Ampere (`A`),
+- `t` is expressed in seconds (`s`).
+
+You can calculate the electrical current intensity `I` in the following way:
+
+```
+I = Q / Δt
+1 A = 1 C / 1 s
+```
+
+where all quantities are the same of the previous formula.
+
+Electric current represents the movement of charge carriers, typically electrons (in conductors). Using the water analogy, the voltage `V` is the pressure and the intensity of the electrical current `I` is the flow rate of water.
+
+**Energy**: is the capacity to perform work, or produce change in a physical system. In electrical systems, energy represents the ability to move electric charges through a circuit. Energy is measured in Joule (`J`) and is the product between the work (measured in Netwon, `N`) and distance (measured in meters, `m`):
+
+```
+E = L x d
+1 J = 1 N x 1 m
+```
+
+Electrical energy can be calculated as:
+
+```
+E = V x I x Δt
+1 J = 1 V x 1 A x 1 s
+```
+
+**Power**: is the rate at which energy is transferred or converted per unit time. It measures how fast work is done or how quickly energy is used. The power is the result of the following formula:
+
+```
+P = E / Δt
+1 W = 1 J / 1 s 
+```
+
+where:
+
+- `P` is expressed in Watts (`W`),
+- `t` is expressed in seconds (`s`).
+
+**Resistance**: is the property of a material or component that opposes the flow of electric current in a circuit. It determines how much a conductor resists the movement of electric charges. From the physical point of view, the resistance `R` of a material depends on the material type, it's spatial extensions (length for conductors), cross-sectional area and temperature. The resistance `R` of a material is given by:
+
+```
+R = ρ * (L / A)
+```
+
+where:
+
+- `ρ` is called resistivity and it's material-specific (for example, silver generally has a very very low resistivity, while glass has a very high resistivity);
+- `L` is the length of the material, or conductor;
+- `A` is the area of the material, or conductor.
+
+The following figure shows the listed parameters:
+
+<!-- to add -->
+*In Figure: the various parameters used to calculate the resistivity of a material*
+
+**Conductance**: is the measure of how easily electric current flows through a material, or component. It is the reciprocal (inverse) of electrical resistance. Given a resistance `R` of a specific material, you can calculate the conductance in this way:
+
+```
+G = 1 / R
+1 S = 1 / 1 Ω
+```
+
+or, equivalently:
+
+```
+G = R^(-1)
+1 S = 1 Ω^(-1)
+```
+
+In practice, conductance is the inverse of resistance: while the latter measures how much a material tends to oppose the flow of electric charges, the former measures how much the material itself favors it. Conductance is measured in Siemens (`S`) and it's indicated with the letter `G`.
 
 ### 02.02. Circuit Basics
 <!-- to do - insulators, conductors and semiconductors -->
