@@ -119,16 +119,97 @@ G = R^(-1)
 In practice, conductance is the inverse of resistance: while the latter measures how much a material tends to oppose the flow of electric charges, the former measures how much the material itself favors it. Conductance is measured in Siemens (`S`) and it's indicated with the letter `G`.
 
 ### 02.02. Circuit Basics
-<!-- to do - insulators, conductors and semiconductors -->
-<!-- to do - circuit, nodes, branches and meshes -->
-<!-- to do - ideal and real voltage source component -->
-<!-- to do - ideal and real current source component -->
-<!-- to do - Kirchhoff’s laws: KCL and KVL -->
-<!-- to do - components in series and in parallel -->
-<!-- to do - measure the current with an ammeter and the sunt resistance -->
-<!-- to do - measure the voltage with a voltmeter -->
-<!-- to do - Thevenin transformation -->
-<!-- to do - Norton transformation -->
+
+**Insulators, Conductors and Semiconductors**: to implement different types of conductors, there are different types of materials:
+
+- Conductors: material that have a high conductance. Conductors are materials with very low resistivity and they favor the flow of electric curent.
+- Insulators: material that have a high resistance. Insulators are materials that prevent the flow of electric current, characterized by high resistivity and a large band gap.
+- Semiconductors: material that have a medium conductance (or medium resistivity). Semiconductors are materials with electrical conductivity between conductors and insulators, commonly used in electronic components like diodes and transistors. Semiconductors are the base of the digital circuits.
+
+**Circuit, Node, Branch and Mash**: an electrical circuit is a set of components of various nature (electrical, mechanical, electromechanical) appropriately placed in order to react adequately to the flow of electric current.
+
+A node is a point in an electrical circuit where two or more circuit elements are connected together; all points belonging to the same node share the same electrical potential (voltage). There are three types of nodes: a simple node is an interconnection of two elements, an essential node is an interconnection of three (or more) elements and a reference node (also called ground, or GND) is a node with a voltage equal to `0 V`.
+
+A branch is a portion of an electrical circuit that contains a single circuit element (such as a resistor, capacitor, source, or inductor) connected between two nodes. For example, a resistor called `R1` connected to another resistor called `R2` defines a branch between two components. A branch connects only and only two nodes.
+
+A mesh is a closed loop in an electrical circuit that doesn't contain any other loops inside it. It is the smallest possible closed path in a planar circuit. Meshes are used to analyze the circuit, or to isolate a specific closed path of the circuit (a subcircuit).
+
+The following figure shows an example of circuit. In the figure arw shows nodes, branches and mashes.
+
+<!-- to add -->
+*In Figure: example of circuit where branches, nodes and mashes are shown*
+
+**Ideal and Real Voltage Source**: the "pressure" of the flow of the electric current is given by the voltage source. An ideal voltage source is a source that provides a constant voltage independent of the current drawn from it and it has the following characteristics:
+
+- The voltage is always constant under any load.
+- Internal resistance of the source is `0 Ω`.
+- Can supply any amount of current.
+- Does not exist in practice: the ideal voltage source is a theoretical model only.
+
+A real voltage source provides a voltage that changes slightly with load current due to its internal resistance. A real voltage source has the following characteristics:
+
+- Voltage decreases when load current increases.
+- Internal resistance isn't `0 Ω`.
+- Limited current capability.
+- Exists in practical systems (batteries and power supplies).
+
+The following figure shows the relationships between the voltage provided by an ideal and a real voltage source and the time:
+
+<!-- to add -->
+*In Figure: relationship between voltage and time of an ideal and real voltage source*
+
+**Ideal and Real Current Source**: the "intensity" of the flow of the electric current is given by the current source. An ideal current source is a source that provides a constant intensity of electrical current independent of the current drawn from it and it has the following characteristics:
+
+- The current is always constant under any load.
+- Internal resistance of the source is infinite.
+- Can maintain constant current regardless of terminal voltage.
+- Does not exist in practice: the ideal current source is a theoretical model only.
+
+A real current source provides an approximately constant current but is affected by its internal resistance. A real current source has the following characteristics:
+
+- Output current varies slightly with load voltage.
+- Internal resistance is large but finite.
+- Limited voltage compliance range.
+- Exists in practical electronic circuits.
+
+The following figure shows the relationships between the intensity of the electrical current provided by an ideal and a real current source and the time:
+
+<!-- to add -->
+*In Figure: relationship between current and time of an ideal and real current source*
+
+**Kirchhoff’s laws: KCL and KVL**: the Kirchoff's laws are very useful to analyze what happen in a specific region, or node of a circuit. Kirchhoff's laws are based on the conservation principles. There are two Kirchhoff’s laws: KCL and KVL. Here's a simple explanation of each:
+
+KCL (Kirchhoff’s Current Law) states that the algebric sum of currents at a node is zero. If we indicate the currents with `Ii`, where `i` is an index varting from `1` to `n` (`n` are the number of the currents), we can express the KCL law in this way:
+
+```
+∑ Ii = 0, i = 1, 2, ..., n
+```
+
+All currents entering the node are positive and all currents leaving the node are negative.
+
+The following figure shows the application of the KCL principle:
+
+<!-- to add -->
+*In Figure: the application of the KCL principle in an example of a circuit*
+
+KVL (Kirchoff's Voltage Laws) states that the algebric sum of voltages around any closed loop is zero. If we indicate the voltages with `Vi`, where `i` is an index varting from `1` to `n` (`n` are the number of the voltages), we can express the KVL law in this way:
+
+```
+∑ Vi = 0, i = 1, 2, ..., n
+```
+
+The sign of each voltage depends on the chosen loop direction and polarity convention. The voltage source is tipically positive and each other components of the circuit that consumes a parte of the voltage has a negative voltage.
+
+The following figure shows the application of the KVL principle:
+
+<!-- to add -->
+*In Figure: the application of the KVL principle in an example of a cuircit*
+
+**In series and in parallel components**: <!-- to do -->
+
+**Thevenin Transformation**: <!-- to do -->
+
+**Norton Transformation**: <!-- to do -->
 
 ### 02.03. Resistance and Resistors
 <!-- to do - ideal resistor -->

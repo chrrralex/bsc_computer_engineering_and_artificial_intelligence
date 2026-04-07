@@ -603,16 +603,29 @@ In the next chapters we'll analyze in detail how each component of the Von Neuma
 <!-- to do - types of computers: embedded systems, personal computers, mobile and game computers, workstations, mainframes, supercomputers, clusters -->
 
 ### 00.06. History of the Multilevel Machines
-<!-- to do - the birth of the microprogramming (1940s) -->
-<!-- to do - the rise of the operating system (1960s) -->
-<!-- to do - the expansion of the ISA (1970s) -->
-<!-- to do - the elimination of the microprogramming (1980s) -->
-<!-- to do - Moore's law -->
+
+**Birth of the Microprogramming (1940s)**: in the late 1940s and early 1950s, microprogramming was introduced (notably by Maurice Wilkes) as a technique to simplify CPU control unit design. Instead of implementing complex control logic entirely in hardware, instructions were interpreted through sequences of simpler microinstructions stored in a control memory. This approach made processor design more flexible and easier to modify or extend. Microprogramming became widely used in early complex instruction set processors (CISC).
+
+<!-- to do -  -->
+
+**Birth of the Operating System (1960s)**: during the 1960s, the OS (Operating System) emerged as a key software layer between hardware and users. Systems like *IBM OS/360* introduced concepts such as multiprogramming, job scheduling, and memory management. Operating systems enabled efficient sharing of expensive computing resources among multiple users and programs. This marked the transition from single-program execution to structured system-level software environments.
+
+**Expansion of the ISA (1970s)**: in the 1970s, many processors adopted increasingly complex Instruction Set Architectures (ISAs), characteristic of the CISC design philosophy. Manufacturers expanded instruction sets to support higher-level programming constructs and reduce program size. Architectures such as the early *x86* family exemplified this trend. This expansion aimed to shift complexity from software into hardware through richer machine instructions.
+
+**Elimination of the Microprogramming (1980s)**: in the mid-1980s, the rise of RISC architectures reduced the reliance on microprogramming by favoring simpler instructions executed directly by hardwired control logic. Projects such as *MIPS* and *SPARC* demonstrated that simplified instruction sets could achieve higher performance through efficient pipelining. Although microprogramming was not completely eliminated, its role decreased in many new processor designs. Modern CPUs still use microcode internally for compatibility and complex instruction handling.
+
+**Moore's Law**: formulated by Gordon Moore in 1965, observed that the number of transistors on an integrated circuit roughly doubles every 18–24 months. This trend has driven exponential growth in computing performance while reducing cost per transistor. It enabled the development of increasingly complex processors, memory systems, and integrated computing devices. Although its pace has slowed in recent years, Moore’s Law remains a central concept in semiconductor evolution.
 
 ### 00.07. History of the Computer Architectures
-<!-- to do - zeroth generation: mechanical computers (1642-1945) -->
-<!-- to do - first generation: vacuum tubes (1945-1955) -->
-<!-- to do - second generation: transistors (1955-1965) -->
-<!-- to do - third generation: integrated circuits (1975-1985) -->
-<!-- to do - fourth generation: VLSI (Very Large Scale Integration) (1965-Today) -->
-<!-- to do - fifth generation: low-power and invisible computers (1990-Today) -->
+
+**Zeroth Generation - Mechanical Computers (1642-1945)**: the zeroth generation includes mechanical and electromechanical computing devices built before electronic computers. Notable examples include the *Pascaline* by Blaise Pascal (1642), Charles Babbage’s *Analytical Engine* (conceptual but foundational), and the *Harvard Mark I* (1944), an electromechanical programmable computer. These machines relied on gears, relays, and mechanical motion rather than electronic components. They established the basic principles of automated calculation and programmable computation.
+
+**First Generation - Vacuum Tubes (1945-1955)**: the first generation of computers used vacuum tubes for circuitry and magnetic drums for memory. Iconic machines include *ENIAC* (1945), one of the first general-purpose electronic computers, *EDVAC*, which introduced the stored-program concept, and *UNIVAC I*, the first commercial computer in the United States. These systems were very large, consumed significant power, and generated considerable heat. Programming was performed using machine language and punched cards.
+
+**Second Generation - Transistors (1955-1965)**: the second generation replaced vacuum tubes with transistors, making computers smaller, faster, and more reliable. Important examples include the *IBM 1401*, widely used for business applications, and the *IBM 7090*, designed for scientific computation. Magnetic core memory became standard, and higher-level programming languages such as FORTRAN and COBOL were introduced. This generation marked the transition toward more practical commercial computing systems.
+
+**Third Generation - Integrated Circuits (1965-1985)**: the third generation introduced integrated circuits (ICs), allowing multiple transistors to be placed on a single chip and greatly improving performance and reliability. Representative machines include the *IBM System/360*, which standardized compatible computer families, and the *DEC PDP-8*, an influential minicomputer. Operating systems became more advanced, supporting multiprogramming and time-sharing. Computers became more accessible to universities and businesses.
+
+**Four Generation - Very Large Scale Integration (1985-Today)**: the fourth generation is characterized by Very Large Scale Integration (VLSI), enabling thousands to millions of transistors on a single chip and leading to the development of microprocessors. Iconic systems include the *Intel 4004* (1971), the first commercial microprocessor, and early personal computers like the *Apple II* and *IBM PC*. This generation made personal computing widespread and dramatically reduced cost and size. Modern desktops, laptops, and servers are based on this technology.
+
+**Five Generation - Low Power and Invisible Computers (1990-Today)**: the fifth generation focuses on low-power, highly integrated, and often invisible computing embedded into everyday environments. Examples include smartphones powered by ARM-based processors, embedded systems in IoT devices, and wearable computers such as smartwatches. Advances in parallel processing, AI acceleration, and mobile computing characterize this era. Computing has become pervasive, networked, and integrated seamlessly into daily life.
