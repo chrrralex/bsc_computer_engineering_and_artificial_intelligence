@@ -459,9 +459,71 @@ NOR-only implementation uses the NOR logical gate only to implement any other lo
 
 Both NAND-only and NOR-only implementations are used in the modern VLSI (Very Large Scale Integration) IC. NAND and NOR gates need a less number of transistors (nMOS, pMOS, or CMOS): this is the main reason that the modern CPUs, caches and other chips are based on NAND-only, or NOR-only logical gates.
 
-<!-- to do - multilevel logic circuits -->
-<!-- to do - don't care conditions -->
-<!-- to do - delays: raise time, fall time, propagation delay, contamination delay, path delay, critical path delay -->
+**Multilevel Logic Circuits**: a multilevel logic circuit is a combinational circuit where at least one (or more) input pass through more than two logical gates to reach the output. The following figure shows an example of a multilevel logic circuit:
+
+<!-- to add -->
+*In Figure: an example of a multilevel logic circuit*
+
+**Don't Care Conditions**: are input combinations for which the output of a boolean function is not specified or not relevant to the operation of the circuit. In a turth table, they're are usually represented by `X`, meaning the output can be either 0 or 1, whichever simplifies circuit. Normally, don't care conditions occur when some input combinations never appear in practice, or a certain combinations are unused, or some outputs are irrelevant for specific states. The following figure shows how a combinational circuit can be optimized and implemented with don't care conditions:
+
+<!-- to add -->
+*In Figure: how a combinational circuit can be represented*
+
+Now, in the combinational circuit and sequential circuit we can use three symbols:
+
+- `0` is tipically a low voltage (in the positive logic).
+- `1` is tipically an high voltage (in the positive logic).
+- `X` is "anything", it's a don't care condition for a particular boolean variable.
+
+**High Impedance State**: indicated with `Z`, it represents a high-impedance state (also called tristate) in digital circuits, meaning the output is electrically disconnected from the circuit. The following figure shows a tristate, a logical gate with two inputs and one output:
+
+<!-- to add -->
+*In Figure: the tristate gate, with A as data input, E as control input and Y as data output*
+
+When `E = 1`, the tristate is transparent and each value of `A` is propagated (with a small delay) and rigenerated in the `Y` output. When `E = 0`, the tristate is opaque and `Y = Z`. This means the `Y` output is in an high impedance state. Note that a Z output is not a logic value, but a circuit condition indicating the output is electrically inactive and does not influence the signal line. A `Z` output (high-impedance state) means the output pin of a digital circuit is electrically disconnected from the signal line, behaving like an open switch.
+
+**Delay**: there are different types of delays in a combinational circuit.
+
+Rise time is the time required for a signal to transition from a low logic level to a high logic level, typically measured between 10% and 90% of the final voltage value. It characterizes how quickly a digital signal switches from `0` to `1` and it's an important parameter of the basic logical gates.
+
+Fall time is the time required for a signal to transition from a high logic level to a low logic level, typically measured between 90% and 10% of the initial voltage value. It describes how quickly a signal switches from `1` to `0` and it's an important parameter of the basic logical gates.
+
+Propagation delay is the time between a change at the input of a logic gate or circuit and the corresponding change at its output. It represents the response time of the circuit and is usually measured between 50% voltage transition points. It is indicated with `tpd` (time propagation delay).
+
+Contamination delay is the minimum time after an input change at which the output may begin to change. It represents the earliest possible effect of an input transition on the output. It is indicated with `tcd` (time contamination delay).
+
+**Critical Path Delays**: the propagation delay of the entire logical circuit is the maximum path delay among all possible input-to-output paths in a combinational circuit. It determines the minimum clock period and therefore the maximum operating speed of the circuit. The propagation delay of a multilevel logic circuit is the sum of the propagation delays of the gates along the longest input-to-output path, called the critical path. For example, consider the following logic circuit:
+
+<!-- to add -->
+*In Figure: an example of a combinational circuit with a critical path, used to calculate the propagation delay of the circuit `tpd`*
+
+In the critical path we've three logical gates: a NOT, an AND and an OR. The propagation delay `tpd` of the circuit is the sum of the propagation delay of each logical gate:
+
+- `tpdNOT` for the NOT gate.
+- `tpdAND` for the AND gate.
+- `tpdOR` for the OR gate.
+
+So, the total propagation delay, indicated with `tpd`, is:
+
+```
+tpd = tpdNOT + tpdAND + tpdOR
+```
+
+The contamination delay of the entire logical circuit is the minimum path delay between the inputs change and the output change. The contamination delay of a multilevel logic circuit is the sum of the contamination delays of the gates along the smallest input-to-output path, called the shortest path. For example, consider the following logic circuit:
+
+<!-- to add -->
+*In Figure: an example of a combinational circuit with a shortest path, used to calculate the contamination delay of the circuit `tcd`*
+
+In the shortest path we've two logical gates: a NOT and a NAND. The contamination delay `tcd` of the circuit is the sum of the contamination delay of each logical gate:
+
+- `tcdNOT` for the NOT gate.
+- `tcdMAND` for the NAND gate.
+
+So, the total contamination delay, indicated with `tcd`, is:
+
+```
+tcd = tcdNOT + tcdNAND
+```
 
 ### 03.04. Combinational Blocks
 <!-- to do - half adder -->

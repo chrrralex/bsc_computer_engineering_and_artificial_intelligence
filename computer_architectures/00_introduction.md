@@ -581,6 +581,9 @@ The Von Neumann architecture is the foundation of the modern digital systems. Al
 In the next chapters we'll analyze in detail how each component of the Von Neumann architecture.
 
 ### 00.04. Modern Digital Computer
+
+**Language**: a language is a set of keywords and syntactic and semantic rules used to represent, or communicate informations between two, or more actors.
+
 <!-- to do - language definition -->
 <!-- to do - machine language, low-level language, mid-level language and high-level language -->
 <!-- to do - interpretation vs translation -->
