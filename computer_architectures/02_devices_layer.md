@@ -205,7 +205,27 @@ The following figure shows the application of the KVL principle:
 <!-- to add -->
 *In Figure: the application of the KVL principle in an example of a cuircit*
 
-**In series and in parallel components**: <!-- to do -->
+**In series and in parallel components**: components are in series when they are connected end-to-end along a single path (or branch), so the same current flows through all of them. An `n` components in series have the following characteristics:
+
+- They've the same current: `I1 = I2 = I3 = ... = In`; therefore all components receive the same current intensity `I`.
+- Total voltage equals the sum of voltage drops (each component represent a voltage drop): `Vtot = V1 + V2 + V3 + ... Vn`; 
+each component consumes a certain amount of voltage, directly proportional to its characteristics (such as internal resistance). For the component `i`, the voltage is given by the following formula: `Vi = Ri * I`.
+
+The following figure shows an example of components in series (resistors):
+
+<!-- to add -->
+*In Figure: an example of a circut to calculate resistors in series*
+
+Components are in parallel when they are connected across the same two nodes, so the same voltage appears across each component. An `n` components in parallels have the following characteristics:
+
+- They've the same voltage: `V1 = V2 = V3 = ... = Vn`; therefore all components receive the same voltage `V`.
+each component consumes a certain amount of voltage, directly proportional to its characteristics (such as internal resistance).
+- Total current equals the sum of each branch current: `Itot = I1 + I2 + I3 + ... In`; each component consumes a certain amount of current, directly proportional to its characteristics (such as internal resistance). For the component `i`, the voltage is given by the following formula: `Ii = V / Ri`.
+
+The following figure shows an example of components in parallels (resistors):
+
+<!-- to add -->
+*In Figure: an example of a circut to calculate resistors in parallels*
 
 **Thevenin Transformation**: <!-- to do -->
 
