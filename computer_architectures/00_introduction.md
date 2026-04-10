@@ -582,20 +582,73 @@ In the next chapters we'll analyze in detail how each component of the Von Neuma
 
 ### 00.04. Modern Digital Computer
 
-**Language**: a language is a set of keywords and syntactic and semantic rules used to represent, or communicate informations between two, or more actors.
+**Language**: a language is a set of keywords and syntactic and semantic rules used to represent, or communicate informations between two, or more actors. There are two main categories of languages:
 
-<!-- to do - language definition -->
-<!-- to do - machine language, low-level language, mid-level language and high-level language -->
-<!-- to do - interpretation vs translation -->
-<!-- to do - virtual machine definition -->
-<!-- to do - multilevel machines and the layered model -->
-<!-- to do - actual multilevel machines -->
-<!-- to do - layer 0 overview: digital logic layer -->
-<!-- to do - layer 1 overview: microarchitecture layer -->
-<!-- to do - layer 2 overview: architecture layer and the ISA (Instruction Set Architecture) -->
-<!-- to do - layer 3 overview: operating system machine layer -->
-<!-- to do - layer 4 overview: assembler layer -->
-<!-- to do - layer 5 overview: applications and problem-oriented languages layer -->
+- Informal languages: is a language used for communication in everyday life that doesn't follow strict grammatical rules or precise structure, and the meaning of each sentence may depend on context, or interpretation. An example of a natural language is the English, used by the humans to communicate.
+- Formal languages: is a language defined by a precise set of rules, symbols, and grammar, where every statement has an exact and unambiguous meaning, commonly used in mathematics, computer science, and programming languages. An example of a formal language is the C programming language.
+
+Formal languages can be divided into these following classes:
+
+- Machine-level programming languages: in reality it's only one and it's composed by only two symbols, that are `0`, or `1`. Machine language represent the concretization of the digital signals, that can be `high`, or `low`.
+- Low-level programming languages: all programming languages still closed to the machine. Fundamentally, these languages are the various assembly languages, like the x86 architecture assembly, or the ARMv7 assembly. Each architecture defines the own instructions set, also known as ISA (Instruction Set Architecture), as we'll seen in the next chapters.
+- Mid-level programming languages: all programming languages located between the closed to machine languages and the closed to humans languages. An example is the C programming language, that provides various low-level constructs (like pointer and various functions of the C standard library used to manipulate directly the main memory). Also C++ and Pascal can be considered examples of mid-level programming languages. 
+- High-level programming languages: all programming languages closed to the humans. Languages like Java, PHP, Python and JavaScript are all examples of high-level programming languages.
+
+**Interpretation**: is the process of translating and executing a program line by line at runtime, without generating a separate executable file beforehand. The interpreter is the software, or hardware component that performs the interpretation. For example, a source code written in the Java programming language is interpretated by a software component called JVM (Java Virtual Machine). In reality, the Java programming language is a pseudo-interpretated language cause, first of all, acts a component called java compiler that compiles the source code into an intermediate language known as bytecode; second, the JVM interprets the bytecode directly, line by line, by converting each line into the target architecture's assembly language. The following figure represents a general interpretation process and the Java-specific interpretation process:
+
+<!-- to add -->
+*In Figure: the generic process of the interpretation (on left) and the Java language interpretation process (on right)*
+
+**Compilation**: is the process of translating the entire source code of a program at once into machine code before execution, producing an executable file that can be run independently. The compiler is the software, or hardware component that performs the compilation. For example, a source code written in the C programming language is compiled (by a C compiler, like GCC -GNU C Compiler-) into an executable file, directly executable by the target architecture. The following figure represents a general compilation process and the C-specific compilation process:
+
+<!-- to add -->
+*In Figure: the generic process of the compilation (on left) and the C language compilation process (on right)*
+
+**Virtual Machine and Layered Model**: in a computer architecture, a VM (Virtual Machine) defines a layer. To be precised, a VM (Virtual Machine) is a software-based, hardware-based, or hybrid-based emulation of a physical computer system that provides an environment capable of executing programs (written in a specific language directly executable by the VM) as if it were a real machine. Modern digital systems consists in a set of different layers. This architecture is called layered model, or multilevel machine model and it has the following elements and characteristics:
+
+- Each layer sees all layers below by using the own abstraction.
+- Each layer can communicate directly with adjacent layers (layer immediately below and layer immediately above).
+- Each layer exposes its services through APIs (Application Programming Interfaces). An API is an interface, is a shared boundary or point of interaction between two systems, components, or entities, through which they communicate and exchange information.
+- Each layer has the own language (or the own languages). The zero-layer execute directly programs represented by the machine language.
+- Higher layers are closed to the humans.
+- Lower layers are closed to the machine.
+
+Below is shown a representation of a layer model, followed by all modern digital systems:
+
+<!-- to add -->
+*In Figure: layered model (the model followed by the multilevel machines)*
+
+**Actual Multilevel Machines**: current multilevel machines consist of multiple layers, one above the other. Modern digital systems all follow the layered model. The layers you can find in a common multilevel machine are:
+
+- Layer 0: the digital logic layer. This layer consists of basic digital circuits such as logic gates, flip-flops, and registers that implement fundamental operations using binary signals. It forms the physical foundation on which higher layers of the computer system are built. This is an abstract representation of the digital logic layer:
+
+<!-- to add -->
+*In Figure: a simple representation of the digital logic layer*
+
+- Layer 1: the microarchitecture layer. This layer defines how hardware components like the ALU, registers, buses, and control unit are organized and interconnected to execute machine-level instructions. It determines how the processor internally implements the instruction set. This is an abstract representation of the microarchitecture layer:
+
+<!-- to add -->
+*In Figure: a simple representation of the microarchitecture layer*
+
+- Layer 2: the architecture layer, or the ISA (Instruction Set Architecture) layer. This layer specifies the set of machine instructions, registers, data types, and addressing modes visible to programmers and compilers. It serves as the interface between hardware and software. This is an abstract representation of the architecture layer:
+
+<!-- to add -->
+*In Figure: a simple representation of the architecture layer*
+
+- Layer 3: the machine layer of the OS (Operating System). This layer provides an extended or virtual machine by managing hardware resources and offering system services such as process control, memory management, and input/output handling. It allows programs to run without directly interacting with hardware. This is an abstract representation of the machine layer of the OS:
+
+<!-- to add -->
+*In Figure: a simple representation of the machine layer of the OS*
+
+- Layer 4: the assembler layer. This layer uses assembly language, which provides symbolic representations of machine instructions and addresses to simplify programming at the machine level. An assembler translates these symbolic instructions into executable machine code. This is an abstract representation of the machine layer of the OS:
+
+<!-- to add -->
+*In Figure: a simple representation of the assembler layer*
+
+- Layer 5: the applications and problem-oriented languages layer. This layer includes high-level programming languages such as C, Java, or Python that allow programmers to solve problems using human-readable syntax. Programs written in these languages are translated into lower-level instructions before execution. This is an abstract representation of the applications and problem-oriented layer:
+
+<!-- to add -->
+*In Figure: a simple representation of the assembler layer*
 
 ### 00.05. Architectures Types
 <!-- to do - definition of CPU, processor, multiprocessor and core -->

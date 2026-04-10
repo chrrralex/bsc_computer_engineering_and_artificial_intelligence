@@ -328,8 +328,33 @@ to do - NAND memory: SSD (Solid State Disk)
 - Wireless mice transmit movement data without cables using short-range communication protocols.
 - Touch-based mice detect finger movement using capacitive sensing instead of mechanical motion tracking.
 
-<!-- to do - monitors: CRT (Cathode Ray Tube), LCD (Liquid Crystal Display), LED (Light Emitting Diode), OLED (Organic LED) and plasma -->
-<!-- to do - printers: inject, bubble-jet, laser, LED, direct thermal, thermal transfer, dot-matrix -->
+**Monitors**: there are different types of monitors.
+
+A CRT monitor works by firing electron beams from the back of the tube onto a phosphor-coated screen to produce images. The beams scan the screen line by line to create the picture. CRT displays are bulky, consume more power, and are largely obsolete today.
+
+An LCD monitor uses liquid crystals placed between glass layers to control light passing from a backlight and form images on the screen. It is thinner, lighter, and more energy-efficient than CRT displays. LCD technology is widely used in laptops, monitors, and televisions.
+
+An LED monitor is actually an LCD monitor that uses light-emitting diodes as the backlight instead of fluorescent lamps. This improves brightness, contrast, and energy efficiency while allowing thinner display designs. LED monitors are common in modern screens today.
+
+An OLED monitor uses organic compounds that emit light when electricity passes through them, so no backlight is required. Each pixel produces its own light, enabling very high contrast, deep blacks, and fast response times. OLED displays are used in high-end smartphones, TVs, and monitors.
+
+A plasma display uses tiny cells filled with electrically charged gas that emit ultraviolet light when activated, which then excites phosphors to produce images. Plasma screens offer good color reproduction and wide viewing angles but consume more power and are heavier than LCD and LED displays. They are now mostly discontinued.
+
+**Printers**: there are different types of printers.
+
+An inkjet printer produces images by spraying tiny droplets of liquid ink onto paper through microscopic nozzles. It is commonly used for home and office printing because it can produce high-quality color images at relatively low cost. Inkjet printers are suitable for documents and photo printing.
+
+A bubble-jet printer is a type of inkjet printer that uses heat to create tiny bubbles in the ink, forcing droplets onto the paper. This method allows precise control of ink placement and produces clear prints. It is widely used in many consumer inkjet printers.
+
+A laser printer uses a laser beam to form an electrostatic image on a rotating drum, which attracts toner particles and transfers them onto paper. Heat is then applied to permanently fix the toner onto the page. Laser printers are fast and produce high-quality text, making them ideal for office environments.
+
+An LED printer works similarly to a laser printer but uses a row of light-emitting diodes instead of a laser beam to create the image on the drum. This design has fewer moving parts and can improve reliability. LED printers are efficient and commonly used in office settings.
+
+A direct thermal printer creates images by applying heat directly to specially coated thermal paper, which changes color when heated. It does not require ink or toner. These printers are commonly used for receipts, tickets, and labels.
+
+A thermal transfer printer uses heat to transfer ink from a ribbon onto paper or labels. This method produces durable and long-lasting prints that resist fading. It is commonly used for barcode labels, packaging, and industrial applications.
+
+A dot-matrix printer creates characters and images by striking an ink ribbon against paper using a set of small pins arranged in a matrix. It is an impact printer capable of printing multi-copy forms using carbon paper. Dot-matrix printers are mainly used in environments such as banking and logistics where continuous paper printing is required.
 
 **Speaker**: a speaker converts digital audio data from the computer into analog sound waves that can be heard by humans. The signal follows this path:
 
@@ -339,7 +364,12 @@ to do - NAND memory: SSD (Solid State Disk)
 4. Amplifier increases signal power.
 5. Speaker diaphragm vibrates → produces sound waves.
 
-<!-- to do - digital cameras -->
+
+**Digital Cameras**: a digital camera works by capturing light through a lens and focusing it onto an image sensor (usually a CMOS or CCD sensor). The sensor converts the incoming light into electrical signals that represent the brightness and color of each pixel in the image. These signals are processed by the camera’s internal processor and converted into a digital image file. The image is then stored in memory (such as an SD card) so it can be viewed, edited, or transferred to other devices.
+
+A CMOS (Complementary Metal-Oxide-Semiconductor) sensor converts light into electrical signals using individual pixel-level amplifiers built directly into the sensor. Each pixel processes its own signal, allowing faster image capture and lower power consumption. CMOS sensors are widely used in smartphones and modern digital cameras because they are inexpensive to manufacture and support high-speed operation. They also enable additional processing functions to be integrated on the same chip.
+
+A CCD (Charge-Coupled Device) sensor captures light and converts it into electrical charges that are transferred across the chip and read at one corner of the sensor. This method produces very high-quality images with low noise and excellent light sensitivity. However, CCD sensors consume more power and are slower compared to CMOS sensors. They were commonly used in earlier digital cameras and are still used in scientific and professional imaging applications.
 
 ### 01.06. System Bus
 
