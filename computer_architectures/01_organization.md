@@ -422,7 +422,14 @@ The hierarchical bus architecture is shown in the following figure:
 - Frequency: bus frequency is the number of transfer cycles per second on the bus.
 - Throughput: is the amount of data transferred per second over the bus.
 
-**Chipset (northbridge and southbridge)**: <!-- to do -->
+**Chipset (northbridge and southbridge)**: the chipset is a set of motherboard components managing data flow between the CPU, memory, and devices. Traditionally, it consists of two parts: the northbridge (which handles high-speed communication with the CPU, RAM, and graphics) and the southbridge (which handles slower I/O functions like USB, SATA, and audio). The following figure shows the basic structure of the chipset:
+
+<!-- to add -->
+*In Figure: northbridge and southbridge*
+
+Northbridge is one of the two chips located in the direction towards North in the motherboard. The main function of North bridge is to manage the communications between the CPU and parts of motherboard. Northbridge is directly towards FSB (Font-Side Bus). Other names for northbridge are host bridge and MCH (Memory Controller Hub).
+
+Southbridge is the another chip of the logical chipset architecture. It is located to the South of PCI (Peripheral Component Interconnect) bus in the motherboard. The main function of southbridge is to control the IO functioning. The northbridge is the medium that connects southbridge and CPU. ICH (I/O Controller Hub) is the other name given to the southbridge for its functionality. 
 
 **FSB (Front-Side Bus)**: is the main communication pathway between the CPU and the main memory (SRAM for cache, DRAM for the central memory). Historically, this bus is called "northbridge", from the chipset proposed by the Intel. It was widely used in older computer architectures before newer interconnect technologies replaced it. It acts like a data highway carrying instructions, addresses, and control signals between processor and memory. Here's represented the FSB:
 
