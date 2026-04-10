@@ -227,9 +227,15 @@ The following figure shows an example of components in parallels (resistors):
 <!-- to add -->
 *In Figure: an example of a circut to calculate resistors in parallels*
 
-**Thevenin Transformation**: <!-- to do -->
+**Thevenin Transformation**: the Thevenin transformation replaces any linear two-terminal circuit with an equivalent circuit consisting of a single voltage source `Vth` in series with a single resistance `Rth`. This equivalent circuit produces the same terminal behavior (same voltage and current) as the original circuit when connected to any load. The Thevenin voltage is the open-circuit voltage at the terminals, and the Thevenin resistance is the equivalent resistance seen from the terminals with independent sources turned off. This is a very useful application in the circuit analysis to simplify it. Here's an example of the Thevenin transofrmation:
 
-**Norton Transformation**: <!-- to do -->
+<!-- to add -->
+*In Figure: an example of the Thevenin transformation*
+
+**Norton Transformation**: the Norton transformation replaces any linear two-terminal circuit with an equivalent circuit consisting of a single current source `In` in parallel with a single resistance `Rn`. The Norton current is the short-circuit current between the terminals, and the Norton resistance equals the equivalent resistance seen from the terminals with independent sources turned off. The Norton equivalent circuit behaves identically to the original circuit at its terminals for any connected load. Here's an example of the Norton transofrmation:
+
+<!-- to add -->
+*In Figure: an example of the Norton transformation*
 
 ### 02.03. Resistance and Resistors
 <!-- to do - ideal resistor -->

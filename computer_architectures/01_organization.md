@@ -309,22 +309,131 @@ to do - NAND memory: SSD (Solid State Disk)
 -->
 
 ### 01.05. I/O Devices
-<!-- to do - keyboards: mechanical, membrane, rubber dome, scissor-switch and capacitive -->
-<!-- to do - mouses: mechanical (rubber ball, internal rollers), optomechanical (ball and ecnoder wheels, LED and photodectectors), optical (early-optical, LED, laser), wireless (infrared, RF and bluetooth) and touch-based -->
+
+**Keyboards**: there are different types of keyboards:
+
+- Mechanical keyboards use individual switches per key that directly close an electrical contact when pressed.
+- Membrane keyboards detects key presses using flexible conductive layers pressed together.
+- Rubber dome keyboards use silicone domes that collapse to connect circuit traces.
+- Scissor-switch keyboards use a stabilizing scissor mechanism above a membrane contact layer.
+- Capacitive keyboards detect key presses by measuring changes in capacitance instead of closing electrical contacts.
+
+**Mouses**: there are different types of mouses (also known as mices):
+
+- Mechanical mice detect movement using a rubber ball that rotates internal rollers connected to position sensors.
+- Optomechanical mice improve mechanical detection using optical sensing of rotating encoder wheels.
+- Early optical mice detect movement using predefined grid-pattern mousepads.
+- Modern optical mice use an LED and image sensor to track surface texture movement.
+- Laser mice operate like optical mice but use a laser diode instead of an LED.
+- Wireless mice transmit movement data without cables using short-range communication protocols.
+- Touch-based mice detect finger movement using capacitive sensing instead of mechanical motion tracking.
+
 <!-- to do - monitors: CRT (Cathode Ray Tube), LCD (Liquid Crystal Display), LED (Light Emitting Diode), OLED (Organic LED) and plasma -->
 <!-- to do - printers: inject, bubble-jet, laser, LED, direct thermal, thermal transfer, dot-matrix -->
-<!-- to do - speakers -->
+
+**Speaker**: a speaker converts digital audio data from the computer into analog sound waves that can be heard by humans. The signal follows this path:
+
+1. CPU sends audio samples to the audio controller / sound card.
+2. Sound controller stores samples in audio buffers.
+3. A Digital-to-Analog Converter (DAC) converts digital samples into analog voltage.
+4. Amplifier increases signal power.
+5. Speaker diaphragm vibrates → produces sound waves.
+
 <!-- to do - digital cameras -->
 
 ### 01.06. System Bus
-<!-- to do - definition of system bus -->
-<!-- to do - width: x8, x16, x32 and x64 architectures -->
-<!-- to do - types: data, address and control -->
-<!-- to do - timing: synchronous bus, asynchronous bus, clocked communication and handshaking mechanism -->
-<!-- to do - arbitration: centralized system bus, distribuited system bus, master-slave mechanism -->
-<!-- to do - performance parameters: width, latency, frequency, throughput -->
-<!-- to do - architectures: single-bus, multiple-bus and hierarchical bus -->
-<!-- to do - modern bus standards: memory bus, FSB (Front-Side Bus), BSB (Block-Side Bus) -->
-<!-- to do - PCI (Pheripheral Components Interconnect) and PCIe (PCI express) -->
+
+**System Bus**: the system bus is the communication network inside a digital system that allows the various devices of a computer to communicate. A system bus is a set of wires that interconnect CPU, main memory and I/O devices. A system bus has different types of buses:
+
+- Data bus is a set of line in which each signal represents a data.
+- Address bus is a set of line in which each signal represents an address.
+- Control bus is a set of line in which each signal represents a control signal.
+
+The system bus has various types of standard and protocols. In general: the bus inside a specific I/O device, or a specific component is not subject to standardization, meanwhile the interconnection between two, or more different devices is a system bus subject to standardization. A standard is a set of rules (or a set of interfaces) that all the productors of the I/O devices, CPUs and main memories must respect to be able to communicate efficently. Communication between two, or more components of a digital system are also subject to a protocol. A protocol is a set of rules that defines how devices communicate and exchange data in a digital system or network.
+
+**Width**: the width of a system bus defines how many parallel wires (or parallel lines) has a particol type of bus. Today there are four main widths used in the most common digital systems:
+
+- `x8` defines 8 parallel lines.
+- `x16` defines 16 parallel lines.
+- `x32` defines 32 parallel lines.
+- `x64` defines 64 parallel lines.
+
+In this case, "parallel lines" means that in a single clock cycle 8, 16, 32, or 64 bits are trasferred from a component to another simousimultaneously.
+
+**Compatibility and Misalignment Problem**: over time, the width of a bus has been a major issue, for example for the Intel x86 architecture, which has had a series of increases in data bus widths starting with the 8088 processor:
+
+- The `8088` processor had a `20` bit address bus.
+- The `80286` processor had a `24` bit address bus. `4` of these bits have been added with a number of other control bits, to ensure backwards compatibility.
+- The `80386` processor had a `32` bit address bus. Another `8` of these bits have been added, further complicating the complexity of the control circuitry.
+
+Compatibility is a concrete problem: the multiplexed address bus could be an efficient solution.
+
+A too high width leads to the bus misalignment problem: each signal in a specific line of the bus has the own propagation delay and the own speed, which varies slightly. This fact could lead to slight bus misalignments, especially when the clock cycle is very short. 
+
+**Timing**: remember that the system clock is a digital signal, continuous and deterministic, which always and constantly repeats without interruption and which always takes on the same waveform at each clock period. System clock can be used by a bus, or not.
+
+- A synchronous bus uses a shared clock signal to coordinate all operations between connected components, for example the memory access (for read, or write operations). All devices follow the same clock and the data transfers occur at fixed time intervals. THese type of system buses are easier to design and control, but they've a limited flexibility when devices have different speeds. Examples of synchronous buses are the FSB (Front-Side Bus) and the SDRAM memory bus.
+- An asynchronous bus doesn't use a global clock, instead all devices coordinate transfers using handshaking signals (like the full handshaking). No system clock is required, and each device involved in the communication works with requests and acks. This is more flexible with mixed-speed devices. This type of system buses is more flexible and optimied for devices with different speeds, but it's slower than synchronous buses (due to handshake overhead). Examples of asynchronous buses are the USB (Universal Serial Bus) and the PCI (Pheripheral Component Interrconnect).
+
+The following figure shows the differences between a communication in a synchronous bus and in an asynchronous bus:
+
+<!-- to add -->
+*In Figure: a communication in a synchronous bus (on left), and in an asynchronous bus (on right)*
+
+**Arbitration**: in a computer system, multiple devices, such as the CPU, the main memory and the I/O devices, are all connected to a common communication pathway known as system bus. In order to transfer data between these devices, they need to have access to the bus. Bus arbitration is the process of resolving conflicts that arise when multiple devices attempt to access the bus at the same time. When multiple devices try to use the bus simultaneously, it can lead to data corruption and system instability. To prevent this, a bus arbitration mechanism is used to ensure that only one device has access to the bus at any given time.
+
+Bus arbitration refers to the process by which the current bus master accesses and then leaves the control of the bus and passes it to another bus requesting processor unit. The controller that has access to a bus at an instance is known as a bus master. There are two types of bus arbitration:
+
+- Centralized bus arbitration: a single bus arbiter (tipically a single bus arbiter called master) performs the required arbitration. 
+- Distribuited bus arbitration: all devices involved in the communication and linked to the system bus participating in the selection of the next bus master.
+
+There are different methods for the bus arbitration:
+
+- Daisy chaining method: it is a simple and cheaper method where all the bus masters use the same line for making bus requests. The bus grant signal serially propagates through each master until it encounters the first one that is requesting access to the bus. This master blocks the propagation of the bus grant signal, therefore any other requesting module will not receive the grant signal and hence cannot access the bus. Here's the daisy chaining method:
+
+<!-- to add -->
+*In Figure: the daisy chaining method to implement a centralized bus arbitration*
+
+- Polling, or rotating priority method: in this, the controller is used to generate the address for the master(unique priority), the number of address lines required depends on the number of masters connected in the system. The controller generates a sequence of master addresses. When the requesting master recognizes its address, it activates the busy line and begins to use the bus. Here's the polling priority method:
+
+<!-- to add -->
+*In Figure: the pooling priority method to implement a distribuited bus arbitration*
+
+- Fixed priority, or independent request method: in this, each master has a separate pair of bus request and bus grant lines and each pair has a priority assigned to it. The built-in priority decoder within the controller selects the highest priority request and asserts the corresponding bus grant signal. Here's the fixed priority request method:
+
+<!-- to add -->
+*In Figure: the fixed priority request method to implement a centralized bus arbitration*
+
+**Architecture of System Bus**: system bus in a digital system can be organized in different ways. There are three main architectures known for the system bus:
+
+- Single bus architecture: all components share one common communication bus for data, address, and control signals. All communications occurs over the same and unique bus. Only one transfer happens at a time, because every device must use the same communication path. In this systems there is commonly a bus arbiter.
+- Multiple bus architecture: uses separate buses for different communication tasks. Multiple transfers can happen simultaneously. This architecture is used in modern processors and performance-oriented systems. Usually this architecture uses both centralized and distribuited bus arbitration methods.
+- Hierarchical bus architecture: in which each component is like a leaf, or a root of a tree. Tipically the root component is the CPU, with a direct connection (with a dedicated bus) to the main memory. This architecture is based on the expansion bus (or expansion slots): each slot allows the user to link another I/O devices to the digital system., by creating a subtree system.
+
+The hierarchical bus architecture is shown in the following figure:
+
+<!-- to add -->
+*In Figure: a hierarchical bus architecture with CPU as root of the tree*
+
+**Performance parameters of the system bus**: here are the key performance parameters of a bus that determine how fast data moves inside a computer system:
+
+- Width: bus width is the number of bits (on for each line) that can be transferred simultaneously over the bus.
+- Latency: is the time delay between sending a request and receiving the response.
+- Frequency: bus frequency is the number of transfer cycles per second on the bus.
+- Throughput: is the amount of data transferred per second over the bus.
+
+**Chipset (northbridge and southbridge)**: <!-- to do -->
+
+**FSB (Front-Side Bus)**: is the main communication pathway between the CPU and the main memory (SRAM for cache, DRAM for the central memory). Historically, this bus is called "northbridge", from the chipset proposed by the Intel. It was widely used in older computer architectures before newer interconnect technologies replaced it. It acts like a data highway carrying instructions, addresses, and control signals between processor and memory. Here's represented the FSB:
+
+<!-- to add -->
+*In Figure: how FSB is located in a modern digital system*
+
+**BSB (Block-Side Bus)**: the BSB (Block-Side Bus), also known as Back-Side Bus, is a dedicated, high-speed and internal bus that connects the CPU to its cache memory, typically the L2 cache. Unlike the FSB, which connects the CPU to main memory and chipset, the BSB connects only the processor and cache. Here's represented the BSB:
+
+<!-- to add -->
+*In Figure: how BSB is located in a modern digital system*
+
 <!-- to do - ISA (Industry Standard Architecture) -->
-<!-- to do - Chipset: northbridge and southbridge -->
+<!-- to do - PCI (Pheripheral Components Interconnect) -->
+<!-- to do - PCIe (PCI express) -->
