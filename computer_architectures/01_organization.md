@@ -471,6 +471,25 @@ Southbridge is the another chip of the logical chipset architecture. It is locat
 <!-- to add -->
 *In Figure: how BSB is located in a modern digital system*
 
-<!-- to do - ISA (Industry Standard Architecture) -->
+**ISA (Industry Standard Architecture)**: is a 16 bits system bus introduced and used for the first time in the IBM PC/AT and nextly in the Intel 80286 processor. Intel always thinks to compatiblity, so the ISA system bus used in the 80286 is with the 8 bits internal system bus of the Intel 8088 processor, used in the IBM PC. The natural evolution of the ISA system bus is the EISA (Extended Industry Standard Architecture), a 32 bits system bus used for x32 architectures.
+
+ISA system bus has the following characteristics:
+
+- Supports 8-bit and later 16-bit data transfer.
+- Typical clock speed about 8 MHz (8 mnilion of Hz).
+- Maximum data transfer rate up to about 16 MB/s.
+- Uses simple and inexpensive hardware design.
+- Does not support automatic configuration (manual jumper settings required).
+- Now obsolete in modern computer systems.
+
+Meanwhile, EISA has the following characteristics:
+
+- Supports 32-bit data transfer.
+- Higher data transfer rate up to about 33 MB/s.
+- Backward compatible with ISA expansion cards.
+- Supports bus mastering for improved performance.
+- Provides automatic device configuration (software-based).
+- Mainly used in high-end PCs and servers before being replaced by PCI buses.
+
 <!-- to do - PCI (Pheripheral Components Interconnect) -->
 <!-- to do - PCIe (PCI express) -->

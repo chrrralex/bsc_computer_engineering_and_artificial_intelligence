@@ -651,18 +651,67 @@ Below is shown a representation of a layer model, followed by all modern digital
 *In Figure: a simple representation of the assembler layer*
 
 ### 00.05. Architectures Types
-<!-- to do - definition of CPU, processor, multiprocessor and core -->
-<!-- to do - Flynn's taxonomy: SISD, SIMD, MISD and MIMD architectures -->
-<!-- to do - memory architectures: Von Neumann, Harvard and Modified Harvard architectures -->
-<!-- to do - parallel computing architectures: scalar processors, vector processors, array processors, multiprocessors systems, multicore systems -->
-<!-- to do - processing organization: centralized systems, parallel systems and distribuited systems -->
-<!-- to do - types of computers: embedded systems, personal computers, mobile and game computers, workstations, mainframes, supercomputers, clusters -->
+
+**CPU, processor, multiprocessor, singlecore and multicore**: we use the term CPU (acronym of Central Processing Unit) to refer any computational unit installed on a digital system, from the conceptual point of view. Instead, we use the term processor to indicate any hardware chip (that has the own pins -inputs, outputs and power supply-). Tipically, a processor contains only one CPU. We use the term multiprocessor for both an hardware board containing more than one processor and for a computer network (where the computers work on the same problem, by exploting the real parallelism). Finally, we use two terms to describe the modern processors:
+
+- Singlecore is a processor (intended as a hardware chip) with only one computational unit, or CPU. You can see a core like a single CPU.
+- Multicore is a processor (intended as a hardware chip) with more than one computational unit, or CPUs.
+
+The following figure shows the differences between a singlecore processor, a multicoreprocessor and a multiprocessors system:
+
+<!-- to add -->
+*In Figure: difference between singlecore processor, multicore processor and multiprocessors system*
+
+Note that all the previous systems can be considered as a CPU. An entire cluster of computers, for example, could represents a single CPU, from the logical point of view and with an high abstraction level. 
+
+**Computational Models**: modern multicore processors are baszed on the parallel execution. Flynn's taxonomy is a classification of computer architectures, proposed by Michael J. Flynn in 1966, and nextly extended in 1972. The Flynn's taxonomy describe how different types of CPU architectures can execute one, or more programs by exploiting the real parallelism. This classification is divided into the following categories:
+
+- SISD (Single Instruction stream, Single Data stream): fundamentally is a system with only one CPU. The CPU execute only one instruction at a tima and each instruction has the own data.
+- SIMD (Single Instruction stream, Multiple Data stream): a single instruction is simultaneously applied to multiple different data streams. Instructions can be executed sequentially, such as by pipelining, or in parallel by multiple functional units. Examples of these systems are array processors (or vector processors), pipelined processors and associative processors.
+- MISD (Multiple Instruction stream, Single Data stream): multiple instructions operate on one data stream. This is an uncommon architecture which is generally used for fault tolerance.
+- MIMD (Multiple Instruction stream, Multiple Data stream): Multiple autonomous processors simultaneously execute different instructions on different data. MIMD architectures include multi-core superscalar processors, and distributed systems, using either one shared memory space or a distributed memory space.
+
+Here's are logical representations of the Flynn's taxonomy:
+
+<!-- to add -->
+*In Figure: logical representations of SISD, SIMD, MISD and MIMD*
+
+**Types of computers**: in relation to the way digital devices are used, we can classify them into:
+
+- Embedded systems. Embedded systems are specialized computers designed to perform dedicated functions within larger devices such as appliances, vehicles, or industrial machines. They are optimized for reliability, low power consumption, and real-time operation rather than general-purpose computing.
+- PC (Personal Computer). A personal computer is a general-purpose computing system intended for individual use, capable of running a wide variety of applications such as word processing, web browsing, and multimedia software. It typically includes a microprocessor, memory, storage, and input/output devices.
+- Mobile and game computers. Mobile computers such as smartphones, tablets, and handheld gaming consoles are portable systems designed for wireless connectivity and energy-efficient operation. Game computers, including gaming consoles, are optimized for high-performance graphics and interactive entertainment.
+- Workstations. Workstations are high-performance computers designed for technical or scientific applications such as engineering, graphics design, and data analysis. They offer more processing power, memory capacity, and reliability than standard personal computers.
+- Mainframes. Mainframes are large, powerful computer systems used by organizations to process massive volumes of data and support many simultaneous users. They are commonly employed in banking, government, and large enterprise environments for critical transaction processing.
+- Supercomputers. Supercomputers are the most powerful computers available, designed to perform extremely complex calculations at very high speeds. They are used for applications such as climate modeling, scientific simulations, and advanced research.
+- Clusters. Clusters are groups of interconnected computers that work together as a single system to improve performance, reliability, or scalability. They are commonly used in scientific computing, cloud services, and large-scale data processing environments.
+
+**Von Neumann, Harvard and Modified Harvard architectures**: the Von Neumann architecture uses a single shared memory space to store both program instructions and data. Instructions and data travel through the same bus, which simplifies system design but can create a performance limitation known as the Von Neumann bottleneck because only one transfer can occur at a time. The following figure shows a very simple representation of the Von Neumann architecture:
+
+<!-- to add -->
+*In Figure: a very simplified representation of the Von Neumann architecture*
+
+The Harvard architecture uses separate memories and separate buses for instructions and data, allowing simultaneous access to both. This improves performance and efficiency and is commonly used in embedded systems and digital signal processors. The following figure shows a very simple representation of the Harvard architecture:
+
+<!-- to add -->
+*In Figure: a very simplified representation of the Harvard architecture*
+
+Finally, the Modified Harvard architecture combines features of both Von Neumann and Harvard architectures by using separate instruction and data paths internally while maintaining a shared main memory. This design improves performance while keeping flexibility and is widely used in modern processors. The following figure shows a very simple representation of the modified Harvard architecture:
+
+<!-- to add -->
+*In Figure: a very simplified representation of the modified Harvard architecture*
+
+**Parallel Computing Architectures**: parallel computing is a type of computation in which many calculations or processes are carried out simultaneously. Large problems can often be divided into smaller ones, which can then be solved at the same time. There are several different forms of parallel computing: bit-level, instruction-level, data, and task parallelism. Parallelism has long been employed in high-performance computing, but has gained broader interest due to the physical constraints preventing frequency scaling. There are different forms of parallel computing:
+
+- Scalar processor: <!-- to do -->
+- Array processor: <!-- to do -->
+- Associative processor: <!-- to do -->
+- Multiprocessor systems: <!-- to do -->
+- Multicore systems: <!-- to do -->
 
 ### 00.06. History of the Multilevel Machines
 
 **Birth of the Microprogramming (1940s)**: in the late 1940s and early 1950s, microprogramming was introduced (notably by Maurice Wilkes) as a technique to simplify CPU control unit design. Instead of implementing complex control logic entirely in hardware, instructions were interpreted through sequences of simpler microinstructions stored in a control memory. This approach made processor design more flexible and easier to modify or extend. Microprogramming became widely used in early complex instruction set processors (CISC).
-
-<!-- to do -  -->
 
 **Birth of the Operating System (1960s)**: during the 1960s, the OS (Operating System) emerged as a key software layer between hardware and users. Systems like *IBM OS/360* introduced concepts such as multiprogramming, job scheduling, and memory management. Operating systems enabled efficient sharing of expensive computing resources among multiple users and programs. This marked the transition from single-program execution to structured system-level software environments.
 
