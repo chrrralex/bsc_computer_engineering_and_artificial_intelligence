@@ -703,11 +703,11 @@ Finally, the Modified Harvard architecture combines features of both Von Neumann
 
 **Parallel Computing Architectures**: parallel computing is a type of computation in which many calculations or processes are carried out simultaneously. Large problems can often be divided into smaller ones, which can then be solved at the same time. There are several different forms of parallel computing: bit-level, instruction-level, data, and task parallelism. Parallelism has long been employed in high-performance computing, but has gained broader interest due to the physical constraints preventing frequency scaling. There are different forms of parallel computing:
 
-- Scalar processor: <!-- to do -->
-- Array processor: <!-- to do -->
-- Associative processor: <!-- to do -->
-- Multiprocessor systems: <!-- to do -->
-- Multicore systems: <!-- to do -->
+- Scalar processor: a scalar processor executes one instruction on one data item at a time, following a sequential processing model. It is the traditional type of processor used in many basic computer systems.
+- Array processor: an array processor performs the same operation simultaneously on multiple data elements using many processing units working in parallel. It is commonly used in scientific computing and applications involving large numerical datasets.
+- Associative processor: an associative processor processes data based on content rather than memory addresses, allowing parallel comparison of many data items at once. It is useful in applications such as database searching, pattern recognition, and artificial intelligence.
+- Multiprocessor systems: a multiprocessor system contains two or more processors that share memory and work together to execute tasks more efficiently. These systems improve performance, reliability, and computational speed through parallel processing.
+- Multicore systems: a multicore system includes multiple processing cores integrated within a single processor chip, allowing several tasks to run simultaneously. This architecture improves performance and energy efficiency in modern computers and mobile devices.
 
 ### 00.06. History of the Multilevel Machines
 
