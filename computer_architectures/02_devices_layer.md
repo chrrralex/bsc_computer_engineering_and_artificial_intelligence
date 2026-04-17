@@ -421,7 +421,28 @@ Step 2: calculate the Ctot equivalent capacitance
 Ctot = C1 + Cp + C4
 ```
 
-<!-- to do - RC circuits -->
+**Charging a Capacitor**: <!-- to do -->
+
+**Discharging a Capacitor**: <!-- to do -->
+
+**RC Circuits**: an RC circuit is an electrical circuit composed of a resistor (`R`, or an equivalent resistance `Req`) and a capacitor (`C`, or an equivalent capacitor `Ceq`) connected in series, or parallel with a voltage source. It is commonly used to control timing, filtering, and signal shaping because the capacitor charges and discharges gradually rather than instantly.
+
+The following is an example of RC circuit, with a resistor `R` in series, before the capacitor `C`:
+
+<!-- to add -->
+*In Figure: an example of RC circuit*
+
+The voltage across the capacitor increases exponentially until it reaches the supply voltage (in practice, in an RC circuit a resistor limits the charging of the capacitors):
+
+```
+VC​(t) = V x (1 − e^(−t / (R x C)))
+```
+
+When the voltage source is removed, the capacitor releases its stored energy through the resistor. The voltage across the capacitor decreases exponentially over time:
+
+```
+VC​(t) = V x e^(−t / (R x C))
+```
 
 ### 02.04. Inductor and Inductance
 <!-- to do - ideal inductor -->
