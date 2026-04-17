@@ -339,12 +339,88 @@ R = V / I
 ```
 
 ### 02.03. Capacitor and Capacitance
-<!-- to do - ideal capacitor -->
-<!-- to do - real capacitor -->
-<!-- to do - types of capacitor -->
-<!-- to do - capacitors in series -->
-<!-- to do - capacitors in parallel -->
-<!-- to do - equivalent capacitance in a circuit -->
+
+**Ideal Capacitor**: an ideal capacitor is the ideal working model of the capacitor component. A capacitor is an electronic component with tha main pruprose of collecting charges. In practice, the capacitor is the real component of the capacitance in a circuit model. An ideal capacitor is a theoretical component that stores electrical energy only in the form of an electric field between its plates and has a constant capacitance value independent of frequency, temperature, or voltage. It has no energy loss, no internal resistance, and no parasitic inductance, so it behaves perfectly according to capacitor equations.
+
+**Real Capacitor**: a real capacitor is a practical component whose behavior deviates from the ideal model because it includes internal resistance, leakage current, and small parasitic inductance. Its capacitance may vary with temperature, frequency, and voltage, and some stored energy is lost as heat during operation. There are different types of capacitor:
+
+- Ceramic capacitors: are made using ceramic material as the dielectric between two conductive plates. They are small, inexpensive, and widely used in high-frequency applications such as filtering, bypassing, and decoupling in electronic circuits.
+- Electrolytic capacitors: use an electrolyte as one of the conductive plates and provide very high capacitance values in a compact size. They are polarized components commonly used in power supplies for filtering and energy storage.
+Tantalum capacitors: are a type of electrolytic capacitor that uses tantalum metal as the electrode, offering high capacitance stability and reliability in a small size. They are commonly used in portable electronic devices and precision circuits.
+- Film capacitors: use thin plastic films such as polyester or polypropylene as the dielectric material. They provide good stability, low losses, and are widely used in timing circuits, signal processing, and audio applications.
+- Mica capacitors: are made using mica as the dielectric material and provide very high accuracy and stability with low losses. They are typically used in high-frequency and radio-frequency circuits.
+- Variable capacitors: allow adjustment of capacitance by changing the distance or overlap between plates. They are commonly used in tuning circuits such as radio receivers and oscillators.
+
+The following figure shows the different types of capacitors:
+
+<!-- to add -->
+*In Figure: different types of capacitors*
+
+**Capacitors in series**: a group of capacitors in series form a single capacitor whose resistance value is the reverse of the sum of all the reverse of the capacitance of each capacitor in series. For example, we consider the following circuit with `C1`, `C2` and `C3` capacitors in series:
+
+<!-- to add -->
+*In Figure: a circuit with three capacitors in series*
+
+The three capacitors shown in figure can be replaced by a single capacitor, for example called `Ctot`, with the following value:
+
+```
+Ctot = 1 / (C1^(-1) + C2^(-1) + C3^(-1))
+```
+
+Alternatively, you can use the following formula:
+
+```
+1 / Ctot = C1^(-1) + C2^(-1) + C3^(-1)
+```
+
+If you have two capacitors in series only, you can use the following formula:
+
+```
+Ctot = (C1 * C2) / (C1 + C2)
+```
+
+The new circuit is:
+
+<!-- to add -->
+*In Figure: the same previous circuit with the equivalent capacitance*
+
+`Ctot` is also called equivalent capacitance.
+
+**Capacitors in parallel**: a group of capacitors in parallel form a single capacitor whose capacitance value is the sum of the capacitance of each capacitors in parallel. For example, we consider the following circuit with `C1`, `C2` and `C3` capacitors in parallel:
+
+<!-- to add -->
+*In Figure: a circuit with three capacitors in parallel*
+
+The three capacitors shown in figure can be replaced by a single capacitor, for example called `Ctot`, with the following value:
+
+```
+Ctot = C1 + C2 + C3
+```
+
+The new circuit is:
+
+<!-- to add -->
+*In Figure: the same previous circuit with the equivalent capacitance*
+
+`Ctot` is also called equivalent capacitance.
+
+**Equivalent Capacitance**: the equivalent capacitance of a circuit is a single capacitor obtained by calculating the total capacitance of a circuit. A circuit can have both capacitors in series and capacitors in parallel. The following circuit has both capacitors in series and capacitors in parallel:
+
+<!-- to add -->
+*In Figure: a circuit with two capacitors in parallel and three capacitors in series*
+
+First, we can calculate the equivalent capacitance of the capacitors `C2` and `C3`, that are in parallel, by obtaining the `Cp` capacitor. Next, we can see `C1`, `Cp` and `C4` like three capacitors in series, so we can calculate the `Ctot`, or `Ceq`.
+
+So, we can operate in two steps:
+
+```
+Step 1: calculate the Cp equivalent capacitance
+Cp = (C2 * C3) / (C2 + C3)
+
+Step 2: calculate the Ctot equivalent capacitance
+Ctot = C1 + Cp + C4
+```
+
 <!-- to do - RC circuits -->
 
 ### 02.04. Inductor and Inductance
