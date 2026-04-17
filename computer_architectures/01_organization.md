@@ -493,3 +493,4 @@ Meanwhile, EISA has the following characteristics:
 
 <!-- to do - PCI (Pheripheral Components Interconnect) -->
 <!-- to do - PCIe (PCI express) -->
+<!-- to do - PIO interface -->

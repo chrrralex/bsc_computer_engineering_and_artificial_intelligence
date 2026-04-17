@@ -238,14 +238,105 @@ The following figure shows an example of components in parallels (resistors):
 *In Figure: an example of the Norton transformation*
 
 ### 02.03. Resistance and Resistors
-<!-- to do - ideal resistor -->
-<!-- to do - real resistor -->
-<!-- to do - types of resistor -->
-<!-- to do - resistors in series -->
-<!-- to do - resistors in parallel -->
-<!-- to do - equivalent resistance in a circuit -->
-<!-- to do - Ohm's law -->
-<!-- to do - R circuits -->
+
+**Ideal Resistor**: an ideal resistor is the ideal working model of the resistor component. A resistor is an electronic component with tha main pruprose of opposing the flow of charges. In practice, the resistor is the real component of the resistance in a circuit model. An ideal resistance is a theoretical component that opposes the flow of electric current with a constant resistance value independent of temperature, voltage, frequency, or physical conditions. It doesn't store energy and has no parasitic effects such as inductance, or capacitance.
+
+**Real Resistor**: a real resistance is a physical component whose resistance value can change with temperature, frequency, and operating conditions. It also includes small parasitic inductance and capacitance and dissipates energy as heat, so its behavior slightly deviates from the ideal model in practical circuits. There are different types of resistors:
+
+- Carbon composition resistors: are made from a mixture of carbon powder and insulating material molded into a cylindrical shape. They are inexpensive and can withstand high energy pulses, but they have lower accuracy and higher noise compared to modern resistors.
+- Carbon film resistors: are made by depositing a thin layer of carbon on a ceramic rod and cutting a spiral groove to adjust resistance. They provide better stability and accuracy than carbon composition resistors and are widely used in general electronic circuits.
+- Metal film resistors: they use a thin metal layer deposited on a ceramic base, offering high precision, low noise, and good temperature stability. They are commonly used in precision electronic applications.
+- Wire-wound resistors: are made by winding a metal wire around a ceramic core and are capable of handling high power and high current. They are typically used in power supplies, industrial equipment, and high-current applications.
+- Variable resistors: they allow adjustment of resistance manually using a rotating or sliding control. They are commonly used for volume control, tuning circuits, and calibration in electronic devices.
+- Thick and thin film resistors: are made by printing a resistive paste onto a substrate, while thin film resistors are produced by depositing a very thin resistive layer onto a surface. Thin film resistors provide higher precision, while thick film resistors are cheaper and widely used in surface-mount electronics.
+
+The following figure shows the different types of resistors:
+
+<!-- to add -->
+*In Figure: different types of resistors*
+
+**Resistors in series**: a group of resistors in series form a single resistor whose resistance value is the sum of all resistors in series. For example, we consider the following circuit with `R1`, `R2` and `R3` resistors in series:
+
+<!-- to add -->
+*In Figure: a circuit with three resistors in series*
+
+The three resistors shown in figure can be replaced by a single resistor, for example called `Rtot`, with the following value:
+
+```
+Rtot = R1 + R2 + R3
+```
+
+The new circuit is:
+
+<!-- to add -->
+*In Figure: the same previous circuit with the equivalent resistance*
+
+`Rtot` is also called equivalent resistance.
+
+**Resistors in parallel**: a group of resistors in parallel form a single resistor whose resistance value is the inverse of the sum of all inverse resistance of each resistors in parallel. For example, we consider the following circuit with `R1`, `R2` and `R3` resistors in parallel:
+
+<!-- to add -->
+*In Figure: a circuit with three resistors in parallel*
+
+The three resistors shown in figure can be replaced by a single resistor, for example called `Rtot`, with the following value:
+
+```
+Rtot = 1 / (R1^(-1) + R2^(-1) + R3^(-1))
+```
+
+Alternatively, you can use the following formula:
+
+```
+1 / Rtot = R1^(-1) + R2^(-1) + R3^(-1)
+```
+
+If you have only two resistances in parallel, you can use the following formula:
+
+```
+Rtot = (R1 * R2) / (R1 + R2)
+```
+
+The new circuit is:
+
+<!-- to add -->
+*In Figure: the same previous circuit with the equivalent resistance*
+
+`Rtot` is also called equivalent resistance.
+
+**Equivalent Resistance**: the equivalent resistance of a circuit is a single resistance obtained by calculating the total resistance of a circuit. A circuit can have both resistances in series and resistances in parallel. The following circuit has both resistances in series and resistances in parallel:
+
+<!-- to add -->
+*In Figure: a circuit with two resistors in parallel and three resistors in series*
+
+First, we can calculate the equivalent resistance of the resistors `R2` and `R3`, that are in parallel, by obtaining the `Rp` resistor. Next, we can see `R1`, `Rp` and `R4` like three resistances in series, so we can calculate the `Rtot`, or `Req`.
+
+So, we can operate in two steps:
+
+```
+Step 1: calculate the Rp equivalent resistance
+Rp = (R2 * R3) / (R2 + R3)
+
+Step 2: calculate the Rtot equivalent resistance
+Rtot = R1 + Rp + R4
+```
+
+**Ohm's Law**: the Ohm's law is one of the most important law in electronic circuits. It describes the relationships between the voltage `V`, the resistance `R` and intensity of the current `I` in an electric circuit. The original form of the Ohm's law states that the intensity of the electric current `I` flowing through a conductor is directly proportional to the voltage `V` across it and inversely proportional to its resistance `R`, provided temperature and physical conditions remain constant.
+
+```
+V = R x I
+```
+
+From the previous formula, we can discover `R` if `V` and `I` are known:
+
+```
+I = V / R
+```
+
+or, if you know both `V` and `I`:
+
+```
+R = V / I
+```
 
 ### 02.03. Capacitor and Capacitance
 <!-- to do - ideal capacitor -->
