@@ -765,122 +765,56 @@ $$
 
 **Sequence detector**: un rilevatore di sequenza e' un circuito sequenziale progettato per riconoscere una specifica sequenza di bit in ingresso e attivare un'uscita quando quella sequenza viene osservata. E' una classica applicazione delle FSM.
 
-### 03.07. HDL (Hardware Description Languages)
+### 03.07. System Verilog
+<!-- to do - HDL (Hardware Description Languages) -->
+<!-- to do - simulazione dell'hardware -->
+<!-- to do - sintesi di una rete logica -->
+<!-- to do - bug e debugging -->
+<!-- to do - cenni storici e caratteristiche del system verilog -->
+<!-- to do - moduli: la keyword module -->
+<!-- to do - assegnamenti continui: la keyword assign e l'operatore = -->
+<!-- to do - segnali logici singoli e multipli (bys): la keyword logic -->
+<!-- to do - operatori logici -->
+<!-- to do - operatori di riduzione -->
+<!-- to do - operatore ternario (o condizionale) e assegnamento condizionale -->
+<!-- to do -->
 
-**Definizione di linguaggi di descrizione hardware**: gli `HDL` sono linguaggi usati per descrivere il comportamento, la struttura e l'organizzazione dei circuiti digitali. Non servono solo a programmare, ma a modellare hardware che potra' essere simulato e spesso sintetizzato in porte logiche reali.
+### 03.08. Curiosità: il codice Morse e il codice Braille
 
-**Ruolo degli HDL nella progettazione di sistemi digitali**: gli `HDL` permettono di descrivere moduli, verificarne il comportamento con simulazioni, sintetizzarli in reti logiche e integrarli in progetti piu' complessi. Sono oggi lo strumento principale per la progettazione di FPGA, ASIC e sottosistemi digitali.
+**Codice Morse**: il codice Morse è un sistema di codifica e di decodifica usato per trasmettere lettere, numeri e punteggiatura mediante segnali di tipo intermittente. In pratica il codice Morse si può usare per comunicare sia su brevi, sia su medie, sia su lunghe distanze, solitamente mediante suoni, o mediante l'accensione e lo spegnimento di una sorgente luminosa, come una torcia. Il codice Morse fu inventato da Samuel Finley Breese Morse (1791-1872) nel 1837 e venne usato soprattutto mediante il telegrafo, uno strumento usato appunto per comunicare su grandi distanze all'epoca. Alfred Vail (1807-1859) lo studiò e lo ampliò e perfezionò ulteriormente. Oggigiorno il codice Morse è soggetto a standard internazionale ed è standardizzato dall'ITU (International Communication Union) con la sua raccomandazione ITU-R M.1677-1.
 
-**Livelli di astrazione nella progettazione HDL**: in un HDL si puo' lavorare a piu' livelli di astrazione:
+La figura seguente mostra l'alfabeto del codice morse:
 
-- **Livello comportamentale**: descrive cosa deve fare il circuito, senza entrare troppo nei dettagli interni.
-- **Livello RTL (Register-Transfer Level)**: descrive trasferimenti di dati tra registri e la logica combinatoria che li controlla. E' il livello piu' importante per la sintesi.
-- **Livello strutturale**: descrive il circuito come interconnessione esplicita di componenti piu' piccoli.
+<!-- to add -->
+*In Figura: l'alfabeto del codice Morse, che comprende lettere, numeri e caratteri di punteggiatura*
 
-**Introduzione a SystemVerilog**: `SystemVerilog` e' un'estensione moderna di Verilog che aggiunge costrutti per una migliore descrizione dell'hardware e per la verifica. E' molto usato sia per il design RTL sia per i testbench.
+Le regole per comunicare in codice Morse sono:
 
-**Definizione di modulo in SystemVerilog**: il modulo e' l'unita' base di progettazione. Un modulo dichiara interfacce, segnali interni e comportamento. Un esempio minimo e':
+- La durata del punto è arbitraria e unitaria: essa viene usata per determinare la velocità di comunicazione ed è il tempo di riferimento del codice Morse.
+- La durata di una linea è circa tre volte la durata di un punto.
+- La pausa tra punti e/o linee deve essere uguale alla durata di un punto.
+- La pausa tra le lettere è circa uguale alla durata di una linea.
+- La pausa tra le parole è circa uguale alla durata di due linee.
 
-```systemverilog
-module inverter (
-    input  logic a,
-    output logic y
-);
-    assign y = ~a;
-endmodule
-```
+Per esempio, la seguente figura mostra la stringa di testo "Hello World" in codice Morse:
 
-**Porte: input, output, inout**: le porte definiscono l'interfaccia del modulo con l'esterno. `input` riceve segnali, `output` li produce, `inout` e' bidirezionale ed e' usato soprattutto su bus condivisi o linee tristate.
+<!-- to add -->
+*In Figura: la stringa di testo "Hello World" in codice Morse*
 
-**Tipi di dato: logic, wire, reg, bit**: `logic` e' il tipo piu' usato in SystemVerilog per segnali singoli o vettori. `wire` rappresenta una connessione continua guidata da assegnamenti continui o uscite di moduli. `reg` e' un tipo storico di Verilog, usato in blocchi procedurali. `bit` e' un tipo a due stati, utile quando non servono `X` e `Z`.
+Numerosi sono i film e le serie TV in cui compare e viene usato il codice Morse: spesso, viene usato da spie ed agenti segreti durante le missioni segreti per comunicare in silenzio, senza dare nell'occhio. Il segnale SOS è costitiito da tre punti (per la prima S), tre linee (per la O) e da altri tre punti (per la seconda S): è la parola in codice Morse più nota.
 
-**Vettori e array**: un vettore rappresenta piu' bit trattati come una parola, per esempio `logic [7:0] data`. Un array rappresenta invece insiemi di elementi, per esempio memorie o collezioni di segnali.
+Una piccola osservazione riguardo il codice Morse: esso è un classico esempio di codice binario, in quanto sfrutta due soli simboli per la rappresentazione di lettere, numeri e caratteri di punteggiatura. Punti e linee si possono anche chiamare, rispettivamente, come 0 e 1. Dati `n` simboli del codice Morse, si possono rappresentare al massimo `2^n` differenti caratteri.
 
-**Parameters e localparams**: `parameter` permette di rendere un modulo configurabile, mentre `localparam` definisce una costante locale non modificabile dall'esterno. Questo rende i moduli piu' riusabili.
+Esiste un modo per decodificare facilmente e rapidamente il codice Morse mentre lo si sta ricevendo? Certamente e lo si fa mediante il diagramma ad albero rappresentato nella seguente figura:
 
-**Operatori in SystemVerilog**: SystemVerilog supporta operatori aritmetici, logici, bit a bit, relazionali e di riduzione. Per esempio:
+<!-- to add -->
+*In Figura: il diagramma ad albero usato per decodificare agevolmente il codice Morse*
 
-- aritmetici: `+`, `-`, `*`, `/`
-- logici: `&&`, `||`, `!`
-- bit a bit: `&`, `|`, `^`, `~`
-- relazionali: `==`, `!=`, `<`, `>`
-- di riduzione: `&a`, `|a`, `^a`
+Nota come la radice del diagramma ad albero (così come ogni nodo) rappresenta una scelta e si noti come ciascun livello, scendendo di profondità, abbia il doppio dei nodi rispetto al livello precedente. Per esempio, la prima scelta identifica il primo simbolo: se si riceve una sola linea (senza ricevere altri simboli) si ha la lettera T; se si riceve un solo punto (senza ricevere altri simboli) la letterea è la E. Se invece si ricevono altri simboli, si dovrà seguire il percorso dalla radice dell'albero fino a ché i simboli non terminano, di fatto attraversando (parzialmente, o interamente) l'albero dalla radice fino a un nodo ben preciso. Da notare che:
 
-**Assegnamenti continui**: un assegnamento continuo usa `assign` e descrive logica combinatoria che guida un segnale in modo continuo. Per esempio:
+- La codifica in codice Morse consiste nel tradurre il messaggio in chiaro, o originale in una sequenza di simboli punti e linee e di pause.
+- La decodifica del codice Morse consiste nel tradurre l'insieme di punti, linee e pause nel messaggio originale considerando il diagramma ad albero mostrato in precedenza.
 
-```systemverilog
-assign y = a & b;
-```
+Se il codice Morse permette di rappresentare `2^n` caratteri, significa che l'albero di decodifica ha `n` livelli, o `log2(2^n) = nlog2(2) = n`.
 
-**Blocchi procedurali: always_comb, always_ff, always_latch**: `always_comb` si usa per logica combinatoria, `always_ff` per logica sequenziale guidata da flip-flop, `always_latch` per descrivere esplicitamente latch. Questi costrutti aiutano strumenti e progettisti a esprimere meglio l'intento del codice.
-
-**Assegnamenti bloccanti e non bloccanti**: l'assegnamento bloccante `=` viene tipicamente usato nella logica combinatoria all'interno di blocchi procedurali. L'assegnamento non bloccante `<=` viene tipicamente usato nella logica sequenziale, perche' modella correttamente l'aggiornamento simultaneo dei registri sul clock.
-
-**Modellazione di circuiti combinatori in SystemVerilog**: la logica combinatoria si descrive tipicamente con `assign` oppure con blocchi `always_comb`. Un esempio e':
-
-```systemverilog
-always_comb begin
-    y = (a & b) | c;
-end
-```
-
-**Modellazione di circuiti sequenziali in SystemVerilog**: la logica sequenziale si descrive tipicamente con `always_ff` sensibile al clock e, se necessario, al reset. Esempio:
-
-```systemverilog
-always_ff @(posedge clk) begin
-    q <= d;
-end
-```
-
-**Descrizione di logica sincronizzata da clock**: la logica clocked usa eventi sul fronte del clock, come `posedge clk` oppure `negedge clk`, per indicare quando i registri devono aggiornarsi. Questo riflette direttamente il comportamento dei flip-flop reali.
-
-**Gestione del reset: sincrono e asincrono**: un reset sincrono agisce in corrispondenza del clock; un reset asincrono puo' agire immediatamente. Un esempio con reset asincrono e':
-
-```systemverilog
-always_ff @(posedge clk or posedge rst) begin
-    if (rst)
-        q <= 1'b0;
-    else
-        q <= d;
-end
-```
-
-**Modellazione di FSM in SystemVerilog**: una FSM si modella tipicamente separando registro di stato, logica di prossimo stato e logica di uscita. Questo rende il progetto piu' leggibile e facilita sintesi e verifica.
-
-**Tipi enumerati (enum)**: gli `enum` permettono di rappresentare gli stati simbolici in modo chiaro e sicuro. Per esempio:
-
-```systemverilog
-typedef enum logic [1:0] {IDLE, LOAD, RUN, DONE} state_t;
-state_t state, next_state;
-```
-
-**Case statements**: il costrutto `case` e' molto usato per descrivere selezioni multiple, per esempio nelle FSM o nei decoder. Migliora la leggibilita' rispetto a lunghe catene di `if`.
-
-**If statements**: il costrutto `if` si usa per esprimere decisioni condizionali. Nei blocchi combinatori deve essere usato con attenzione, coprendo tutti i casi necessari, per evitare la sintesi involontaria di latch.
-
-**Generate blocks**: i blocchi `generate` permettono di creare strutture ripetute o parametrizzate in fase di elaborazione del codice, per esempio array di moduli o logica variabile con i parametri.
-
-**Gerarchia e progettazione modulare**: la progettazione HDL e' naturalmente gerarchica: moduli piccoli e ben definiti vengono composti per creare sistemi piu' grandi. Questo migliora riuso, leggibilita' e verifica.
-
-**Moduli parametrizzati**: un modulo parametrizzato e' un modulo il cui comportamento o dimensionamento puo' essere adattato variando parametri, per esempio la larghezza dei bus. Esempio:
-
-```systemverilog
-module reg_n #(parameter N = 8) (
-    input  logic         clk,
-    input  logic [N-1:0] d,
-    output logic [N-1:0] q
-);
-    always_ff @(posedge clk)
-        q <= d;
-endmodule
-```
-
-**Interfacce: concetto di base**: un'interfaccia in SystemVerilog permette di raggruppare segnali correlati in un unico oggetto, migliorando organizzazione e leggibilita' specialmente nei sistemi complessi e nei testbench.
-
-**Struttura di un testbench**: un testbench e' un modulo di verifica che genera stimoli, osserva le uscite del progetto e controlla se il comportamento e' corretto. Tipicamente contiene istanze del modulo da testare, generazione di clock e reset, stimoli, monitor e controlli.
-
-**Simulazione e sintesi**: la simulazione verifica il comportamento del modello HDL nel tempo. La sintesi traduce la descrizione RTL in una rete di porte, registri e connessioni implementabile in hardware. Non tutto cio' che si puo' simulare e' sintetizzabile.
-
-**Vincoli di sintesi: idea di base**: i vincoli di sintesi e temporizzazione specificano frequenze di clock, ritardi di ingresso e uscita, vincoli fisici e altre informazioni necessarie agli strumenti per ottimizzare correttamente il progetto e verificarne il timing.
-
-**Panoramica del flusso di implementazione FPGA**: un flusso tipico per FPGA comprende descrizione HDL, simulazione funzionale, sintesi, implementazione fisica con mapping, placement e routing, analisi temporale, generazione del bitstream e programmazione del dispositivo.
+**Codice Braille**: <!-- to do -->
