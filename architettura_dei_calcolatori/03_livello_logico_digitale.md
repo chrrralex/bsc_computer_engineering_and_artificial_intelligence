@@ -817,4 +817,19 @@ Nota come la radice del diagramma ad albero (così come ogni nodo) rappresenta u
 
 Se il codice Morse permette di rappresentare `2^n` caratteri, significa che l'albero di decodifica ha `n` livelli, o `log2(2^n) = nlog2(2) = n`.
 
-**Codice Braille**: <!-- to do -->
+**Codice Braille**: il codice Braille è un metodo di scrittura e lettura adatto e ottimizzato appositamente per le persone dotate di cecità (parziale, o totale). Un simbolo nel codice braile è costituito da un punto, che pu essere liscio, o in rilievo. Un insieme di sei punti disposti verticalmente, in una griglia di tre righe e due colonne, forma un carattere. La prima colonna, dal punto in alto a sinistra fino a quello in basso a sinistra, ha i punti 1, 2 e 3. La seconda colonna, dal punto in alto a destra al punto in basso a destra, ha i punti 4, 5 e 6. Questa situazione è mostrata nella seguente figura:
+
+<!-- to add -->
+*In Figura: rappresentazione di un carattere nel codice Braille*
+
+Lo standard Unicode ha aggiunto al proprio set di caratteri il codice Braille versione 3.0, che consiste in altri due punti per carattere, ottenendo un totale di 8 punti per rappresentare un carattere. La situazione è rappresentata nella seguente figura:
+
+<!-- to add -->
+*In Figura: codice Braille con caratteri formati da 8 punti. Da notare come il punto 7 è stato aggiunto alla prima colonna, mentre il punto 8 è stato aggiunto alla seconda colonna*
+
+Da considerare come un singolo punto può essere considerato come un elemento bistabile, ossia come un elemento che può essere in uno stato, oppure in un altro: ha due soli stati stabili. Possiamo ad esempio chiamare lo stato in rilievo come 1 e lo stato non in rilievo (o liscio) come 0. In questo modo, possiamo vedere 6 punti come un insieme di 6 bit, pertanto un singolo simbolo formato da 6 punti consente di rappresentare `2^6 = 64` possibili caratteri.
+
+Per esempio, la lettera `A` è rappresentata dal solo punto 1 posto in rilievo, mentre per la `B` sono i punti 1 e 2 in rilievo. La seguente figura mostra, a titolo esemplificativo, come sono rappresentati i caratteri con il codice Braille:
+
+<!-- to add -->
+*In Figura: rappresentazione dei caratteri alfabetici nel codice Braille*
