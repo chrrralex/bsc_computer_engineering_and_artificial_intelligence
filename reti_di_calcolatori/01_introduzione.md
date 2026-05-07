@@ -60,8 +60,59 @@ Un protocollo è un insieme di regole ben definite e concordate da ambedue le pa
 - l'ordine con il quale devono essere scambiati, o inviati i messaggi;
 - le azioni che devono essere intraprese in determinate casistiche.
 
-Un protocollo stabilisce, in pratica, il modo in cui due, o più host della rete possono comunicare.
+Un protocollo stabilisce, in pratica, il modo in cui due, o più host della rete possono comunicare. Per esempio, un possibile esempio di protocollo è rappresentato nella seguente figura:
+
+<!-- to add -->
+*In Figura: un esempio di protocollo che permette a due host di una rete di comunicare*
+
+Il protocollo prevede:
+
+1. Che il mittente richieda l'apertura di una connessione mediante un messaggio del tipo `CONNECTION_REQUEST`.
+2. Che il destinatario, se è tutto pronto, apra la connessione e restituisca un messaggio del tipo `CONNECTION_OK`.
+3. Che il mittente invii una richiesta di elaborazione con un messaggio del tipo `REQUEST_DATA`.
+4. Che il destinatario, dopo aver ricevuto ed elaborato i dati, restituisca un messaggio del tipo `SEND_DATA`.
+
+Si tratta di un esempio molto semplice, ma la struttura di una comunicazione è questa nelle moderne reti di calcolatori. Da notare come, nella figura, la comunicazione avviene nel corso del tempo: le freccie inclinate e le due linee frapposte tra host mittente e host destinatario rappresentano lo scorrere del tempo. L'IP (Internet Protocol) e il TCP (Transfer Control Protocol) sono due esempi di protocolli molto famosi ed utilizzati nell'ordierna Internet.
 
 Uno standard è un insieme di scelte ufficiali e soprattutto effettuate da organizzazioni internazionali (che si occupano appositamente di reti e telecomunicazioni) che delinano i protocolli da utilizzare all'interno di una comunicazione.
 
 Standard e protocolli sono in stretto rapporto tra loro ed ognuno di essi cerca di delinare tutti gli aspetti tecnici utili per raggiungere effiicenza, prestazioni, affidabilità e sicurezza maggiori. 
+
+### 01.06. Il layered model
+
+Il layered model (modello a strati, o a livelli) è un tipo di modello costituito da una pila di strati posti l'uno sopra l'altro, in cui la comunicazione può avvenire dallo strato più alto a quello più basso (top-to-down communication), o viceversa, dallo strato più basso a quello più alto (down-to-top communication). Caiscuno strato rappresenta un livello d'astrazione ben preciso: lo strato N accetta i servizi forniti sia dallo strato soprastante N + 1, sia dallo statro sottostante N - 1. Analogamente, lo strato N fornisce servizi in modo diretto agli strati N + 1 e N - 1 e in modo indiretto a tutti gli altri strati della pila. Ciò che, nell'ambito delle reti di calcolatori, rappresenta un determinato layer è un protocollo, oppure un insieme di protocolli. La comunicazione in Internet ha stabilito due layered model molto importanti dal punto di vista didattico e tecnico: il modello OSI ed il modello TCP/IP.
+
+Lo stack di protocolli TCP/IP, il cui nome deriva dai due protocolli "principe" TCP (Transfer Control Protcol) e IP (Internet Protocol) della pila stessa rappresenta un vero e proprio standard de-facto delle reti di calcolatori e consiste in cinque livelli, numerati da 1 a 5. Lo stack TCP/IP è rappresentato di seguito:
+
+<!-- to add -->
+*In Figura: lo stack TCP/IP con i suoi cinque livelli, numerati da 1 a 5*
+
+- Layer 1: il physical layer si occupa della trasmissione di un segnale da un host a un altro. Esso è costituito dal vero e proprio mezzo trasmissivo che, dal punto di vista fisico, trasmette bit per bit dal mittente al destinatario. Diciamo che si occupa di "spostare" i bit in un collegamento punto-a-punto.
+- Layer 2: il datalink layer si occupa di gestire gli errori di trasmissione di un'intero messaggio trasmesso nell'ambito di un collegamento punto-a-punto. In realtà il datalink layer ha anche a che fare con l'indirizzo MAC (Media Access Control) del dispositivo fisico, ovvero della NIC (Network Interface Card). Inoltre governa le politiche per accedere al canale di comunicazione, andando a occuparsi di tematiche importanti come reti Ethernet e Token Ring, di cui parleremo ampiamente in seguito.
+- Layer 3: ed ecco il network layer, forse il livello più noto di tutti. Esso utilizza degli host intermedi chiamat router per instradare il messaggio tra reti diverse. In questo livello si affrontano tutti i problemi legati al routing ed alla comunicazione tra due reti differenti. Il protocollo IP è di gran lunga quello più usato nel network layer.
+- Layer 4: il transport layer gestisce l'intera comunicazine, vista come un flusso di bit, o di Byte da un dispositivo all'interno di una determinata rete a un altro dispositivo che risiede in un'altra rete, differente e magari completamente lontana. Qui è il protocollo TCP a governare. Spesso qui lavorano i programmatori di applicazioni.
+- Layer 5: l'application layer presenta i dati all'utente e gli consentete di stabilire connessioni e comunicazioni ad altissimo livello. In pratica l'utente non ha la minima idea di tutti i dettagli implementativi e dell'infrastruttura di rete sottostante a questo livello. I programmatori di applicazioni (come microservizi, backend e molto altro) lavorano soprattutto in questo livello.
+
+Infine, presentiamo di seguito il modello ISO/OSI (International Standardization for Organization / Open System Interconnect). Si tratta di un modello creato e proposto dalla ISO, un'ente internazionale che si occupa di emanare e gestire standard. Si tratta però di un modello difficile da implementare nella pratica e, sopratuttto, datato per via delle nuove emergenti tecnologie che non erano ancora state commercializzate quando il modello OSI venne proposto. Ad ogni modo, lo stack di protocolli TCP/IP deriva direttamente dallo stack di protocolli OSI, che è di seguito rappresentato con i suoi 7 livelli, numerati da 1 a 7:
+
+<!-- to add -->
+*In Figura: lo stack di protocolli ISO/OSI con i suoi 7 livelli*
+
+Esistono vari modi per analizzare lo stack di protocolli TCP/IP. L'approccio bottom-up prevede di analizzare prima i livelli più bassi e, man mano che si va avanti, diminuire la complessità analizzando via via PDU e servizi relativamente più semplici, in quanto più orientati all'utente. Una seconda modalità prevede di utilizzare l'approccio top-down, in cui si parte dal layer didatticamente più semplice, l'application layer, per poi man mano passare ai livelli inferiore ed aumentare gradualmente la complessità. Entrambi gli approcci sono molto validi ed hanno pro e contro. Noi seguiremo un approccio bottom-up.
+
+
+### 01.07. La PDU
+Un messaggio all'interno di un determinato layer viene genericamente detto PDU (Protocol Data Unit, unità di dati del protocollo), anche se si sente spesso il termine packet (pacchetto). Man man che dal livello di applicazione si passa ai livelli sottostanti, i dati che un host mittente vuole trasmettere a un host destinatario vengono decorati da informazioni aggiuntive. Per esempio, il livello application dello stack TCP/IP consiste nei dati puri e semplici che si devono trasmettere, ma quando si passa la PDU del livello application al livello transport, quest'ultimo aggiunge una serie di informazioni (tra cui la porta dei servizi posti in comunicazione di mittente e destinatario), di fatto ottenendo una PDU con più dati. Questi ultimi dati sono utili solo ed esclusivamente al transport layer. Analogamente, quando il transport layer consegna la sua PDU al network layer, quest'ultimo aggiunge alcune altre informazioni utili per i router (tra cui indirizzi IP di mittente e destinazione). Infine, quando il network layer consegna la PDU al datalink layer, quest'ultimo aggiunge gli indirizzi MAC dei dispositivi mittente e destinatario. In realtà le informazioni dette prima non sono le uniche ad essere aggiunte, bensì ne vengono aggiunte molte altre in realazione ai servizi che può offrire ciascun livello. La seguente figura mostra quanto appena detto per lo stack TCP/IP:
+
+<!-- to add -->
+*In Figura: il modo in cui la PDU di ciascun layer viene dettagliata con informazioni utili per ciascun livello*
+
+La comunicazione tra due host può non consistere per forza in tutti i livelli. Per esempio, due router appartenenti a due reti differenti possono tranquillamente dialogare solo fino a livello network (e, nell'effettiva pratica, è esattamente così che funzionano): a loro non interessa conoscere le porte a cui stanno comunicando due servizi presenti in mittente e destinatario, ma solo i relativi indirizzi IP per comprendere come instradare il pacchetto attraverso la rete. In generale, ciascun host della rete considera solo lo stack fino a quale è interessato a dover operare. Ecco che, ad esempio:
+
+- Un router opererà fino al livello network.
+- Uno switch opererà fino al livello datalink.
+- Un hub opererà fino al livello datalink.
+- Un programma browser web in un host dell'utente opererà fino al livello application.
+- Uno script Python che sfrutta il protocollo TCP in esecuzione su una macchina può operare, a seconda del caso, fino al livello transport, o fino al livello application.
+
+La PDU a livello application è genericamente detta data, quella a livello transport è detta segment (o datagram), a livello network è detta packet, a livello datalink è chiamata frame e, infine, nel livello physical si hanno i bit, o signals. Quando una PDU passa dal un layer inferiore a un layer superiore, si dice che essa viene decapsulata (o estratta) dalla PDU del livello sottostante. Viceversa, quando una PDU passa dal layer superiore al layer inferiore, si dice che essa viene incapsulata (o inserita) nella PDU del livello sottostante. 
