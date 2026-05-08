@@ -123,10 +123,30 @@ $r$ è detto maximum data rate ed è misurato in bps (bit per seconds). $B$ è l
 - Minore è il rapporto, maggiore è la dominanza del rumore rispetto al segnale.
 
 ### 02.05. Guided Media
-<!-- to do -->
+
+In canale trasmissivo che consiste in un mezzo guidato (guided media) sfrutta la propagazione del segnale all'interno di un solido per poter attuare la comunicazione. I cavi elettrici come il doppino telefonico ed il cavo coassiale sono esempi di guided media. Un guided media necessita di un'infrastruttura fisica che consiste nel collegamento fisico tra i due, o più host posti in comunicazione tra loro. Si dice anche che gli host sfruttano una connessione wired (cablata). 
 
 ##### 02.05.01. Twisted Pair
-<!-- to do -->
+
+Il twisted pair (o doppino telefonico) è un guided media molto datato, usato fin dai primi anni della nascita di Internet. Un doppino singolo è costituito da una coppia di fili di rame intrecciati tra loro, in modo tale da ridurre il più possibile il rumore (i campi elettromagnetici generati tra i due fili). La coppia di fili consiste in due fili numerati: 1 e 2. Un moderno twisted pair consiste di ben 4 coppie di fili di rame, laddove ciascuna coppia è intrecciata. Le coppie sono numerate da 1 a 4 e sono opportunamente colorate: la prima coppia è blu, la seconda arancione, la terza verde e la quata è rossa. Ciascuna coppia di fili trasmettere i bit in modo seriale: il filo 1 della coppia va dal mittente al destinatario, mentre il filo 2 va dal destinatario al mittente. In totale ci sono 4 fili che vanno al destinatario e 4 fili che vanno al mittente, in modo tale da realizzare una trasmissione parallela di 4 bit. Le trasmissioni parallele, purtroppo, sono affette da una problematica denominata delay skew (o distorsione di propagazione), ovvero una variazione nel ritardo di propagazione del segnale sulle singole coppie, dovuta al diverso passo di binatura delle coppie. Ad esempio, la coppia 1 potrebbe trasmettere un bit all'istante $t$, mentre le coppie 2, 3 e 4 potrebbero subire un leggero ritardo (anche di pochi microsecondi, o nanosecondi) ed il segnale potrebbe propagarsi più lentamente, giungendo al tempo $t + r$, dove $r$ è il ritardo. La struttura di un doppino telefonico a 4 coppie è mostrata nella seguente figura:
+
+<!-- to add -->
+*In Figura: 4 coppie di fili di rame, numerate da 1 a 4. Ciascuna coppia è composta da due fili numerati da 1 a 2. Da notare come ciascun filo di rame ha il proprio isolante, così da non causare interferenze di natura elettrica agli altri fili.*
+
+Esistono tre principali tipi di doppini telefonici:
+
+- UTP (Unshielded Twisted Pair): le 4 coppie di fili di rame non sono schermate, ma sono tutte racchiuse all'interno di una guaina. Ovviamente, ciascun filo ha il proprio isolante.
+- FTP (Foiled Twisted Pair): esattamente come l'UTP, ma utilizza un isolante aggiuntivo che racchiude le 4 coppie di fili di rame, riducendo il rischio di interferenze.
+- STP (Shilded Twisted Pair): utilizza una schermatura in alluminio per ciascuna coppia di fili di rame, in modo da ridurre gli effetti di interferenze e crosstalk.
+
+La seguente figura mostra le varie tipologie di cavi twisted pair:
+
+<!-- to add -->
+*In Figura: le differenze fra UTP, FTP e STP*
+
+Il cavo UTP Categorie 5 (Cat5 UTP) viene spesso utilizzato per la Ethernet classica, che sfrutta solo 2 delle 4 coppie di fili di rame, garantendo una velocità di 100 Mbps (Megabit per second). La Gigabit Ethernet estende l'uso a tutte e 4 le coppie di fili, arrivando a velocità di 1 Gbps (Gigabit per second).
+
+Le schermature dei cavi twisted pair sono state introdotte per ridurre il più possibile il fenomeno del crosstalk, ovvero delle interferenze elettromagnetiche dovute alla generazione di campi elettromagnetici attorno al filo di rame durante il passaggio della corrente elettrica. Si tratta di un fenomeno fisico che non può essere evitato, ma può solo essere controllato, o decrementato il più possibile utilizzando isolanti, guaine e schermature in alluminio (che "assorbono", per modo di dire, i campi elettromagnetici dei fili in rame).
 
 #### 02.05.02. Coaxial Cable
 <!-- to do -->
@@ -135,7 +155,8 @@ $r$ è detto maximum data rate ed è misurato in bps (bit per seconds). $B$ è l
 <!-- to do -->
 
 ### 02.06. Unguided Media
-<!-- to do -->
+
+Eccoci giunti ai mezzi non guidati (unguided media). Un canale trasmissivo non guidato sfrutta la propagazione delle onde elettromagnetiche per poter trasmettere dei dati dall'host mittente all'host destinatario. Si dice anche che gli host posti in comunicazione sfruttano una connessione di tipo wireless (senza fili). Le comunicazioni wireless sono tipiche dei sistemi satellitari, delle reti mobile e della trasmissione radio.
 
 ##### 02.06.01. Wi-Fi
 <!-- to do -->
