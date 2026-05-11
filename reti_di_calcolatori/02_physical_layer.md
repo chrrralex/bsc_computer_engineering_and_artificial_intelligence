@@ -103,7 +103,7 @@ Da notare che non necessariamente dobbiamo utilizzare infinite armoniche seno e 
 <!-- to add -->
 *In Figura: ecco come viene utilizzata la serie di Fourier per ricostruire un segnale digitale (o segnale a onde quadre) aumentando man mano il numero delle armoniche*
 
-### 02.04. Bandwidth
+### 02.04. Bandwidth e teorema di Shannon
 
 La bandwidth (o semplicemente banda) di un canale di comunicazione rappresenta l'ampiezza del canale stesso, ovvero la gamma di frequenze utilizzabili per poter trasmettere un segnale. La banda viene spesso confusa con la velocità della trasmisisone dati, ma non è assolutamente così. Se dovessimo fare un parallelismo con le autostrade, la banda indicherebbe il numero delle corsie dell'autostrada, mentre le macchine (ognuna con la propria velocità) rappresentano i singoli segnali che vengono trasmessi nel canale di comunicazione.
 
@@ -225,12 +225,29 @@ Le fibre ottiche sono costruite in modo tale da minimizzare il più possibile il
 Eccoci giunti ai mezzi non guidati (unguided media). Un canale trasmissivo non guidato sfrutta la propagazione delle onde elettromagnetiche per poter trasmettere dei dati dall'host mittente all'host destinatario. Si dice anche che gli host posti in comunicazione sfruttano una connessione di tipo wireless (senza fili). Le comunicazioni wireless sono tipiche dei sistemi satellitari, delle reti mobile e della trasmissione radio.
 
 ##### 02.06.01. Wi-Fi
-<!-- to do -->
+
+Le reti Wi-Fi sono particolari reti LAN base sulla comunicazione wireless che consentono a dispositivi elettronici di scambiare dati senza utilizzare alcun tipo di guided media. Il funzionamento di una rete Wi-Fi si basa sulla trasmissione di informazioni tramite onde radio, o onde RF (Radio Frequency), generalmente nelle seguenti tre bande di frequenza:
+
+- Una banda a 2.4 GHz.
+- Una banda a 5 GHz.
+- Una banda a 6 GHz, introdotta nelle più recenti versioni delle reti Wi-Fi.
+
+Una rete Wi-Fi è composta principalmente da un AP (Access Point, punto d'accesso), spesso integrato nel router, o nello switch, e da uno o più dispositivi client (personal computer, laptop, smartphone, smartwatch, tablet e dispositivi IoT). L'AP crea la rete wireless e coordina le comunicazioni, mentre i client si collegano a essa tramite una scheda di rete Wi-Fi: più client possono comunicare tra loro sfruttando frequenze differenti all'interno di una stessa banda o, se lo supportano, all'interno della banda che utilizza frequenze più alte e segnali più potenti, posta a 6 GHz.
+
+Quando un dispositivo cerca una rete, rileva i segnali radio trasmessi dagli AP vicini. Ogni rete è identificata da un nome chiamato SSID (Service Set IDentifier). Dopo aver scelto una rete, il dispositivo avvia una procedura di associazione e autenticazione. Se la rete è protetta, viene richiesta una password che serve per generare chiavi crittografiche utilizzate per cifrare il traffico dati. Una volta stabilita la connessione, il router assegna al dispositivo un indirizzo IP tramite il protocollo DHCP (Dynamic Host Configuration Protocol). Tale indirizzo identifica il dispositivo all’interno della rete locale e permette lo scambio corretto dei dati.
+
+La comunicazione avviene attraverso pacchetti di dati. Le informazioni vengono suddivise in piccoli blocchi, convertite in segnali radio e trasmesse nell’aria. Il dispositivo destinatario riceve il segnale, lo decodifica e ricostruisce i dati originali. Le prestazioni di una rete Wi-Fi dipendono da diversi fattori: distanza dal router, presenza di ostacoli, interferenze elettromagnetiche, numero di dispositivi collegati e standard Wi-Fi utilizzato. Le pareti, soprattutto se spesse e fatte in materiali metallici (o rivestite in materiali metallici), attenuano sensibilmente il segnale. Anche altre reti Wi-Fi vicine possono causare interferenze se utilizzano gli stessi canali radio e le stesse frequenze.
+
+Nel tempo gli standard Wi-Fi si sono evoluti per aumentare velocità, stabilità ed efficienza. Gli standard più recenti, come Wi-Fi 6 e Wi-Fi 7, introducono tecnologie avanzate come MIMO, OFDMA e beamforming, che migliorano la gestione simultanea di molti dispositivi e ottimizzano la direzione del segnale radio. Studieremo alcune di queste tecniche nel corso dei prossimi capitoli.
+
+Dal punto di vista della sicurezza, le reti moderne utilizzano protocolli come WPA2 e WPA3, che proteggono le comunicazioni tramite cifratura. Una password robusta e l’aggiornamento regolare del firmware del router sono elementi fondamentali per ridurre i rischi di accessi non autorizzati.
+
+È importante distinguere tra Wi-Fi e Internet. Il Wi-Fi è semplicemente la tecnologia wireless utilizzata per collegare dispositivi a una rete locale, mentre Internet è la rete globale che permette la comunicazione tra sistemi distribuiti nel mondo. Una rete Wi-Fi può esistere anche senza accesso a Internet.
 
 ##### 02.06.02. Bluetooth
 <!-- to do -->
 
-##### 02.06.03. Mobile Networks
+##### 02.06.03. Lo spettro elettromagnetico
 <!-- to do -->
 
 ##### 02.06.04. Onde Radio
@@ -309,7 +326,10 @@ L'ADSL viene utilizzata per trasmettere e ricevere dati di natura digitale su In
 
 I canali, nell'ambito delle linee ADSL, viene anche detto tono.
 
-##### 02.07.03. FTTH (Fiber to the Home) e FTTC (Fiber to the Cabin)
+##### 02.07.03. HFC (Hybrid Fiber-Coax)
+<!-- to do -->
+
+##### 02.07.04. FTTH (Fiber to the Home) e FTTC (Fiber to the Cabin)
 
 Nel contesto delle telecomunicazioni, FTTH (Fiber To The Home) è una architettura di accesso in cui la fibra ottica arriva direttamente fino all’abitazione o sede dell’utente finale. È una delle evoluzioni del local loop (o “ultimo miglio”), cioè il tratto di rete che collega la centrale dell’operatore all’utente.
 
@@ -443,4 +463,24 @@ Dal punto di vista logico, il routing può seguire diversi criteri. In genere il
 Infine, un router non deve necessariamente essere implementato via hardware: può essere un software eseguito da un vero e proprio computer posto tra una rete e l'altra, oppure può essere un dispositivo router (come i router CISCO) creato appositamente per il routing dei pacchetti. Analizzeremo anche questo aspetto quando parleremo del livello network dello stack TCP/IP.
 
 ##### 02.08.06. Gateway
-<!-- to do -->
+
+Adesso parliamo di un dispositivo molto simile al router: il gateway. Il gateway, nelle reti di calcolatori, è un dispositivo hardware, o software che permette la comunicazione tra reti diverse utilizzando protocolli differenti, o comunque fungendo da punto di accesso verso un’altra rete. Un router, infatti, solitamente implementa uno specifico algoritmo di routing tra le varie reti che collega e può venire utilizzato per realizzare reti MAN, o WAN. Differentemente, un gateway è un dispositivo che collega reti più grandi, ossia reti che sfruttano protocolli differenti per l'instradamento dei pacchetti, o che rappresentano due domini distinti nell'ambito delle reti di calcolatori (capiremo meglio che cosa intendiamo con il termine "dominio" nel corso dei prossimi capitoli).
+
+Il gateway riceve i dati provenienti da una rete, li interpreta e li inoltra verso la rete destinataria corretta. In molti casi esegue anche conversioni di protocollo, traduzione degli indirizzi o controlli di sicurezza. In pratica il gateway è un punto di collegamento tra reti anche molto differenti. Oltre a instradare i dati, può tradurre protocolli, formati, oppure modalità di comunicazione tra sistemi incompatibili.
+
+Le principali funzioni di un gateway sono:
+
+- Collegare reti differenti.
+- Instradare il traffico dati.
+- Tradurre protocolli e indirizzi.
+- Controllare accessi e sicurezza.
+- Consentire la comunicazione tra sistemi incompatibili.
+
+Esistono diversi tipi di gateway:
+
+- Gateway di rete: collega reti diverse.
+- Gateway VoIP: converte comunicazioni telefoniche tradizionali in traffico IP, utilizzabile in Internet e nelle moderne infrastrutture basate su fibra ottica e onde elettromagnetiche.
+- Gateway applicativi: filtrano e controllano traffico di specifiche applicazioni e tipicamente vengono implementati via software.
+- Gateway IoT: collegano dispositivi intelligenti a reti o servizi cloud.
+
+Il gateway si distingue dal router perché il router si occupa principalmente di instradare pacchetti tra reti compatibili, mentre il gateway può anche effettuare conversioni e adattamenti tra sistemi differenti. In una configurazione IP, il “default gateway” è l’indirizzo del dispositivo a cui un host invia i pacchetti destinati a reti esterne alla propria LAN. Senza gateway, reti con protocolli e/o struttura differenti non potrebbero comunicare correttamente tra loro.

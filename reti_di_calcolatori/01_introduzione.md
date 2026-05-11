@@ -116,3 +116,33 @@ La comunicazione tra due host può non consistere per forza in tutti i livelli. 
 - Uno script Python che sfrutta il protocollo TCP in esecuzione su una macchina può operare, a seconda del caso, fino al livello transport, o fino al livello application.
 
 La PDU a livello application è genericamente detta data, quella a livello transport è detta segment (o datagram), a livello network è detta packet, a livello datalink è chiamata frame e, infine, nel livello physical si hanno i bit, o signals. Quando una PDU passa dal un layer inferiore a un layer superiore, si dice che essa viene decapsulata (o estratta) dalla PDU del livello sottostante. Viceversa, quando una PDU passa dal layer superiore al layer inferiore, si dice che essa viene incapsulata (o inserita) nella PDU del livello sottostante.
+
+### 01.08. Packet Switching e Circuit Switching
+<!-- to do - packet switching -->
+<!-- to do - circuit switching -->
+<!-- to do - confronto tra packet e circuit switching -->
+
+### 01.09. Struttura moderna della rete Internet
+<!-- to do - ISP d'accesso -->
+<!-- to do - ISP provinciale -->
+<!-- to do - ISP regionale -->
+<!-- to do - ISP nazionale -->
+<!-- to do - ISP globale -->
+<!-- to do - IXP (Internet eXchange Point) -->
+<!-- to do - PoP (Point of Presence) -->
+<!-- to do - CDN (Content Delivery Network) -->
+
+### 01.10. Modalità di comunicazione
+<!-- to do - simplex -->
+<!-- to do - half duplex -->
+<!-- to do - full duplex -->
+
+### 01.11. Ritardi nelle reti
+<!-- to do - processing delay -->
+<!-- to do - queuing delay -->
+<!-- to do - trasmission delay -->
+<!-- to do - propagation delay -->
+<!-- to do - end-to-end delay su collegamenti uniformi -->
+<!-- to do - end-to-end delay su collegamenti eterogenei -->
+<!-- to do - il peso di ciascun tipo di ritardo nella trasmissione dati -->
+<!-- to do - indice di intensità di traffico, suo grafico e parametri L, a e R -->
