@@ -13,6 +13,9 @@ Tutto ciò ha a che fare con la natura del mezzo trasmissivo.
 
 ### 02.02. Segnali
 
+
+##### 02.02.01. Caratteristiche dei segnali
+
 Un segnale è rappresentato dalla variazione di una proprietà della corrente elettrica nel corso del tempo, tipicamente il voltaggio (indicato con V), oppure l'intensità di corrente elettrica (indicato con I). Il voltaggio rappresenta la tensione, ossia la pressione mediante il quale vengono spinti gli elettroni in modo che essi formino un vero e proprio flusso di corrente elettrica; l'intensità di corrente è la quantità di elettroni che passano dal punto A al punto B in una determinata unità di tempo. Il voltaggio si misura in V (Volt), mentre l'intensità di corrente in A (Ampere). Un segnale può essere di due tipi:
 
 - Analogico: se la sua variazione risulta essere continua e, tra un determinato valore di tensione e un altro, il segnale assume una quantità teoricamente infinita di valori (tutte le tensioni "possibili" tra i due valori considerati). I segnali analogici sono generati tipicamente da fenomeni naturali ed è difficilissimo rigenerarli fedelmente tramite componenti elettronici. I segnali digitali hanno, spesso, una forma "ondulata": essi oscillano tra un valore minimo e un valore massimo, detti rispettivamente picco minimo e picco massimo.
@@ -32,6 +35,26 @@ Un segnale digitale ha le seguenti caratteristiche:
 - Lunghezza (o lunghezza d'onda): indicata con la lettera greca lambda ($λ$), essa è misurata in m (metri) e indica quanto è estesa l'onda elettromagnetica dal punto di vista spaziale. Maggiore è la frequenza $f$ del segnale, minore è la lunghezza d'onda $λ$; al contrario, minore è la frequeunza del segnale, maggiore è la lunghezza d'onda $λ$. La lunghezza del segnale è strettamente correlata alla frequenza ed alla velocità della luce, indicata con $c$ e pari a $299 792 458$ m/s (metri al secondo). La velocità della luce è la velocità massima a cui un segnale può arrivare, anche se difficilmente nell'effettiva pratica si raggiungono velocità pari a $\frac{1}{3}$ di quelle della luce, o al massimo a $\frac{1}{2}$. 
 
 In che modo i bit vengono trasmessi mediante un mezzo trasmissivo? Variando la tensione V del mezzo stesso, in cui solitamente una tensione alta rappresenta un 1 logico, mentre una tensione bassa rappresenta uno 0 logico. Quanto abbiamo appena detto si chiama logica positiva ed esiste anche la logica negativa, in cui i due valori logici sono invertiti: 0 è rappresentato da una tensione alta, 1 da una tensione bassa. Ma i bit possono anche essere rappresentati in un altro modo. Ad esempio, nel caso dei mezzi trasmissivi wireless (senza alcun canale fisico), le frequenze delle onde elettromagnetiche stabiliscono se si tratta di un bit 1, o un bit 0: alte frequenze possono rappresentare l'1, basse frequenze lo 0. Analogamente, nelle fibre ottiche (che sono un mezzo trasmissivo basato su segnali luminosi, non elettrici) un impulso luminoso può essere considerato un 1 logico, mentre la sua assenza uno 0 logico.
+
+##### 02.02.02. Modalità di comunicazione
+<!-- to do - simplex -->
+<!-- to do - half duplex -->
+<!-- to do - full duplex -->
+
+##### 02.02.03. Sincronizzazione
+<!-- to do - comunicazioni sincrone -->
+<!-- to do - comunicazioni asincrone -->
+
+##### 02.02.04. Modalità di switching
+<!-- to do - packet switching -->
+<!-- to do - circuit switching -->
+<!-- to do - message switching -->
+<!-- to do - confronto tra packet, circuit e message switching -->
+
+##### 02.02.05. Throughput
+<!-- to do - throughput end-to-end tra client e server con un nodo intermedi tra di essi -->
+<!-- to do - throughput end-to-end tra client e server con N nodi intermedi tra di essi -->
+<!-- to do - throughput end-to-end tra client e server in presenza di M coppie client-server e con collegamento bottleneck in comune -->
 
 ### 02.03. Analisi di Fourier
 
@@ -103,7 +126,7 @@ Da notare che non necessariamente dobbiamo utilizzare infinite armoniche seno e 
 <!-- to add -->
 *In Figura: ecco come viene utilizzata la serie di Fourier per ricostruire un segnale digitale (o segnale a onde quadre) aumentando man mano il numero delle armoniche*
 
-### 02.04. Bandwidth e teorema di Shannon
+### 02.04. Bandwidth, teorema di Shannon e teorema di Nyquist
 
 La bandwidth (o semplicemente banda) di un canale di comunicazione rappresenta l'ampiezza del canale stesso, ovvero la gamma di frequenze utilizzabili per poter trasmettere un segnale. La banda viene spesso confusa con la velocità della trasmisisone dati, ma non è assolutamente così. Se dovessimo fare un parallelismo con le autostrade, la banda indicherebbe il numero delle corsie dell'autostrada, mentre le macchine (ognuna con la propria velocità) rappresentano i singoli segnali che vengono trasmessi nel canale di comunicazione.
 
@@ -121,6 +144,8 @@ $r$ è detto maximum data rate ed è misurato in bps (bit per seconds). $B$ è l
 
 - Maggiore è il rapporto, maggiore è la dominanza del segnale rispetto al rumore.
 - Minore è il rapporto, maggiore è la dominanza del rumore rispetto al segnale.
+
+<!-- to do - teorema di Nyquist -->
 
 ### 02.05. Guided Media
 
@@ -247,23 +272,39 @@ Dal punto di vista della sicurezza, le reti moderne utilizzano protocolli come W
 ##### 02.06.02. Bluetooth
 <!-- to do -->
 
-##### 02.06.03. Lo spettro elettromagnetico
+##### 02.06.03. Lo spettro elettromagnetico e le leggi di Maxwell
 <!-- to do -->
 
-##### 02.06.04. Onde Radio
+##### 02.06.04. Trasmission radio
 <!-- to do -->
 
-##### 02.06.05. Microonde
+##### 02.06.05. Trasmissione a microonde
 <!-- to do -->
 
-##### 02.06.06. Infrarossi
+##### 02.06.06. Trasmissione a infrarossi
 <!-- to do -->
 
-##### 02.06.07. Onde millimetriche
+##### 02.06.07. Trasmissione basate sulla luce
 <!-- to do -->
 
 ##### 02.06.08. Comunicazioni satellitari
-<!-- to do -->
+<!-- to do - comunicazione ship-to-shore -->
+<!-- to do - comunicazione terra-luna-terra -->
+<!-- to do - hardware di un satellite -->
+<!-- to do - orbita geo-stazionaria -->
+<!-- to do - satelliti LEO -->
+<!-- to do - satelliti MEO -->
+<!-- to do - satelliti GEO -->
+<!-- to do - costellazioni di satelliti: Starlink, Project Kuiper e WorldVu -->
+
+##### 02.06.09. Reti wireless mobile
+<!-- to do - concetti generali: celle e stazioni base -->
+<!-- to do - 1G: AMPS (Advanced Mobile Phone System) -->
+<!-- to do - 2G: GMS (Global System for Mobile communication), SIM (Subscriber Identity Module) e MSC (Mobile Switching Center) -->
+<!-- to do - 3G: UMTS (Universal Mobile Telecommunication System) -->
+<!-- to do - 4G: LTE (Long-Term Evolution) -->
+<!-- to do - 5G: IoT e reti mobile virtuali -->
+<!-- to do - 6G: velocità "monster", ISAC (Integrated Sensing And Communication), XR (eXtense Reality), digital twins e IoS (Internet of Senses) -->
 
 ### 02.07. PSTN (Public Switched Telephone Network)
 <!-- to do -->
@@ -484,3 +525,52 @@ Esistono diversi tipi di gateway:
 - Gateway IoT: collegano dispositivi intelligenti a reti o servizi cloud.
 
 Il gateway si distingue dal router perché il router si occupa principalmente di instradare pacchetti tra reti compatibili, mentre il gateway può anche effettuare conversioni e adattamenti tra sistemi differenti. In una configurazione IP, il “default gateway” è l’indirizzo del dispositivo a cui un host invia i pacchetti destinati a reti esterne alla propria LAN. Senza gateway, reti con protocolli e/o struttura differenti non potrebbero comunicare correttamente tra loro.
+
+### 02.09. Modulazione e demodulazione del segnale
+<!-- to do - ADC (Analog-to-Digital Conversion) -->
+<!-- to do - DAC (Digital-to-Analog Conversion) -->
+<!-- to do - digital clock signal -->
+<!-- to do - positive and negative logic -->
+<!-- to do - baseband e passband -->
+
+##### 02.09.01. ASK (Amplitude Shift Keying)
+<!-- to do -->
+
+##### 02.09.02. FSK (Frequency Shift Keying)
+<!-- to do -->
+
+##### 02.09.03. PSK (Phase Shift Keying)
+<!-- to do -->
+
+##### 02.09.04. QAM (Quadrature Amplitude Modulation)
+<!-- to do -->
+
+### 02.10. Multiplexing del canale
+<!-- to do -->
+
+##### 02.10.01. FDM (Frequency Division Multiplexing)
+<!-- to do -->
+
+##### 02.10.02. TDM (Time Division Multiplexing)
+<!-- to do -->
+
+##### 02.10.03. CDM (Code Division Multiplexing)
+<!-- to do -->
+
+##### 02.10.04. WDM (Wavelength Division Multiplexing)
+<!-- to do -->
+
+### 2.11. Codifica di linea
+<!-- to do -->
+
+##### 2.11.01. NRZ (Non-Return Zero)
+<!-- to do -->
+
+##### 2.11.02. Manchester
+<!-- to do -->
+
+##### 2.11.03. Differential Manchester
+<!-- to do -->
+
+##### 2.11.04. 4B/5B
+<!-- to do -->
