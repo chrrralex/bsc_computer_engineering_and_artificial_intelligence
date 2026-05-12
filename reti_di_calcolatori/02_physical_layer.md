@@ -13,7 +13,6 @@ Tutto ciò ha a che fare con la natura del mezzo trasmissivo.
 
 ### 02.02. Segnali
 
-
 ##### 02.02.01. Caratteristiche dei segnali
 
 Un segnale è rappresentato dalla variazione di una proprietà della corrente elettrica nel corso del tempo, tipicamente il voltaggio (indicato con V), oppure l'intensità di corrente elettrica (indicato con I). Il voltaggio rappresenta la tensione, ossia la pressione mediante il quale vengono spinti gli elettroni in modo che essi formino un vero e proprio flusso di corrente elettrica; l'intensità di corrente è la quantità di elettroni che passano dal punto A al punto B in una determinata unità di tempo. Il voltaggio si misura in V (Volt), mentre l'intensità di corrente in A (Ampere). Un segnale può essere di due tipi:

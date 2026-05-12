@@ -117,6 +117,9 @@ La comunicazione tra due host può non consistere per forza in tutti i livelli. 
 
 La PDU a livello application è genericamente detta data, quella a livello transport è detta segment (o datagram), a livello network è detta packet, a livello datalink è chiamata frame e, infine, nel livello physical si hanno i bit, o signals. Quando una PDU passa dal un layer inferiore a un layer superiore, si dice che essa viene decapsulata (o estratta) dalla PDU del livello sottostante. Viceversa, quando una PDU passa dal layer superiore al layer inferiore, si dice che essa viene incapsulata (o inserita) nella PDU del livello sottostante.
 
+<!-- to do - il concetto di incapsulamento -->
+<!-- to do - il concetto di deincapsulamento -->
+
 ### 01.08. Struttura moderna della rete Internet
 <!-- to do - ISP d'accesso -->
 <!-- to do - ISP provinciale -->
