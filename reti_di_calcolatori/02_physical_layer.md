@@ -57,7 +57,7 @@ In che modo i bit vengono trasmessi mediante un mezzo trasmissivo? Variando la t
 
 ### 02.03. Analisi di Fourier
 
-Il matematico Jean Baptiste Fourier (1768-1830) studio a fondo le funzioni trigonometriche e le funzioni periodiche. In pratica lui scoprì che, data una funzione periodica, essa si può ricostruire mediante una somma infinita di funzioni seno e coseno, ognuna che accetta un opportuno argomento. Ciò che ne deriva dai suoi importanti studi riguardanti la matematica è la serie di Fourier, ossia una somma infinita di funzioni seno e coseno (ognuna detta armonica) definita da appositi coefficienti, in cui ciascuno rappresenta l'ampiezza dell'armonica.
+Il matematico Jean Baptiste Fourier (1768-1830) studiò a fondo le funzioni trigonometriche e le funzioni periodiche. In pratica lui scoprì che, data una funzione periodica, essa si può ricostruire mediante una somma infinita di funzioni seno e coseno, ognuna che accetta un opportuno argomento. Ciò che ne deriva dai suoi importanti studi riguardanti la matematica è la serie di Fourier, ossia una somma infinita di funzioni seno e coseno (ognuna detta armonica) definita da appositi coefficienti, in cui ciascuno rappresenta l'ampiezza dell'armonica.
 
 Partiamo dai concetti singoli e semplici. Una sommatoria da 1 a N è una somma di N termini, ciascuno opportunamente numerato da un indice. Questo concetto si può esprimere, in matematica, nel seguente modo:
 
