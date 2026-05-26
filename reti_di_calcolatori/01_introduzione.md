@@ -117,24 +117,42 @@ La comunicazione tra due host può non consistere per forza in tutti i livelli. 
 
 La PDU a livello application è genericamente detta data, quella a livello transport è detta segment (o datagram), a livello network è detta packet, a livello datalink è chiamata frame e, infine, nel livello physical si hanno i bit, o signals. Quando una PDU passa dal un layer inferiore a un layer superiore, si dice che essa viene decapsulata (o estratta) dalla PDU del livello sottostante. Viceversa, quando una PDU passa dal layer superiore al layer inferiore, si dice che essa viene incapsulata (o inserita) nella PDU del livello sottostante.
 
-<!-- to do - il concetto di incapsulamento -->
-<!-- to do - il concetto di deincapsulamento -->
+La PDU viene incapsulata e deincapsulata tra i livelli. L'host mittente spedisce la PDU, che passa dal livello più alto del layered model al livello più basso: da un passaggio all'altro, la PDU si arricchisce di informazioni relative a quel particolare strato dell'architettura. In pratica l'incapsulamento consiste nel prelevare la PDU del livello superiore ed aggiungere un'intestazione (header) e una terminazione (come un codice d'errore, una guardia, o altro), per ottenre una nuova PDU contenente più informazioni. Il processo di deincpsulazione è l'azione inversa rispetto alla precedente: la PDU passa dal livello più basso a quello più alto. Una PDU che risiede nel livello più basso e passa ad un livello più alto viene sprovvista dell'header e della terminazione del livello più basso. In pratica solo il contenuto "interno" della PDU interessa al livello soprastante. L'ultimo livello dell'architettura ottiene il messaggio puro e semplice che sarà letto ed interpretato direttamente dall'utente finale. I due processi sono rappresentati nella figura seguente:
+
+<!-- to add -->
+*In Figura: incapsulamento e deincapsulamento della PDU (Protocol Data Unit)*
 
 ### 01.08. Struttura moderna della rete Internet
-<!-- to do - ISP d'accesso -->
-<!-- to do - ISP provinciale -->
-<!-- to do - ISP regionale -->
-<!-- to do - ISP nazionale -->
-<!-- to do - ISP globale -->
-<!-- to do - IXP (Internet eXchange Point) -->
-<!-- to do - PoP (Point of Presence) -->
-<!-- to do - CDN (Content Delivery Network) -->
+
+Un ISP (Internet Service Provider) è un'azenda il cui compito è fornire l'accesso ad Internet ai propri clienti, situati ognuno presso la propria abitazione. Esistono tantissimi tipi di ISP:
+
+- L'ISP di accesso è una cabina, o un insieme di cabine poste nei centri urbani, o comunque vicino alle abitazioni dei clienti e fornisce l'accesso ad Internet ad uno, o più quartieri, o vie.
+- L'ISP provinciale è un centralino che collega più ISP d'accesso volto a collegare clienti situati in centri urbani differenti.
+- L'ISP regionale è un centralino che collega più ISP d'accesso e/o ISP provinciali, il cui scopo è collegare clienti situati in province differenti (idealmente l'intera regione di un paese).
+- L'ISP nazionale è una centrale molto grande a cui convergono tutti gli ISP regionali, provinciali, o d'accesso, il cui obiettivo è collegare tutti i clienti della nazione ad Internet.
+- Infine, l'ISP globale: si tratta di una vasta centrale che intercollega tantissimi ISP nazionali, regionali, provinciali, o d'accesso.
+
+
+Un IXP (Internet eXchange Point) è una struttura fisica dove più reti (ISP, operatori, cloud provider, CDN, aziende) si collegano tra loro per scambiarsi traffico Internet direttamente. Senza un IXP, il traffico tra due reti potrebbe dover passare attraverso operatori intermedi. Con un IXP, le reti possono realizzare ciò che normalmente viene chiamato peering, cioè scambiarsi dati in modo diretto. In pratica un IXP è una grande stanza dove sono allocati più cabine, ognuna di un determinato ISP.
+
+Un PoP (Point of Presence) è un punto di accesso di una rete in una determinata area geografica. In pratica è una sede tecnica dove un operatore installa apparati di rete (router, switch, server, collegamenti in fibra) per fornire connettività ai clienti, o interconnettersi con altre reti. In pratica un PoP permette a un ISP di estendere la propria presenza geografica.
+
+Una CDN (Content Delivery Network) è una rete di server distribuiti geograficamente che serve contenuti agli utenti dal nodo più vicino a loro. L'obiettivo principale è ridurre la latenza, aumentare la velocità di caricamento e diminuire il carico sui server originari. In pratica una CDN è costituita da un insieme di macchine contenenti lo stesso contenuto, oppure una parte di un contenuto più grande e che sono sempre e costantemente pronti a fornirlo agli utenti che ne fanno richiesta.
+
+La seguente figura mostra la moderna struttura della rete Internet:
+
+<!-- to add -->
+*In Figura: la struttura moderna di Internet*
 
 ### 01.09. Ritardi nelle reti
-<!-- to do - processing delay -->
-<!-- to do - queuing delay -->
-<!-- to do - trasmission delay -->
-<!-- to do - propagation delay -->
+
+Ciascun nodo all'interno della rete presente un determinato ritardo. Esistono almeno quattro tipi di ritardi che affliggono la comunicazione tra due, o più host posizionati nella stessa rete, o in reti differenti:
+
+- Processing delay (ritardo di elaborazione): il tempo necessario da parte del nodo della rete per elaborare la PDU arrivata in input. Normalmente è dell'ordine di pochissimi microsecondi, o addirittura nanosecondi.
+- Queuing delay (ritardo di accodamento): ciascun nodo intermedio della rete presenta una coda (o buffer) nel quale vengono man mano memorizzati i pacchetti ricevuti in ingresso. Più è grande la coda, maggiore è questo ritardo; meno è grande la coda, minore è questo ritardo. Si tratta di un ritardo molto variabile, che può variare dall'essere nullo fino a qualche decina (e talvolta centinaia) di millisecondi.
+- Trasmission delay (ritardo di trasmissione): il tempo impiegato dal nodo per prelevare la PDU dalla propria memoria centrale (o buffer) e trasmetterlo nella corrispettiva interfaccia di uscita. Si tratta di un tempo che dipende dalla lunghezza della PDU stessa, anche se normalmente richiede non più di qualche decina di microsecondi.
+- Propagation delay (ritardo di propagazione): sebbene sia spesso confuso con il precedente ritardo (che dipende dalla velocità di trasmissione del nodo e dalla lunghezza della PDU), il ritardo di propagazione dipende solo ed esclusivamente dalle caratteristiche fisiche del mezzo trasmissivo (come la fibra ottica, o il doppino telefonico). Il ritardo di propagazione è dominante quando si parlad i reti di vaste dimensioni e, solitamente, varia da qualche microsecondo a svariate centinaia di millisecondi (come, ad esempio, nel caso delle comunicazioni satellitari).
+
 <!-- to do - end-to-end delay su collegamenti uniformi -->
 <!-- to do - end-to-end delay su collegamenti eterogenei -->
 <!-- to do - il peso di ciascun tipo di ritardo nella trasmissione dati -->

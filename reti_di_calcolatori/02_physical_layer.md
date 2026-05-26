@@ -297,13 +297,43 @@ Dal punto di vista della sicurezza, le reti moderne utilizzano protocolli come W
 <!-- to do - costellazioni di satelliti: Starlink, Project Kuiper e WorldVu -->
 
 ##### 02.06.09. Reti wireless mobile
-<!-- to do - concetti generali: celle e stazioni base -->
-<!-- to do - 1G: AMPS (Advanced Mobile Phone System) -->
-<!-- to do - 2G: GMS (Global System for Mobile communication), SIM (Subscriber Identity Module) e MSC (Mobile Switching Center) -->
-<!-- to do - 3G: UMTS (Universal Mobile Telecommunication System) -->
-<!-- to do - 4G: LTE (Long-Term Evolution) -->
-<!-- to do - 5G: IoT e reti mobile virtuali -->
-<!-- to do - 6G: velocità "monster", ISAC (Integrated Sensing And Communication), XR (eXtense Reality), digital twins e IoS (Internet of Senses) -->
+
+La tecnologia 1G (Generation 1) è basata sulla trasmissione dati mediante l'invio e la ricezione di segnali analogici, molto più difficili da generare e da interpretare dai dispositivi elettronici. Aveva un livello di sicurezza molto basso, se non nullo in determinate comunicazioni. Si tratta della rete mobile più utilizzata negli anni '80 del secolo scorso. La tecnologia 1G, con la sua trasmissione analogica, utilizzava la AMPS (Advanced Mobile Phone System), che permetteva solo la comunicazione vocale (solo segnali vocali). AMPS utilizzava la FDMA (Frequency Division Multiple Access), in cui a ciascuna comunicazione veniva allocata una determinata banda di frequenze.
+
+La tecnologia 2G (Generation 2) introdusse numerose novità. Lanciata commercialmente nel 1991 con il GSM (Global System for Mobile communication), rispetto alle reti 1G essa utilizza segnali solo ed esclusivamente digitali. Si utilizzano frequenze di comunicazione più alte rispetto alle reti 2G, anche se comunque non troppo robuste a determinati fenomeni di interferenza elettromagnetica. Fu la tecnologia più utilizzata negli anni '90 del secolo scorso. L'utilizzo delle SIM (Subscriber Identity Module) era all'ordine del giorno, laddove era registrato il numero di telefono. Da quegli anni in poi si sono susseguiti vari formati di SIM, ma oggi il futuro è destinato alle eSIM (eletronic SIM), ovvero SIM non fisiche, ma elettroniche. Nello standard GSM, il MSC (Mobile Switching Center) è un grande centro che smista e gestisce le comunicazioni tra due, o più utenti mobili. Il compito principale di un MSC è gestire, instradare e smistare le chiamate vocali e gli SMS tra gli utenti della rete mobile e tra questi e la rete fissa. A proposito: SMS (Short Message Service) è un vero e proprio servizio di messaggistica utilizzato dagli utenti mobili per comunicare attraverso messaggi testuali. Un singolo SMS può contenere non più di 160 caratteri. Oggigiorno gli SMS vengono ancora utilizzati per la generazione di password temporanee, l'autenticazione a due fattori e molto altro. GSM utilizza il TDMA (Time Division Multiplex Access), ossia associa una porzione di tempo ben precisa a ciascuna coppia di host in comunicazione, di fatto non garantendo elevate velocità di trasmissione.
+
+Il Giappone fu il primo paese ad introdurre la terza generazione delle reti mobili: le reti 3G (Generation 3). Le reti 3G sono molto più evolute rispetto a quelle 2G e lo standard che le governa è denominato UMTS (Universal Mobile Telecommunications System), che è la naturale evoluzione del GMS introdotto dalle reti 2G. Utilizza il protocollo W-CDMA (Wideband Code Division Multiple Access), un particolare metodo di accesso al canale radio che prevede l'utilizzo di una banda molto più larga rispetto a quella usata dalle reti 2G, in cui ogni host mobile che cerca di comunicare utilizza il canale mediante un codice. Analizzeremo meglio W-CDMA nel corso dei successivi capitoli. Lo standard W-CDMA supporta non solo più comunicazioni tra host mobili, ma anche una maggiore velocità visto lo spettro distribuito delle frequenze. In pratica ogni host ha a propria disposizione l'intera banda di frequenza e non più una sola parte, come avveniva con FDMA per AMPS. Le reti UMTS hanno il seguente aspetto:
+
+<!-- to add -->
+*In Figura: struttura di una rete UMTS delle reti 3G*
+
+UMTS organizza il tutto in una CN (Core Network), in cui sono presenti i seguenti elementi principali:
+
+- SGSN (Serving GPRS Support Node): gestisce il traffico dati a pacchetto (ossia destinato ad Internet).
+- MSC Server (Mobile Switching Centre): smista e gestisce le chiamate vocali.
+- MGW (Media GateWay): trasporta e converte i flussi voce.
+- CBC (Cell Broadcast Centre): per l'invio di messaggi broadcast.
+
+Il CN è ovviamente collegato attraverso un'apposita infrastruttura al resto della rete mobile. UTRAN (UMTS Terrestrial Radio Access Network) è la rete di accesso vera e propria che utilizza lo spettro radio distribuito (cone W-CDMA) per collegarsi alla rete UMTS globale. Una rete d'accesso a UMTS, anche detta RNS (Radio Network Subsystem) contiene due elementi fondamentali:
+
+- RNC (Radio Network Controller): controlla le stazioni radio.
+- Node B: equivalenti delle moderne stazioni base (antenne/celle). Capiremo meglio in seguito che cosa intendiamo con "celle" e con "antenne". 
+
+Arriviamo quindi alla quarta generazione delle reti mobile: le reti 4G (Generation 4). In sostanza, le reti 4G hanno avuto una conferma ufficiale nel 2010, quando l'ITU (International Telecommunication Union) ha approvato gli standard LTE (Long-Term Evolution) e WiMAX per la telefonia. Partiamo da LTE: il suo obiettivo è arrivare a velocità di trasmissione di 1 Gbps, anche mentre l'utente mobile si sposta (ad esempio, mentre l'utente sta viaggiando in auto, oppure in treno). Anche LTE vanta un ampio spettro di frequenze, ma utilizza la tecnica OFDM (Orthogonal Frequency Division Multiplexing), una particolare tecnica di accesso al canale trasmissivo che utilizza non un solo segnale portante, bensì svariate sottoportanti ortogonali tra loro (questa proprietà è poi utile per estrapolare facilmente il segnale di una particolare comunicazione). LTE ha un'efficienza spettrale tre volte superiore rispetto a UMTS e vanta un RTT (Round Trip Time, ne riparleremo quando tratteremo il livello fisico) veramente molto basso per le reti mobile, al di sotto di 10 ms, contro i 70 di UMTS. LTE garantisce una velocità massima di download pari a 326 Mbps, una velocità massima di upload pari a 86 Mbps e latenze molto basse rispetto alle reti 3G. Passiamo a WiMAX. WiMAX (Worldwide Interoperability for Microwave Access) è una tecnologia di telecomunicazione progettata per fornire accesso a Internet a banda larga senza fili su distanze molto maggiori rispetto alla classica tecnologia utilizzata nelle reti LAN, ovvero il Wi-Fi. Basata sullo standard 802.16, una stazione base WiMAX copre da qualche centinaia, fino anche a decine di chilometri. Nelle versioni più avanzate e potenti di WiMAX, si raggiungono velocità anche superiori ai 100 Mbps. WiMAX è particolarmente utile per garantire l'accesso ad Internet nelle aree rurali e nei collegamenti tra sedi aziendali. WiMAX è una vera e propria alternativa alle connessioni cablate (come ADSL e fibra ottica).
+
+Le reti 5G (quinta generazione) rappresentano l'evoluzione delle reti mobili 4G e sono progettate per offrire velocità di trasmissione molto elevate, tempi di risposta estremamente ridotti (latenza di pochissimi millisecondi) e la possibilità di connettere un numero enorme di dispositivi contemporaneamente. L'architettura di una rete 5G è composta principalmente dai dispositivi degli utenti (smartphone, tablet, oggetti appartenenti al mondo IoT -Internet of Things-), dalle stazioni radio chiamate gNodeB, che forniscono la copertura wireless, e dal 5G Core Network, che gestisce autenticazione, mobilità, instradamento dei dati e servizi. Il 5G utilizza diverse bande di frequenza: bande basse per garantire ampia copertura, bande medie per un buon compromesso tra copertura e prestazioni e onde millimetriche (mmWave) per raggiungere velocità molto elevate su distanze più brevi. Tra le tecnologie fondamentali del 5G vi sono:
+
+- Massive MIMO: impiega numerose antenne per aumentare la capacità della rete.
+- Beamforming, che concentra il segnale verso specifici utenti migliorando efficienza e qualità della connessione.
+- Network slicing: permette di creare reti virtuali dedicate a differenti applicazioni sulla stessa infrastruttura fisica.
+
+Il 5G supporta tre principali categorie di servizi:
+
+- eMBB (Enhanced Mobile Broadband) per Internet ad alta velocità e streaming avanzato.
+- URLLC (Ultra-Reliable Low-Latency Communications) per applicazioni che richiedono comunicazioni affidabili e in tempo reale, come la robotica industriale e i veicoli autonomi.
+- mMTC (Massive Machine-Type Communications) per la connessione massiva di dispositivi IoT.
+
+Grazie a queste caratteristiche, il 5G non si limita a migliorare la navigazione mobile, ma costituisce una piattaforma tecnologica essenziale per lo sviluppo di città intelligenti, automazione industriale, telemedicina, realtà virtuale e aumentata e molte altre applicazioni innovative.
 
 ### 02.07. PSTN (Public Switched Telephone Network)
 <!-- to do -->
@@ -526,11 +556,22 @@ Esistono diversi tipi di gateway:
 Il gateway si distingue dal router perché il router si occupa principalmente di instradare pacchetti tra reti compatibili, mentre il gateway può anche effettuare conversioni e adattamenti tra sistemi differenti. In una configurazione IP, il “default gateway” è l’indirizzo del dispositivo a cui un host invia i pacchetti destinati a reti esterne alla propria LAN. Senza gateway, reti con protocolli e/o struttura differenti non potrebbero comunicare correttamente tra loro.
 
 ### 02.09. Modulazione e demodulazione del segnale
-<!-- to do - ADC (Analog-to-Digital Conversion) -->
-<!-- to do - DAC (Digital-to-Analog Conversion) -->
-<!-- to do - digital clock signal -->
-<!-- to do - positive and negative logic -->
-<!-- to do - baseband e passband -->
+
+Nell'ambito della modulazione e della demodulazione del segnale sono due le conversioni che vengono eseguite:
+
+- Quando si vuole adattare un segnale digitale su un mezzo che supporta solo portanti analogiche (trasmissione analogica), si esegue sempre una conversione ADC (Analog-to-Digital Conversion). Il segnale digitale, mediante l'ADC, viene convertito in un segnale sinusoidale.
+- Quando si riceve un segnale analogico che deve essere convertito in un segnale digitale si esegue sempre una conversione DAC (Digital-to-Analog Conversion). Il segnale analogico, mediante la DAC, viene convertito in un segnale digitale e l'informazione viene ricostruita in termini di bit.
+
+Un qualsiasi mezzo trasmissivo ha una certa frequenza, misurata in Hz. La frequenza determina la velocità alla quale si possono trasmettere i dati: un doppino telefonico che lavora a 100 MHz può idealmente cambiare stato 100 milioni di volte al secondo, mentre una fibra ottica da 1 GHz può idealmente trasmettere 1 miliardo di bit alla volta (anche se non è proprio così, ma per adesso sorvoliamo). La logica secondo il quale viene attuata la modulazione è detta logica:
+
+- Logica positiva: attribuisce tipicamente i valori alti di tensione al valore logico 1, mentre i valori bassi allo 0.
+- Logica negativa: attribuisce tipicamente i valori alti di tensione al valore logico 0, mentre i valori bassi allo 1 (il contrario rispetto alla logica positiva).
+
+La scelta di utilizzare la logica positiva, o negativa dipende dall'effettiva implementazioned del mezzo trasmissivo e della rete.
+
+Altri due concetti fondamentali sono quelli di baseband e passband. La baseband (detta anche banda base) è rappresentata dal segnale trasmesso nella sua forma originale, senza modulazione su una portante; occupa frequenze vicine a 0 Hz ed è tipico delle comunicazioni cablate come Ethernet. In pratica si tratta del segnale nudo e crudo, che non subisce alcun tipo di variazione, adattamento, o trasformazione per fini trasmissivi. La passband (detta anche banda passante) è il segnale restituito a seguito della modulazione del segnale originale, ovvero il segnale basato su un segnale portante dotato di una frequenza più alta, in modo da poter essere trasmesso efficacemente attraverso un canale radio o altri mezzi di comunicazione.
+
+Ma adesso veniamo al dunque: che cosa significa modulare un segnale? Un canale trasmissivo può essere dotato, o no di un segnale portante: si classificano quindi i canali trasmissivi senza e con portante (e questi ultimi si suddividono in segnali con una, o più portanti). Un segnale portante è un segnale analogico periodico e ripetitivo che funge da clock di trasmissione, dotato quindi di una certa frequenza. L'operazione di modulazione significa, dato il segnale originale, modificare una delle caratteristiche della portante (ampiezza, frequenza, fase) in modo da riprodurre il contenuto informativo presente nel segnale originale. In pratica la modulazione permette di passare dalla baseband (segnale originale) alla passband (segnale modulato). Esistono quindi varie tecniche di modulazione del segnale, esaminate di seguito.
 
 ##### 02.09.01. ASK (Amplitude Shift Keying)
 <!-- to do -->
