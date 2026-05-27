@@ -36,19 +36,36 @@ Un segnale digitale ha le seguenti caratteristiche:
 In che modo i bit vengono trasmessi mediante un mezzo trasmissivo? Variando la tensione V del mezzo stesso, in cui solitamente una tensione alta rappresenta un 1 logico, mentre una tensione bassa rappresenta uno 0 logico. Quanto abbiamo appena detto si chiama logica positiva ed esiste anche la logica negativa, in cui i due valori logici sono invertiti: 0 è rappresentato da una tensione alta, 1 da una tensione bassa. Ma i bit possono anche essere rappresentati in un altro modo. Ad esempio, nel caso dei mezzi trasmissivi wireless (senza alcun canale fisico), le frequenze delle onde elettromagnetiche stabiliscono se si tratta di un bit 1, o un bit 0: alte frequenze possono rappresentare l'1, basse frequenze lo 0. Analogamente, nelle fibre ottiche (che sono un mezzo trasmissivo basato su segnali luminosi, non elettrici) un impulso luminoso può essere considerato un 1 logico, mentre la sua assenza uno 0 logico.
 
 ##### 02.02.02. Modalità di comunicazione
-<!-- to do - simplex -->
-<!-- to do - half duplex -->
-<!-- to do - full duplex -->
+
+Nell'ambito delle reti di calcolatori sono tre le modalità secondo cui due host possono comunicare:
+
+- Comunicazione simplex: il canale trasmissivo è unidirezionale e il segnale può scorrere solo ed esclusivamente in un determinato verso, da una parte all'altra. Solo un host può svolgere il ruolo di mittente ed il rimanente deve necessariamente essere il destinatario. Il megafono è un esempio di questo tipo di comunicazione, sebbene non ci sia un solo destinatario, ma molti.
+- Comunicazione half-duplex: il canale trasmissivo può essere usato in modo bidirezionale, ma in modo alternato. In pratica può viaggiare solo ed esclusivamente un segnale alla volta ed in una determinata direzione. In un preciso momento nel tempo solo un host può agire come mittente ed il rimanente come destinatario, ma dopo che il mittente ha concluso la trasmissione del messaggio, si possono invertire i ruoli (ed anche il verso secondo cui viaggia il segnale). I walkie-talkie sono il classico esempio di comunicazione half-duplex: solo una persona alla volta può parlare ed in una determinata direzione.
+- Comunicazione full-duplex: è quella più efficiente. In pratica possono viaggiare più sengali all'interno del canale trasmissivi: uno diretto al destinatario, l'altro diretto al mittente. Entrambi gli host posti in comunicazione possono svolgere, in modo intercambiabile, sia il ruolo di mittente, sia quello di destinatario. Si dice anche che il canale trasmissivo sia bidirezionale (il segnale può scorrere verso un polo, o un altro).
 
 ##### 02.02.03. Sincronizzazione
-<!-- to do - comunicazioni sincrone -->
-<!-- to do - comunicazioni asincrone -->
+
+La sincronizzazione è il meccanismo che consente al ricevitore di individuare correttamente l'inizio e la fine dei bit trasmessi, garantendo una corretta interpretazione dei dati. A seconda del modo in cui trasmettitore e ricevitore mantengono il riferimento temporale, le comunicazioni possono essere sincrone o asincrone.
+
+Nelle comunicazioni sincrone trasmettitore e ricevitore condividono un riferimento temporale comune, detto clock. I dati vengono inviati come un flusso continuo di bit organizzati in PDU senza la necessità di inserire bit di start e stop per ogni carattere trasmesso. Questo metodo consente una maggiore efficienza nella trasmissione, poiché riduce l'overhead dovuto alle informazioni di controllo. Tuttavia, richiede meccanismi di sincronizzazione più complessi per mantenere allineati i clock dei dispositivi coinvolti.
+
+Nelle comunicazioni asincrone non esiste un clock condiviso tra trasmettitore e ricevitore. Ogni segnale viene trasmesso in modo indipendente ed è delimitato da particolari bit di controllo. Questo approccio semplifica l'implementazione dei dispositivi e permette di trasmettere dati a intervalli irregolari, a seconda della necessità, ma introduce un maggiore overhead e una minore efficienza rispetto alle comunicazioni sincrone.
 
 ##### 02.02.04. Modalità di switching
-<!-- to do - packet switching -->
-<!-- to do - circuit switching -->
-<!-- to do - message switching -->
-<!-- to do - confronto tra packet, circuit e message switching -->
+
+Le reti di calcolatori sono governati da due tipi principali di switching: la modalità packet switching (o commutazione di pacchetto) e la modalità circuit switching (o commutazione di circuito).
+
+Partiamo dalla circuit switching, maggiormente utilizzata nelle reti telefoniche pubbliche, agli inizi di Internet. Il principio secondo il quale funzione una rete circuit switching è la creazione di un circuito virtuale dall'host mittente all'host destinatario: in pratica ciascun host intermedio (router, switch, hub, o altro) si "accorda" con il precedente ed il successivo host in modo da formare un percorso completo che congiunga i due host posti in comunicazione tra loro. La modalità circuit switching si basa, quindi, su un vero e proprio canale virtuale costantemente allocato e riservato agli host posti in comunicazione. La comunicazione non parte in modo diretto, ma dopo una prima fase di creazione del percorso virtuale tra i due host in comunicazione (fase che solitamente richiede del tempo). Inoltre l'efficienze è molto limitata da quanto effettivamente i due host utilizzino il proprio percorso, che si chiama circuito virtuale: raramente viene utilizzato durante tutto il tempo in cui è allocato e in tutta la sua banda allocata. In pratica il circuito virtuale è sottoutilizzato (e la banda che occupa non può, ovviamente, essere usata da altri host della rete). Il vantaggio è che due host non verranno mai disturbati da altri durante la loro comunicazione (meno overhead di gestione durante l'effettiva comunicazione) ed i messaggi inviati dal mittente subiscono ritardi generalmente prevedeibili e controllabili. Si tratta di una modalità adatta per le comunicazioni in tempo reale, non a caso viene ancora oggi usata in certi casi per le chiamate vocali. Tuttavia causa spesso un elevato spreco delle risorse e non è poco flessibile (la modifica del circuito virtuale è molto onerosa). La seguente figura mostra un esempio di rete circuit switching, in cui due host A e B sono collegati da un circuito virtuale formato da nodi intermedi:
+
+<!-- to add -->
+*In Figura: una rete circuit switching*
+
+Al contrario, possiamo dire che oggigiorno Internet è una rete globale basata sulla modalità packet switching. La tecnica utilizzata in una rete packet switching è molto semplice: al posto di allocare un circuito virtuale, sarà l'host intermedio a gestire autonomamente (e secondo dovuti algoritmi) il traffico della rete. Questo sarebbe più un argomento da livello network dello stack TCP/IP, ma si è comunque deciso di trattarlo nel livello physical così da comprendere fin da subito le potenzialità delle reti packet switching. Il messaggio originale viene diviso in più PDU, informalmente chiamate pacchetti, che viaggiano lungo la rete: ogni pacchetto include una parte del messaggio originale e delle informazioni di controllo e, a seconda del tipo di comunicazione, può essere numerato, oppure no (in modo tale che il destinatario riordini il messaggio nel modo corretto). Ogni porzione della rete, così come anche l'intera banda del canale di comunicazione, è utilizzata da più utenti in modo dinamico e, quando un host vuole trasmettere qualcosa, inizia semplicemente a farlo senza che venga allocato alcun percorso virtuale tra lo stesso e il destinatario. Grazie agli algoritmi di routing, ai nodi intermedi ed alla frammentazione del messaggio originale in più pacchetti si ha una maggior efficienza ed un elevato utilizzo del canale: questo vuol dire che molti più host possono comunicare all'interno della rete. Il ritardo non è facilmente prevedibile, ma dipende dal traffico della rete e soprattutto da quanto essa è congestionata, se ha colli di bottiglia, se qualche percorso è inusabile a causa di un guasto e molti altri fattori. Si ha una possibile perdita dei pacchetti, ma le reti moderne garantiscono comunque tassi di errore molto bassi, inoltre ciascun livello superiore al fisico dello stack TCP/IP prevede una qualche forma di controllo degli errori, che può arrivare anche a far ritrasmettere un determinato pacchetto al mittente. La seguente figura mostra la modalità packet switching:
+
+<!-- to add -->
+*In Figura: una rete packet switching*
+
+Una terza modalità è il message switching, ovvero un packet switching che non utilizza dei pacchetti come unità dati, ma in cui ciascun nodo trasmette l'intero messaggio (causando anche maggiori ritardi). In pratica si mantengono tutti i vantaggi della tecnica packet switching, ma a differenza di suddividere il messaggio originale in più pacchetti e trasmetterli in vari momenti nel corso del tempo, si trasmette direttamente l'intero messaggio. Ciò causa un grande ritardo e, soprattutto, un elevato tasso di errori.
 
 ##### 02.02.05. Throughput
 <!-- to do - throughput end-to-end tra client e server con un nodo intermedi tra di essi -->
@@ -269,7 +286,8 @@ Dal punto di vista della sicurezza, le reti moderne utilizzano protocolli come W
 È importante distinguere tra Wi-Fi e Internet. Il Wi-Fi è semplicemente la tecnologia wireless utilizzata per collegare dispositivi a una rete locale, mentre Internet è la rete globale che permette la comunicazione tra sistemi distribuiti nel mondo. Una rete Wi-Fi può esistere anche senza accesso a Internet.
 
 ##### 02.06.02. Bluetooth
-<!-- to do -->
+
+Bluetooth è una tecnologia di comunicazione wireless a corto raggio utilizzata per lo scambio di dati tra dispositivi come smartphone, computer, cuffie, smartwatch e periferiche. Opera nella banda ISM (Industrial, Scientific, Medical) a 2.4 GHz e consente la creazione di reti personali (WPAN -Wireless Personal Area Network-). Le comunicazioni avvengono a basso consumo energetico e su distanze generalmente comprese tra pochi metri e alcune decine di metri, a seconda della classe del dispositivo e della versione utilizzata.
 
 ##### 02.06.03. Lo spettro elettromagnetico e le leggi di Maxwell
 <!-- to do -->
@@ -573,44 +591,59 @@ Altri due concetti fondamentali sono quelli di baseband e passband. La baseband 
 
 Ma adesso veniamo al dunque: che cosa significa modulare un segnale? Un canale trasmissivo può essere dotato, o no di un segnale portante: si classificano quindi i canali trasmissivi senza e con portante (e questi ultimi si suddividono in segnali con una, o più portanti). Un segnale portante è un segnale analogico periodico e ripetitivo che funge da clock di trasmissione, dotato quindi di una certa frequenza. L'operazione di modulazione significa, dato il segnale originale, modificare una delle caratteristiche della portante (ampiezza, frequenza, fase) in modo da riprodurre il contenuto informativo presente nel segnale originale. In pratica la modulazione permette di passare dalla baseband (segnale originale) alla passband (segnale modulato). Esistono quindi varie tecniche di modulazione del segnale, esaminate di seguito.
 
-##### 02.09.01. ASK (Amplitude Shift Keying)
-<!-- to do -->
+Le quattro tecniche principale di modulazione del segnale sono descritte di seguito (come riferimento prendere la figura successiva al seguente elenco):
 
-##### 02.09.02. FSK (Frequency Shift Keying)
-<!-- to do -->
+- ASK (Amplitude Shift Keying): prevede di variare solo l'ampiezza della portante, mentre frequenza e fase rimangono invariate. Nella logica positiva solitamente si sfrutta un'ampiezza elevata per trasmettere un 1, mentre un'ampeizza nulla per trasmettere uno 0 logico. La modulazione ASK è semplice da implementare e richiede circuiti relativamente poco complessi, motivo per cui è stata utilizzata in diverse applicazioni di comunicazione digitale a bassa velocità e nei sistemi di identificazione a radiofrequenza (come i dispositivi RFID ed alcune reti di sensori per l'IoT). Ma ASK è molto sensibile al rumore, oltre che causare problemi di desincronizzazione per le lunghe sequenze di 0 (in cui il segnale è costantemente nullo).
+- FSK (Frequency Shift Keying): prevede di variare solo la frequenza della portante, mentre ampiezza e fase rimangono invariate. Nella logica positiva solitamente si utilizza una frequenza maggiore per trasmettere un 1, mentre una frequenza minore trasmette uno 0 logico. In realtà la FSK sfrutta altre due sottoportanti (la cui frequenza è un multiplo della portante di base): la portante con frequenza maggiore viene utilizzata per l'1, mentre la portante con la frequenza minore viene utilizzata per lo 0. Sebbene sia molto meno sensibile al rumore ed abbia una buona affidabilità, essa richiede una banda di frequenze maggiore ed ha anche una minore efficienza spettrale.
+- PSK (Phase Shift Keying): prevede di variare solo la fase della portante, mentre ampiezza e frequenza rimangono inalterate. Un segnale è dotato di un periodo, solitamente indicato con $t$ e misurato in s (secondo). Quando il segnale è allo 0% del suo periodo, allora la sua fase è di 0°, quando è al 25% la sua fase è di 90°, al 50% è di 180° (la metà di un angolo giro, ossia un angolo piatto), al 75% la sua fase è di 270° e, infine, quando è al 100% la sua fase è di 360° (un angolo giro, che coincide con il punto iniziale). Per trasmettere un determinato bit si utilizza un cambiamento di fase all'inizio del periodo della portante: per esempio una fase di 180° per trasmettere l'1, mentre la trasmissione di uno 0 logico non ha alcun cambiamento di fase. Usando 4 fasi differenti si possono anche trasmettere 2 bit alla volta: 0° per trasmettere 00, 90° per trasmettere 01, 180° per trasmettere 10 e, infine, 270° per trasmettere 11.
+- QAM (Quadrature Amplitude Modulation): è una tecnica di modulazione digitale che combina la modulazione di ampiezza ASK e PSK. L'informazione viene trasmessa variando contemporaneamente sia l'ampiezza sia la fase della portante, consentendo di rappresentare più bit con un singolo simbolo. Grazie a questa caratteristica, la QAM offre un'elevata efficienza spettrale, permettendo di trasmettere grandi quantità di dati utilizzando una banda relativamente ridotta. Esistono diverse versioni della QAM, come 16-QAM, 64-QAM, 256-QAM e superiori, dove il numero indica quanti simboli distinti possono essere trasmessi. Maggiore è il numero di simboli, maggiore è la velocità di trasmissione, ma aumenta anche la sensibilità al rumore.
 
-##### 02.09.03. PSK (Phase Shift Keying)
-<!-- to do -->
+<!-- to add -->
+*In Figura: tecniche ASK, FSK e PSK di modulazione del segnale portante*
 
-##### 02.09.04. QAM (Quadrature Amplitude Modulation)
-<!-- to do -->
+Nella seguente figura viene mostrata la tecnica 16-QAM, in grado di trasferire 16 bit in un singolo periodo della portante:
+
+<!-- to add -->
+*In Figura: la tecnica 16-QAM è in grado di trasmettere ben 16 bit in un singolo periodo del segnale portante*
 
 ### 02.10. Multiplexing del canale
-<!-- to do -->
 
-##### 02.10.01. FDM (Frequency Division Multiplexing)
-<!-- to do -->
+Il multiplexing del canale (anche noto come channel multiplexing) è compiuto da un apposito apparato (il multiplexer) il cui obiettivo principale è garantire che più coppie di host possano essere poste in comunicazione ottimizzando quanto più possibile l'utilizzo del canale trasmissivo. Detto in altro modo, il multiplexing permette a più coppie di dispositivi di utilizzare lo stesso canale di comunicazione, ma in differenti porzioni di esso. Invece di dedicare un intero canale a un solo utente, o servizio, il multiplexing permette di combinare più comunicazioni sullo stesso collegamento. All'estremità ricevente, un apparato chiamato demultiplexer effettua il cosiddetto demultiplexing, azione che consiste nella separazione dei vari segnali.
 
-##### 02.10.02. TDM (Time Division Multiplexing)
-<!-- to do -->
+Il modello che seguiamo qui per comprendere il multiplexing del canale è rappresentato nella seguente figura:
 
-##### 02.10.03. CDM (Code Division Multiplexing)
-<!-- to do -->
+<!-- to add -->
+*In Figura: il multiplexing del canale trasmissivo*
 
-##### 02.10.04. WDM (Wavelength Division Multiplexing)
-<!-- to do -->
+La comunicazione inizia con il mittente di una comunicazione, che genera il messaggio. Questo arriva in input ad un apparecchio chiamato MUX (MUltipleXer) che combina tutti i segnali in un'unica linea di trasmissione. Tale linea arriva fino al DEMU (DEMUltipleXer), che effettua l'operazione uguale ed opposta del MUX: preleva tutte le componenti di segnali presenti nella singola linee e le suddivide in più linee, ognuna diretta all'interessato: il destinatario della comunicazione. 
+
+Esistono varie tecniche di multiplexing del canale, di seguito brevemente descritte:
+
+- FDM (Frequency Division Multiplexing): in cui la banda viene suddivisa in più sottobande, ognuna dedicata ad un'apposita comunicazione (coppia di host mittente e destinatario). Alcune porzioni del canale potrebbero non essere utilizzate (ad esempio se i due host non si stanno scambiando alcuna informazione). Inoltre, il numero di host che possono comunicare è molto limitato.
+- CDM (Code Division Multiplexing): in cui ogni host posto in comunicazione può utilizzare l'intera banda messa a disposizione dal canale trasmissivo, in quanto dispone di un codice univoco che viene combinato con il segnale trasmesso nel canale stesso, in modo che il ricevente riesca ad estrapolare correttamente il segnale. Si tratta di una tecnica molto innovativa che, a differenza della FDM, non spreca inutilmente porzioni del canale, ma anzi ne favorisce il suo completo utilizzo, vista l'intera banda a disposizione. 
+- TDM (Time Division Multiplexing): in cui il tempo viene suddiviso in quanti temporali chiamati slot. Uno slot è associato a un particolare host posto in comunicazione e per questo vengono tipicamente numerati da 1 a N. Un frame (o data frame) è costituito da tutti gli slot utilizzati dagli host per comunicare. Uno slot concede l'intera banda delle frequenze a un particolare host, ma un tempo molto limitato. Anche TDM, come FDM, consente un numero molto limitato di host, ma ciascun host ha tutta la banda a disposizione (che difficilmente utilizzerà); quindi TDM potrebbe comunque causare un sottoutilizzo del canale trasmissivo. Solitamente viene utilizzata una politica RR (Round Robin) per consentire a tutti gli host collegati di trasmettere dati.
+- WDM (Wavelength Division Multiplexing): WDM è molto simile a FDM, ma viene utilizzata con particolari mezzi trasmissivi (fibre ottiche) dotati di una portante avente una frequenza molto maggiore, anche dell'ordine di vari GHz.
+
+La seguente figura mostra le varie tecniche di multiplexing del canale:
+
+<!-- to add -->
+*In Figura: le varie tecniche di multiplexing del canale di comunicazione*
+
+Da notare come WDM e FDM vengono rappresentate come bande trasversali, mentre TDM come bande longitudinali (dei piccoli rettangoli).
 
 ### 2.11. Codifica di linea
-<!-- to do -->
 
-##### 2.11.01. NRZ (Non-Return Zero)
-<!-- to do -->
+La codifica del segnale (detta anche codifica di linea) è il processo mediante il quale le informazioni vengono trasformate in una forma adatta alla trasmissione o alla memorizzazione. In una rete di comunicazione, la codifica converte i dati digitali in segnali elettrici, ottici, o radio che possono essere trasportati dal mezzo trasmissivo. Questa operazione può essere effettuata dal MUX, o da un apparecchio presente all'interno del MUX. La decodifica di linea è l'operazione opposta a quella appena descritta: è il processo mediante il quale il segnale trasmesso sul canale viene convertito in informazioni adatte ad essere elaborate dall'host destinatario.
 
-##### 2.11.02. Manchester
-<!-- to do -->
+Lo scopo principale della codifica è rappresentare i livelli logici digitali 0 e 1 in modo che possano essere trasmessi in maniera efficiente e affidabile, facilitando la sincronizzazione tra trasmettitore e ricevitore e riducendo gli errori dovuti al rumore. La seguente figura mostra vari modi possibili per realizzare una codifica di linea efficiente:
 
-##### 2.11.03. Differential Manchester
-<!-- to do -->
+<!-- to add -->
+*In Figura: alcune tecniche di codifica di linea*
 
-##### 2.11.04. 4B/5B
-<!-- to do -->
+Le tecniche principalmente utilizzate per la codifica di linea sono:
+
+- NRZ (Non-Return Zero): nonostante il nome, questa codifica associa due livelli differenti di tensione a ciascun bit, per esempio +5V per trasmettere un 1 logico e +0V per trasmettere uno 0 logico (in logica positiva). Questa codifica è afflitta da un grave problema: sequenze di bit uguali possono produrre un segnale che permane sempre nello stesso livello di tensione, causando disallineamenti e desincronizzazione tra trasmettitore e ricevitore. Ha un basso consumo di energia elettrica.
+- AMI (Alternate Mark Inversion): in cui i valori 1 assumono livelli di tensione alternati tra +5V e -5V, ma i bit 0 rimangono sempre a +0V. Sebbene anche AMI abbia un basso consumo di energia elettrica, comunque per lunghe sequenze di bit 0 si possono avere problemi di desincronizzazione del segnale.
+- Manchester: in cui vi è una transizione a metà di ciascun periodo. Per esempio: un segnale che inizia dal livello basso ed a metà passa a livello alto potrebbe rappresentare un 1, mentre un segnale che passa dal livello alto al livello basso potrebbe rappresentare uno 0. Sebbene non causi alcuna desincronizzazione, richiiede comunque il dobbio della banda (frequenza duplicata rispetto al segnale originale).
+- Differential Manchester: molto simile alla codifica Manchester, è un codice di linea digitale in cui i dati binari vengono memorizzati in base alla presenza, o assenza di una transizione di segnale all'inizio del periodo di clock. A differenza della codifica Manchester standard (dove il valore del bit dipende dalla direzione della transizione centrale), la Manchester differenziale combina le informazioni sui dati e sul clock utilizzando esclusivamente le variazioni dello stato elettrico.
+- 4B/5B: codifica in 4 bit di dati vengono mappati su una stringa di 5 bit di dati in modo opportuno ed intelligente, valutando le proprietà fisiche del canale di comunicazione. Questo metodo serve a evitare che il segnale rimanga piatto troppo a lungo, garantendo che ci siano sempre abbastanza cambi di tensione per mantenere sincronizzati i computer. Per esempio, se i bit dati sono tutti 1 (o la maggior parte sono a 1), il quinto bit aggiunto dalla codifica 4B/5B può essere 0, in modo da causare segnali piatti troppo a lungo.
