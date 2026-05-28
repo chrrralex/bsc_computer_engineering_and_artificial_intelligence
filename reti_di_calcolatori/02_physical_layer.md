@@ -68,9 +68,44 @@ Al contrario, possiamo dire che oggigiorno Internet è una rete globale basata s
 Una terza modalità è il message switching, ovvero un packet switching che non utilizza dei pacchetti come unità dati, ma in cui ciascun nodo trasmette l'intero messaggio (causando anche maggiori ritardi). In pratica si mantengono tutti i vantaggi della tecnica packet switching, ma a differenza di suddividere il messaggio originale in più pacchetti e trasmetterli in vari momenti nel corso del tempo, si trasmette direttamente l'intero messaggio. Ciò causa un grande ritardo e, soprattutto, un elevato tasso di errori.
 
 ##### 02.02.05. Throughput
-<!-- to do - throughput end-to-end tra client e server con un nodo intermedi tra di essi -->
-<!-- to do - throughput end-to-end tra client e server con N nodi intermedi tra di essi -->
-<!-- to do - throughput end-to-end tra client e server in presenza di M coppie client-server e con collegamento bottleneck in comune -->
+
+A differenza della bandwidth, il trhoughput è la quantità di dati che realmente viaggiano all'interno del mezzo trasmissivo ed è sempre minore, o al massimo uguale (anche se raramente) alla bandwidth. Per esempio, una fibra ottica che ha una frequenza di 1 GHz, difficilmente fornirà questa velocità se più utenti sono collegati alla stessa fibra, per via della gestione dell'overhead degli utenti stessi. Inoltre la fibra ottica (in particolare il nucleo, fatto in vetro) è soggetta ad impurità. Diciamo che arrivare a 700-800 MHz è un buon compromesso. Ecco, in questo esempio 1 GHz rappresenta la bandwidth, mentre 700-800 MHz rappresenta il throughput.
+
+In questo paragrafo cercheremo di calcolare il throughput considerando scenari via via più complessi. Partiamo dal primo caso, ovvero il calcolo del throughput end-to-end tra due host: un host client che richiede dei dati a un host server. Il client è quello che richiede un determinato servizio, mentre il server è quello che lo fornisce. Assumiamo, per semplicità, che tra client e server è presente un nodo intermedio. In pratica vogliamo calcolare il throughput end-to-end tra client e server con un nodo intermedio tra di essi. La situazione è rappresentata nella seguente figura:
+
+<!-- to add -->
+*In Figura: throughput end-to-end tra client e server con un nodo intermedio tra di essi*
+
+Il collegamento tra il server S ed il nodo intermdio R ha una velocità di trasmissione pari a $R_S$. Il collegamento tra il client C e il nodo intermedio R ha una velocità di trasmissione pari a $R_C$. Possiamo dire che la massima velocità di trasmissione dati tra S e C è $min(R_S, R_C)$: in pratica è il minimo tra la velocità del collegamento del server e la velocità del collegamento del client. Perché la minima? Perché ovviamente gli host non possono comunicare ad una velocità superiore, se questa non è consentita da un particolare mezzo trasmissivo. Da notare che in figura i due collegamenti sono stati rappresentati come guided media, ma lo stesso discorso vale se questi fossero degli unguided media.
+
+E nel caso di due host, un client C ed un server S, collegati però da un certo numero N - 1 di nodi intermedi (ad esempio, dei router) ed N collegamenti? In pratica si vuole calcolare il throughput end-to-end tra client e server separati da N nodi intermedi tra di essi. Questa situazione è molto simile a quella mostrata nella figura precedente, ma al posto di avere i collegamenti $R_S$ e $R_C$, si hanno più collegamenti: $R_1$, $R_2$, $R_3$, fino a $R_N$. Questa situazione è rappresentata nella figura seguente:
+
+<!-- to add -->
+*In Figura: throughput end-to-end tra client e server con N - 1 nodi intermedi tra di essi e N collegamenti*
+
+Ancora una volta, possiamo dire che la massima velocità di trasmissione dati tra S e C è $min(R_1, R_2, R_3, ..., R_N)$: in pratica il throughput è la velocità di trasmissione minima tra tutti i collegamenti a disposizione. In pratica, il collo di bottiglia (bottleneck) è il collegamento che possiede la velocità di trasmissione minima tra C ed S.
+
+Consideriamo ora uno scenario più realistico in cui sono presenti $M$ coppie client-server ($M$ host di tipo client ed $M$ host di tipo server) che condividono uno stesso collegamento della rete. In questo caso il throughput disponibile sul collegamento condiviso deve essere ripartito tra tutte le comunicazioni attive.
+
+Supponiamo che il collegamento condiviso (bottleneck) abbia capacità $R$ e che venga utilizzato contemporaneamente da tutte le $M$ connessioni. Se la banda viene distribuita equamente tra tutte le connessioni, ciascuna coppia client-server avrà a disposizione un throughput pari a:
+
+$$
+\frac{R}{M}
+$$
+
+Di conseguenza, il throughput end-to-end di una singola connessione sarà limitato sia dalla capacità dei collegamenti lungo il percorso sia dalla quota di banda disponibile sul collegamento condiviso. In generale, il throughput può essere espresso come:
+
+$$
+\min\left(R_1, R_2, \ldots, R_N, \frac{R}{M}\right)
+$$
+
+dove:
+
+- $R_1, R_2, \ldots, R_N$ sono le capacità dei collegamenti attraversati dalla connessione;
+- $R$ è la capacità del collegamento bottleneck condiviso;
+- $M$ è il numero di connessioni che utilizzano contemporaneamente tale collegamento.
+
+In altre parole, quando più utenti condividono una stessa risorsa di rete, il throughput disponibile per ciascuno diminuisce all'aumentare del numero di connessioni attive. Per questo motivo, nelle reti reali il throughput percepito dagli utenti può variare nel tempo in funzione del livello di congestione della rete.
 
 ### 02.03. Analisi di Fourier
 
@@ -161,7 +196,20 @@ $r$ è detto maximum data rate ed è misurato in bps (bit per seconds). $B$ è l
 - Maggiore è il rapporto, maggiore è la dominanza del segnale rispetto al rumore.
 - Minore è il rapporto, maggiore è la dominanza del rumore rispetto al segnale.
 
-<!-- to do - teorema di Nyquist -->
+Il teorema di Nyquist stabilisce che la massima velocità di trasmissione dati ottenibile su un canale privo di rumore dipende dalla sua larghezza di banda. In particolare, la frequenza di campionamento deve essere almeno il doppio della massima frequenza presente nel segnale per consentirne la corretta ricostruzione.
+
+Per un canale ideale, il bitrate massimo è dato da:
+
+$$
+C = 2B · log_{2}(M)
+$$
+
+dove:
+- $C$ è la capacità del canale trasmissivo, espressa in bps (bit per second).
+- $B$ è la larghezza di banda del canale, ovvero la bandwidth, miurata in Hz;
+- $M$ è il numero di livelli del segnale. Un segnale digitale ha solamente due livelli: uno 0 logico ed un 1 logico. Tuttavia, possono esistere anche segnali digitali a più livelli.
+
+Il teorema evidenzia che aumentando la larghezza di banda o il numero di livelli utilizzati nella codifica è possibile incrementare la velocità di trasmissione dei dati.
 
 ### 02.05. Guided Media
 
@@ -290,28 +338,67 @@ Dal punto di vista della sicurezza, le reti moderne utilizzano protocolli come W
 Bluetooth è una tecnologia di comunicazione wireless a corto raggio utilizzata per lo scambio di dati tra dispositivi come smartphone, computer, cuffie, smartwatch e periferiche. Opera nella banda ISM (Industrial, Scientific, Medical) a 2.4 GHz e consente la creazione di reti personali (WPAN -Wireless Personal Area Network-). Le comunicazioni avvengono a basso consumo energetico e su distanze generalmente comprese tra pochi metri e alcune decine di metri, a seconda della classe del dispositivo e della versione utilizzata.
 
 ##### 02.06.03. Lo spettro elettromagnetico e le leggi di Maxwell
-<!-- to do -->
 
-##### 02.06.04. Trasmission radio
-<!-- to do -->
+In fisica viene utilizzato il termine spettro per indicare il modo in cui una grandezza fisica si distribuisce nel corso del tempo, oppure in funzione di un'altra grandezza fisica. Nel nostro caso, che parliamo di reti di calcolatori, si tratta di spettri elettromagnetici: una vastissima gamma di frequenze che sono già utilizzate, o potrebbero essere utilizzate per la comunicazione su Internet. In breve, lo spettro elettromagnetico è la gamma di tutte le possibili frequenze della radiazione elettromagnetica. La radiazione elettromagnetica è la propagazione dell'energia nello spazio circostante sotto forma di campi elettrici ed onde elettromagnetiche. Le onde elettromagnetiche, in condizioni atmosferiche normali, presentano la stessa velocità posseduta dalle onde luminose, in fisica nota come $c$, pari a circa $299 792 458$ m/s (metri al secondo). La velocità della luce, $c$, è una costante universale e nessun oggetto può superare tale velocità. In realtà è veramente molto difficile, nelle reti di calcolatori (per quanto un mezzo trasmissivo possa essere quanto più puro possibile) permettere a un segnale di viaggiare alla velocità della luce.
 
-##### 02.06.05. Trasmissione a microonde
-<!-- to do -->
+La seguente immagine mostra lo spettro elettromagnetico utilizzato per allocare determinati range di frequenze a particolari tipi di comunicazione:
 
-##### 02.06.06. Trasmissione a infrarossi
-<!-- to do -->
+<!-- to add -->
+*In Figura: ecco lo spettro elettrmagnetico, utilizzato nelle comunicazioni di tipo unguided nelle reti di calcolatori*
 
-##### 02.06.07. Trasmissione basate sulla luce
-<!-- to do -->
+Maggiore è la frequenza del segnale, minore è la sua lunghezza d'onda; analogamente, maggiore è la sua lunghezza d'onda, minore è la sua frequenza. Lo spettro elettromagnetico è rappresentato come una barra orizzontale in cui all'estrema destra vi sono le onde radio, che presentano una frequenza che va dai $10^8$ ai $10^4$ Hz (lunghezza d'onda dell'ordine dei metri, fino ai migliaia di metri), mentre all'estrema sinistra vi sono le onde gamma, che presentano una frequenza molto più elevata (e di conseguenza una lunghezza d'onda molto minore), variabile tra i $10^24$ e $10^19$ Hz. In pratica il diagramma nella precedente figura mostra il variare di due grandezze:
 
-##### 02.06.08. Comunicazioni satellitari
-<!-- to do - comunicazione ship-to-shore -->
-<!-- to do - comunicazione terra-luna-terra -->
-<!-- to do - hardware di un satellite -->
-<!-- to do - orbita geo-stazionaria -->
-<!-- to do - satelliti LEO -->
-<!-- to do - satelliti MEO -->
-<!-- to do - satelliti GEO -->
+- La lunghezza d'onda aumenta man mano che si scorre da sinistra verso destra.
+- La frequenza d'onda aumenta man mano che si scorre da destra verso sinistra.
+
+In fisica si utilizza la lettera $f$ per indicare la frequenza, mentre la lettera greca $\lambda$ si utilizza per la lunghezza d'onda, ma ciò è irrilevante per i nostri fini.
+
+Esistono varie tipologie di onde utilizzate nel mondo delle reti di calcolatori:
+
+- Onde radio: onde elettromagnetiche a bassa frequenza utilizzate nelle comunicazioni radio, televisive, mobili e satellitari. Possono propagarsi su lunghe distanze e attraversare diversi ostacoli.
+- Microonde: onde elettromagnetiche a frequenza più elevata rispetto alle onde radio, utilizzate nelle comunicazioni satellitari, nei ponti radio, nelle reti Wi-Fi e nei radar.
+- Infrarossi: radiazioni elettromagnetiche con frequenza superiore alle microonde e inferiore alla luce visibile. Utilizzate per telecomandi, sensori e comunicazioni a corto raggio. Sono molto direzionali e più sensibili a certi ostacoli (come strutture, abitazioni, o pareti).
+- Onde UV (Ultra Violetti): radiazioni elettromagnetiche con frequenza superiore alla luce visibile. Sono impiegate in applicazioni mediche, sterilizzazione e analisi dei materiali. Sono estremamente direzionali.
+- Raggi X: radiazioni elettromagnetiche ad alta frequenza e grande capacità di penetrazione, utilizzate principalmente in ambito medico e industriale per ottenere immagini dell'interno degli oggetti. Forniscono analisi molto dettagliate in contesti clinici e, talvolta, militari.
+- Raggi gamma (onde luminose): radiazioni elettromagnetiche con la frequenza più elevata e la maggiore energia nello spettro elettromagnetico. Sono prodotte da fenomeni nucleari e utilizzate in medicina, ricerca scientifica e trattamenti radioterapici (applicazioni molto specifiche).
+
+I principali fenomeni che possono disturbare la propagazione delle onde elettromagnetiche sono:
+
+- Attenuazione: perdita di potenza del segnale durante la propagazione nel mezzo trasmissivo.
+- Rumore: disturbi casuali che alterano il segnale trasmesso, causati da fenomeni naturali, o da altre comunicazioni condotte da altri dispositivi elettronici.
+- Interferenza: sovrapposizione di segnali provenienti da altre sorgenti che degradano la comunicazione. Per esempio, due onde elettromagnetiche potrebbero andare in conflitto tra loro.
+- Riflessione: il segnale rimbalza su superfici, o ostacoli modificando il percorso di propagazione.
+- Rifrazione: variazione della direzione dell'onda dovuta al passaggio tra mezzi con caratteristiche differenti.
+- Diffrazione: deviazione dell'onda attorno agli ostacoli, o attraverso aperture che causano una distorsione del segnale stesso.
+- Scattering: dispersione del segnale causata da particelle, o irregolarità presenti nel mezzo (nel caso delle onde elettromagnetiche, il mezzo è l'atmosfera terrestre).
+- Multipath: ricezione dello stesso segnale attraverso percorsi differenti, con possibili ritardi e distorsioni.
+
+##### 02.06.04. Comunicazioni satellitari
+
+I satelliti e le comunicazioni satellitari hanno subito profonde innovazioni nel corso degli ultimi tre decenni, in particolare durante gli ultimi anni. I satelliti sono dispositivi elettromeccanici di grosse dimensioni che vengono periodicamente mandati in orbita per scopi di comunicazione, di perlustrazione, o di analisi dell'atmosfera terrestre, o del sistema solare.
+
+Le comunicazioni satellitari derivano in modo diretto dalle comunicazioni S2S (Ship-to-Shore) e possono essere considerate la sua naturale evoluzione. La comunicazione S2S (Ship-to-Shore) è una comunicazione wireless tra una nave (ship) e una stazione terrestre, o costiera (shore). Viene utilizzata per trasmettere dati, voce e informazioni operative tra le imbarcazioni e i centri di controllo a terra. In pratica questa comunicazione è fondamentale per trasmettere dati nell'oceano e per la sicurezza marittima, inoltre essa garantisce servizi di rete a bordo di una nave (sebbene sia isolata dai centri urbani).
+
+Un'altra forma di comunicazione molto utilizzata in passato è la TLT (Terra-Luna-Terra), meglio nota con l'acronimo inglese come EME (Earth-Moon-Earth), o moon bounce. Si tratta di una tecnica di radiocomunicazione che utilizza la superficie della Luna come riflettore passivo. Un segnale radio viene trasmesso dalla Terra verso la Luna, riflesso dalla sua superficie e successivamente ricevuto da una stazione terrestre. Questa tecnica consente comunicazioni su distanze molto elevate senza l'utilizzo di satelliti artificiali, ma richiede antenne direttive ad alto guadagno e trasmettitori di elevata potenza a causa della forte attenuazione del segnale.
+
+Parliamo di satelliti. Il satellite ha uno scheletro chiamato bus, la struttura portante dell'intera macchina che, realizzata in materiali come titanio, o leghe di alluminio, sopporta le grandissime tensioni che possono avvenire durante il lancio. Le strutture secondarie e terziarie comprendono le staffe, gli alloggiamenti per le apparecchiature elettroniche ed i pannelli protettivi. Un satellite è anche costituito dai cosiddetti MLI (Multi-Layer Insulation): strati sovrapposti di materiale riflettente che proteggono l'hardware dal caldo estremo del Sole e dal gelo dello spazio profondo. Un satellite ha tantissimi sensori, tra cui: controllo dell'altitudine, controllo dell'orbita, telemetria, antenne (per trasmettere nelle bande C, Ku e Ka), computer di bordo, controllo terminco e tanto altro. I satelliti hanno ovviamente dei propulsori che sono continuamente, o parzialmente operativi durante tutto il ciclo di vita del satellite stesso. Ovviamente i propulsori consumano carburante, per il quale è previsto un apposito alloggiamento.
+
+Un satellite nasce per mantenere un'orbita ben precisa, che viene denominata orbita geostazionaria (geotrationary orbit, in inglse): in pratica un satellite descrive un'orbita simile a una circonferenza intorno al pianeta Terra, mantenendosi sempre alla stessa distanza dalla sua superficie (in realtà viene considerato il livello dell'acqua come superficie). Il satellite deve utilizzare in modo continuo, o ad intermittenza, o a comando i propri propulsori in modo da controbilanciare la forza d'attrazione gravitazionale esercitata dal pianeta Terra stesso. Questa situazione è rappresentata nella seguente figura:
+
+<!-- to add -->
+*In Figura: l'orbita geostazionaria descritta da un satellite intorno al pianeta Terra posto ad una certa altitudine*
+
+Esistono tre principali fasce in cui i satelliti possono mantenere la propria orbita geostazionaria. Tali fasce sono:
+
+- LEO (Low Earth Orbit): i satelliti LEO orbitano a un'altitudine compresa tra circa 160 e 2.000 km dalla superficie terrestre. Grazie alla loro vicinanza alla Terra, offrono una bassa latenza e sono utilizzati per telecomunicazioni su brevi/medie distanze, osservazione terrestre e sistemi di navigazione. Per garantire una copertura globale è necessario impiegare costellazioni composte da numerosi satelliti, per questo le costellazioni di satelliti (ne parleremo a breve) tipicamente risiedono nella fascia LEO, anche se non è detto.
+- MEO (Medium Earth Orbit): i satelliti MEO orbitano a un'altitudine compresa che varia tra circa 2.000 e circa 35.786 km. Presentano una latenza e una copertura intermedie rispetto ai satelliti LEO e GEO. Sono impiegati principalmente nei sistemi di navigazione satellitare, come il GPS, Galileo e GLONASs.
+- GEO (Geostationary Earth Orbit): i satelliti GEO orbitano a circa 35.786 km di altitudine sopra l'equatore terrestre e ruotano con la stessa velocità angolare della Terra. Di conseguenza appaiono fermi rispetto a un osservatore terrestre. In pratica sono geosincronizzati con la rotazione della Terra (un pò come la Luna). Grazie all'ampia area di copertura, sono utilizzati per telecomunicazioni, trasmissioni televisive e collegamenti satellitari a lunga distanza . Lo svantaggio principale è l'elevata latenza dovuta alla grande distanza dalla superficie terrestre.
+
+Le tre fasce dell'atmosfera terrestre sono rappresentate di seguito:
+
+<!-- to add -->
+*In Figura: le fasce LEO, MEO e GEO ospitanti satelliti*
+
 <!-- to do - costellazioni di satelliti: Starlink, Project Kuiper e WorldVu -->
 
 ##### 02.06.09. Reti wireless mobile
@@ -354,7 +441,36 @@ Il 5G supporta tre principali categorie di servizi:
 Grazie a queste caratteristiche, il 5G non si limita a migliorare la navigazione mobile, ma costituisce una piattaforma tecnologica essenziale per lo sviluppo di città intelligenti, automazione industriale, telemedicina, realtà virtuale e aumentata e molte altre applicazioni innovative.
 
 ### 02.07. PSTN (Public Switched Telephone Network)
-<!-- to do -->
+
+La PSTN (Public Switched Telephone Network) è la tradizionale rete telefonica pubblica commutata utilizzata per fornire servizi di comunicazione vocale tra utenti situati in qualsiasi parte del mondo. Si basa sulla tecnica del circuit switching (rete a commutazione di circuito), nella quale viene instaurato un circuito dedicato tra chiamante e destinatario per tutta la durata della comunicazione.
+
+La PSTN è composta da una vasta infrastruttura di collegamenti fisici e centrali telefoniche che permettono di instradare le chiamate tra gli utenti. Sebbene originariamente fosse progettata per la trasmissione della voce in forma analogica, nel tempo la rete è stata progressivamente digitalizzata mantenendo però il principio della commutazione di circuito.
+
+La struttura della PSTN può essere suddivisa in tre componenti principali:
+
+- Terminali utente: telefoni fissi, o dispositivi collegati alla rete telefonica. Si tratta dei terminali utilizzati dall'utente finale.
+- Rete di accesso: collega gli utenti alla centrale telefonica locale mediante il cosiddetto local loop (ultimo miglio). Analizzeremo vari tipi di local loop nel corso dei successivi paragrafi.
+- Centrali di commutazione: nodi della rete che instaurano e gestiscono i circuiti necessari alla comunicazione tra gli utenti. Si parla di commutatori specifici per la telefonia nel caso di PSTN (nel caso di Internet si parla di switch, hub, router, gateway, ecc.).
+
+Il seguente schema semplificato mostra la struttura della rete:
+
+```text
+Telefono A
+     │
+     ▼
+Centrale locale
+     │
+     ▼
+Rete di trasporto
+     │
+     ▼
+Centrale locale
+     │
+     ▼
+Telefono B
+```
+
+Quando un utente effettua una chiamata, la rete stabilisce un percorso dedicato tra i due telefoni. Tale percorso rimane riservato fino al termine della conversazione, garantendo una larghezza di banda costante e una qualità della comunicazione prevedibile.
 
 ### 02.08. Local loop
 
@@ -415,7 +531,11 @@ L'ADSL viene utilizzata per trasmettere e ricevere dati di natura digitale su In
 I canali, nell'ambito delle linee ADSL, viene anche detto tono.
 
 ##### 02.07.03. HFC (Hybrid Fiber-Coax)
-<!-- to do -->
+
+HFP (Hybrid Fiber-Coaxial) è una rete che utilizza due mezzi trasmissivi fisici (fibra ottica e cavo coassiale) per connettere uno, o più clienti tipicamente di un intero quartiere alla una stazione base dell'ISP, in modo da collegarli ad Internet. Immaginiamoci un quartiere, costituito da più vie, ognuna costituita da più abitazioni. Lungo ciascuna via passa un grosso cavo coassiale a cui sono connessi tutte le abitazioni: ogni utente, in pratica, condivide lo stesso cavo coassiale degli utenti che abitano nella stessa via. Maggiore è il numero di utenti collegati, minore è la banda a disposizione dell'utente (giocare alle quattro del mattino, o guardare la TV alle due di notte permetteerebbe all'utente, invece, di utilizzare l'intera banda disponibile). Tutti i cavi coassiali colleganti ciascuno un'apposita via convergono in una singola stazione che prende il nome di ON (Optical Node): si tratta di una giunzione da cui entra il cavo coassiale e furoriesce una fibra ottica. Questi ON possono essere posizionati alla fine di ciascuna via, oppure direttamente all'interno del centralino. Soprattutto per le vie lunghe, si utilizzano numerosi amplificatori posizionati lungo la via stessa, in modo da garantire sempre un segnale sufficientemente pulito e potente. Ogni ON converge nel cosiddetot DH (Distribution Hub), ossia una centrale che si occupa di accogliere tutte le linee di più quertieri. Tutto questo scenario è presentato nella seguente figura:
+
+<!-- to add -->
+*In Figura: ultimo miglio che utilizza HFC (Hybrid Fiber-Coaxiall)*
 
 ##### 02.07.04. FTTH (Fiber to the Home) e FTTC (Fiber to the Cabin)
 
