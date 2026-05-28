@@ -153,7 +153,7 @@ Ciascun nodo all'interno della rete presente un determinato ritardo. Esistono al
 - Trasmission delay (ritardo di trasmissione): il tempo impiegato dal nodo per prelevare la PDU dalla propria memoria centrale (o buffer) e trasmetterlo nella corrispettiva interfaccia di uscita. Si tratta di un tempo che dipende dalla lunghezza della PDU stessa, anche se normalmente richiede non più di qualche decina di microsecondi.
 - Propagation delay (ritardo di propagazione): sebbene sia spesso confuso con il precedente ritardo (che dipende dalla velocità di trasmissione del nodo e dalla lunghezza della PDU), il ritardo di propagazione dipende solo ed esclusivamente dalle caratteristiche fisiche del mezzo trasmissivo (come la fibra ottica, o il doppino telefonico). Il ritardo di propagazione è dominante quando si parlad i reti di vaste dimensioni e, solitamente, varia da qualche microsecondo a svariate centinaia di millisecondi (come, ad esempio, nel caso delle comunicazioni satellitari).
 
+<!-- to do - il peso di ciascun tipo di ritardo nella trasmissione dati -->
 <!-- to do - end-to-end delay su collegamenti uniformi -->
 <!-- to do - end-to-end delay su collegamenti eterogenei -->
-<!-- to do - il peso di ciascun tipo di ritardo nella trasmissione dati -->
 <!-- to do - indice di intensità di traffico, suo grafico e parametri L, a e R -->

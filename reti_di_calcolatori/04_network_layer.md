@@ -1,4 +1,4 @@
-ot# 04. Network Layer
+# 04. Network Layer
 
 ### 04.01. Introduzione
 <!-- to do -->
