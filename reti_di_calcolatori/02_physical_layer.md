@@ -399,6 +399,11 @@ Le tre fasce dell'atmosfera terrestre sono rappresentate di seguito:
 <!-- to add -->
 *In Figura: le fasce LEO, MEO e GEO ospitanti satelliti*
 
+Idealmente, sarebbero necessari solo tre satelliti di tipo GEO per poter coprire le comunicazioni in ogni singolo angolo della superficie terrestre. Se due host A e B posti nei due emisferi terrestri vogliono comunicare tra loro, è sufficiente che A invii il segnale al proprio satellite GEO, che a sua voltalo invia a un altro satellite GEO, che a sua volta lo invia all'host B. I tre satelliti GEO formerebbero un triangolo che ruota intorno alla Terra, in modo geosincrono, come mostra la seguente figura:
+
+<!-- to add -->
+*In Figura: come tre satelliti GEO possono coprire qualsiasi comunicazione della superficie terrestre (in questo esempio gli host A e B sono posti in comunicazione tra loro)*
+
 <!-- to do - costellazioni di satelliti: Starlink, Project Kuiper e WorldVu -->
 
 ##### 02.06.09. Reti wireless mobile
