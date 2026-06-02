@@ -404,7 +404,11 @@ Idealmente, sarebbero necessari solo tre satelliti di tipo GEO per poter coprire
 <!-- to add -->
 *In Figura: come tre satelliti GEO possono coprire qualsiasi comunicazione della superficie terrestre (in questo esempio gli host A e B sono posti in comunicazione tra loro)*
 
-<!-- to do - costellazioni di satelliti: Starlink, Project Kuiper e WorldVu -->
+Particolarmente interessanti sono le costellazioni di satelliti (satellites costellation): vari produttori e grandi aziende hanno mandato in orbita i propri satelliti. Una costellazione di satelliti è un gruppo (o fascio) di satelliti che seguono la stessa orbita LEO, o MEO e che forniscono connettività all'intero globo. Alcuni esempid i progetti sono i seguenti:
+
+- Starlink: costellazione di satelliti sviluppata da SpaceX per fornire accesso a Internet ad alta velocità a livello globale, soprattutto nelle aree rurali o poco servite.
+- Project Kuiper: progetto di Amazon che mira a creare una rete di satelliti in orbita terrestre bassa per offrire connettività Internet a banda larga in tutto il mondo.
+- WorldVu (OneWeb): costellazione di satelliti in orbita terrestre bassa progettata per fornire servizi Internet globali a utenti privati, aziende e istituzioni.
 
 ##### 02.06.09. Reti wireless mobile
 
