@@ -153,7 +153,52 @@ Ciascun nodo all'interno della rete presente un determinato ritardo. Esistono al
 - Trasmission delay (ritardo di trasmissione): il tempo impiegato dal nodo per prelevare la PDU dalla propria memoria centrale (o buffer) e trasmetterlo nella corrispettiva interfaccia di uscita. Si tratta di un tempo che dipende dalla lunghezza della PDU stessa, anche se normalmente richiede non più di qualche decina di microsecondi.
 - Propagation delay (ritardo di propagazione): sebbene sia spesso confuso con il precedente ritardo (che dipende dalla velocità di trasmissione del nodo e dalla lunghezza della PDU), il ritardo di propagazione dipende solo ed esclusivamente dalle caratteristiche fisiche del mezzo trasmissivo (come la fibra ottica, o il doppino telefonico). Il ritardo di propagazione è dominante quando si parlad i reti di vaste dimensioni e, solitamente, varia da qualche microsecondo a svariate centinaia di millisecondi (come, ad esempio, nel caso delle comunicazioni satellitari).
 
-<!-- to do - il peso di ciascun tipo di ritardo nella trasmissione dati -->
-<!-- to do - end-to-end delay su collegamenti uniformi -->
-<!-- to do - end-to-end delay su collegamenti eterogenei -->
-<!-- to do - indice di intensità di traffico, suo grafico e parametri L, a e R -->
+Interessante è comprendere il peso di ciascun tipo di ritardo nella trasmissione dati. In una LAN che utilizza fibre ottiche, per esempio, il peso del ritardo di propagazione è relativamente minore, nel senso che difficilmente si subiranno ritardi per via della propagazione del segnale, che nelle fibre ottiche è circa la metà della velocità della luce. In pratiga il ritardo $d_{prop}$ è più che trascurabile. Tra due host collegati direttamente, il ritardo di accodamento, $d_{queue}$ è trascurabile, in quanto non vi è alcun host intermedio tra i due dispositivi posti in comunicazione (in questo scenario anche il ritardo di elaborazione $d_{elab}$ è trascurabile). Al contrario, se si considera una reete WAN in cui partecipano attivamente molti router per instradare i pacchetti, allora i ritardi $d_{elab}$ e $d_{queue}$ assumono sicuramente un peso maggiore, così come anche il ritardo di propagazione $d_{prop}$. Bisogna sempre considerare con quale tipo di rete si ha a che fare per comprendere quali possono essere i ritardi dominanti e quali no. In genere, maggiori sono le dimensioni geografiche della rete e gli host coinvolti, maggiore è la latenza (o ritardo) end-to-end che affligge la trasmissione dati tra gli host posit in comunicazione tra loro. Ma il ritardo totale non dipende solo dalla rete, anche dalla dimensione dei pacchetti: maggiore è quest'ultima, maggiore sarà il ritardo di trasmissione $d_{transm}$ e, viceversa, minore sarà la lunghezza del pacchetto, minore sarà $d_{trans}$.
+
+Se si hanno $N - 1$ host intermedi che collegano due host, diciamo A e B, attraverso $N$ mezzi trasmissivi la cui velocità è uniforme, ossia tutti gli $N$ collegamenti hanno un throughput di $R$ bps, possiamo facilmente calcolare il ritardo end-to-end (end-to-end delay) tra A e B, indicato con $d$, si può calcolare nel seguente modo:
+
+$$
+d = N (d_{trans​} + d_{prop​}) + (N − 1) (d_{elab} + d_{queue​})
+$$
+
+Essendo $N$ i collegamenti, ciascuno di essi ha un proprio ritardo di trasmissione $d_{trans}$ e un ritardo di propagazione $d_{prop}$. Essendo $N - 1$ gli host intermedi tra A e B, ciascuno di essi ha lo stesso ritardo di elaborazione del pacchetto $d_{elab}$ e lo stesso ritardo di accodamento $d_{queue}$. Questa situazione, con collegamenti omogenei, è mostrata nella seguente figura:
+
+<!-- to add -->
+*In Figura: end-to-end delay su collegamenti omogenei*
+
+Ovviamente la precedente situazione non è realistica: ciascun mezzo trasmissivo ha il proprio throughput, ovvero i propri ritardi $d_{trans}$ e $d_{prop}$. Analogamente, ciascun dispositivo intermedio ha il proprio hardware, ossia ha il proprio processore e la propria memoria, per cui ha anche i propri ritardi di elaborazione $d_{elab}$ e ritardi di accodamento $d_{queue}$: quest'ultimo, in particolare, dipende anche da quanto è trafficata la rete. Ecco la formula per calcolare il ritardo end-to-end (end-to-end delay) tra gli host A e B in una rete con collegamenti eterogenei:
+
+$$
+d = \sum_{i = 1}^{N} (d_{trans_i​} + d_{prop_i​}) + \sum_{i = 1}^{N - 1} (d_{elab_i} + d_{queue_i​})
+$$
+
+Le due sommatorie sfruttano l'indice $i$ da $1$ a $N$ (nel caso dei collegamenti), o $N - 1$ (nel caso degli host intermedi) per indicare ciascun ritardo in modo specifico. Immagina di numerare i collegamenti da $1$ a $N$ e gli host intermedi da $1$ a $N - 1$. Questa situazione, con collegamenti eterogenei, è mostrata nella seguente figura:
+
+<!-- to add -->
+*In Figura: end-to-end delay su collegamenti eterogenei*
+
+Infine, parliamo dell'indice di intensità di traffico. L'indice di intensità di traffico misura il grado di utilizzo di un collegamento di rete e rappresenta il rapporto tra il traffico offerto e la capacità del collegamento stesso. L'indice di intensità di traffico si indica solitamente con $I$ ed è definito dalla seguente formula:
+
+$$
+I = \frac{La}{R}
+$$
+
+Analizziamo ciascuna variabile della precedente formula:
+
+- $I$ è l'indice di intensità di traffico.
+- $L$ è la lunghezza media del pacchetto (espressa in bit, o suoi multipli).
+- $a$ è il tasso medio di arrivo dei pacchetti (si misura in pacchetti arrivati all'host intermedio al secondo).
+- $R$ è la velocità di trasmissione del collegamento in uscita espressa in bps (bit per second).
+
+Il prodotto $La$ rappresenta il traffico generato dalla sorgente espresso in bit/s, mentre $R$ rappresenta la capacità del collegamento.
+
+L'indice di intensità di traffico $I$ è fondamentale per comprendere che cosa succederà alla rete:
+
+- $I < 1$: il traffico generato è inferiore alla capacità del collegamento; il sistema è stabile, per cui non ci sarà alcuna congestione.
+- $I \approx 1$: il collegamento è vicino alla saturazione. Man mano che $I$ si avvicina a $1$, l'host si avvicina alla saturazione del collegamento.
+- $I > 1$: il traffico supera la capacità disponibile. Questo significa che l'host corrente sta avendo una saturazione nel collegamento in ingresso, in quanto i pacchetti arrivano ad un tasso maggiore rispetto a quanto possa elaborare e trasmettere l'host stesso. La coda cresce fino alla saturazione del buffer di ingresso dei pacchetti (un'area della memoria). Si avrà quindi congestione e perdita di pacchetti.
+
+L'andamento del ritardo di accodamento in funzione dell'intensità di traffico mostra una crescita lenta per valori bassi di $I$ e una crescita molto rapida quando $I$ si avvicina a 1. Quando l'intensità di traffico tende a 1, il ritardo di accodamento tende a crescere rapidamente poiché i pacchetti arrivano quasi alla stessa velocità con cui possono essere trasmessi. Questa situazione è rappresentata dal seguente grafico:
+
+<!-- to add -->
+*In Figura: grafico dell'indice di intensità di traffico*
