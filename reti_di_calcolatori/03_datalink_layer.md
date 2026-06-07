@@ -172,19 +172,144 @@ La principali tecniche di framing sono le seguenti:
 - Violazione del codice fisico: alcuni schemi di codifica del livello fisico prevedono simboli, o combinazioni di bit che normalmente non possono apparire nei dati. Essi vengono riutilizzati per aggiungere dei marker di inizio e fine del frame, avendo la sicurezza che essi non potranno comparire all'interno del payload del frame (a meno ché non capiti un errore: in tal caso sarebbe necessaria una gestione apposita).
 
 ### 03.04. Controllo degli errori
-<!-- to do -->
 
-##### 03.04.01. Introduzione agli errori di trasmissione
-<!-- to do - cause degli errori nei canali -->
-<!-- to do - rumore e interferenze -->
-<!-- to do - errori singoli e burst errors -->
+Il datalink layer si occupa del controllo degli errori. In moltissime architettura basate sul layered model, come l'architettura delle reti di calcolatori oggigiorno usata da Internet (ovvero TCP/IP), è particolarmente importante rendere affidabile e sicuro lo scambio di informazioni sia tra due host collegati direttamente, sia tra due host collegati per mezzo di uno, o più switch, router, o altri dispositivi intermedi. Il controllo degli errori, come vedremo, viene attuato da più livelli dello stack TCP/IP, in particolare i livelli datalink e transport. In questo contersto parlaremo del controllo degli errori a basso livello, ossia quello che si ha quando un host invia un frame in uscita su un determinato collegamento. Il controllo degli errori viene attuato sia lato mittente, sia lato destinatario:
+
+- Il mittente prepara appositi gruppi di bit ridondanti, detti anche redundant bits.
+- Il destinatario, venendo a conoscenza di quale protocollo di controllo degli errori ha utilizzato il mittente, effettua un controllo sui redundant bits per comprendere se, durante la trasmissione dei dati, sia avvenuto qualche errore, oppure no.
+
+Gli errori possono avvenire in due modalità (ed entrambi sono possibili nell'ambito di una comunicazione dati in Internet):
+
+- Errori singoli: data una lunga sequenza di bit, si ha un errore isolato che coinvolge solo uno, o pochissimi bit isolati l'uno dall'altro.
+- Errori multipli (o burst errors): si ha quando l'errore interessa un gruppo più ampio di bit consecutivi, per esempio interessando più Byte della PDU.
+
+In entrambi i casi, il controllo degli errori attuato dal datalink layer nasce proprio per identificare gli errori e, s'é possibiel e s'é previsto dal codice di controllo degli errori, correggerlo lato ricevente (anche se non sempre questa operazione è possibile).
+
+Quali sono le cause principali degli errori nei canali di comunicazione? Sono molteplici, ma ecco riassunte le più comuni:
+
+- Rumore termico: generato dal movimento casuale degli elettroni nei circuiti elettronici e nei mezzi trasmissivi.
+- Interferenze elettromagnetiche (EMI): causate da dispositivi elettrici, motori, linee di alimentazione o altri sistemi di comunicazione che operano nelle vicinanze.
+- Attenuazione del segnale: diminuzione della potenza del segnale durante la propagazione, che rende più difficile distinguere correttamente i dati trasmessi.
+- Distorsione: alterazione della forma del segnale dovuta alle caratteristiche non ideali del canale di trasmissione.
+- Interferenza tra simboli (ISI - Inter Symbol Interference): sovrapposizione di simboli consecutivi causata dalla dispersione del segnale nel canale.
+- Multipath propagation: ricezione dello stesso segnale attraverso percorsi differenti, che può generare ritardi, attenuazioni e cancellazioni del segnale.
+- Diafonia (Crosstalk): interferenza prodotta da segnali che viaggiano su canali fisicamente vicini.
+- Errori dovuti a ostacoli e condizioni ambientali: fenomeni atmosferici, ostacoli fisici, pioggia, nebbia o edifici possono degradare la qualità del segnale, soprattutto nelle comunicazioni wireless.
+- Congestione della rete: in alcune tecnologie può provocare perdita di pacchetti e ritrasmissioni, aumentando la probabilità di errori nella comunicazione.
+
+Tali fenomeni possono alterare uno o più bit durante la trasmissione, rendendo necessario l'impiego di tecniche di rilevamento e correzione degli errori per garantire l'affidabilità delle comunicazioni.
+
+I codici di controllo degli errori, detti anche ECs (Error Codes) si suddividono in due categorie principali:
+
+- EDCs (Error Detection Codes): codici di controllo degli errori che rilevano solo se c'è stato un errore singolo, o un errore multiplo.
+- ECCs (Error Correction Codes): codici di controllo degli errori che non solo rilevano la presenza di uno, o più errori, ma cercano anche di correggerli.
+
+In seguito esamineremo entrambi i tipi di ECs.
 
 ##### 03.04.02. EDCs (Error Detection Codes)
-<!-- to do - parity bit singolo -->
-<!-- to do - parity bit multipli -->
-<!-- to do - parity bit bidimensionale -->
-<!-- to do - checksum -->
-<!-- to do - CRC (Cyclic Redundancy Code) e polinomi generatori -->
+
+Analizzere i codici di rilevamento degli errori in modo progressivo, dal più semplice al più complesso. Il parity code (codice di parità) consiste di una stringa di un certo numero di bit a cui viene aggiunto un bit di parità, detto anche parity bit (o anche bit ridondante, o redundant bit). Ci sono due modi per decidere il valore che deve assumere il parity bit:
+
+- Parità pari: il numero totale di 1 nella stringa di bit deve essere pari, per cui il parity bit diventa 1 solo se nella stringa originale di bit è presente un numero dispari di 1.
+- Parità dispari: il numero totale di 1 nella stringa di bit deve essere dispari, per cui il parity bit diventa 1 solo se nella stringa originale di bit è presente un numero pari di 1.
+
+Per esempio, se scegliamo di utilizzare la parità pari e la stringa di dati di 8 bit è: 11110010 (con 5 bit impostati al valore 1 ed i rimanenti al valore 0), allora il bit di parità da aggiungere dovrà essere 1, ottenendo la stringa di 8 + 1 bit (9 bit), ovvero: 111100101. Che succede in caso di errore? Essendo un codice di rilevamento degli errori, il parity bit singolo non riesce a correggerli, tuttavia è in grado di accorgersi dei seguenti casi (si consideri la parità pari):
+
+- Se un bit dovesse subire un errore (ad esempio viene cambiato in 1, ma vale anche il viceversa), il parity bit se ne accorgerebbe.
+- Se due bit dovessero subire un errore (ad esempio un bit cambia da 0 a 1, mentre un altro cambia da 1 a 0), il parity bit non se ne accorgerebbe, in quanto il numero totale di 1 è sempre pari.
+- Se tre bit dovessero subire un errore (ad esempio due bit passano da 0 a 1 e un bit da 1 a 0), il parity bit se ne accorgerebbe, in quanto il numero totale di 1 diventerebbe dispari.
+
+In pratica il parity bit singolo è in grado di accorgersi di un numero di errori dispari, ma non pari, aspetto che lo rende talvolta poco efficace.
+
+La naturale evoluzione del parity bit singolo è il parity bit multiplo, in cui più bit di parità vengono aggiunti alla stringa originale di N bit, diciamo ogni M bit, ove M è solitamente detto gruppo di parità. Per esempio, se si ha una stringa di 12 bit di dati, si potrebbe pensare di aggiungere un bit di parità ogni 4 bit di dati, ottenendo una stringa di 15 bit. Eccola:
+
+```
+bbbbr bbbbr bbbbr
+```
+
+dove `b` indica un bit dati, mentre `r` indica un bit ridondante (bit di parità). Ciascun bit di parità effettua il rilevamento degli errori solo ed esclusivamente all'interno del proprio gruppo di bit. Scegliendo la parità pari, per esempio, e avendo a disposizione i bit di dati 1111 0010 1101, la stringa completa diventa:
+
+```
+11110 00101 11011
+```
+
+Il primo bit di parità è 0, in quanto il gruppo 1111 contiene quattro 1; il secondo bit di parità è 1, in quanto il gruppo di bit 0010 contiene un solo uno; infine, il gruppo 1101 contiene tre uno, per cui il bit di parità diventa 1. I parity bit multipli possono rilevare sia errori dispari, sia errori pari: in quest'ultimo caso, però, in due (o più gruppi) deve avvenire lo stesso numero di errori. Un numero pari di errori che si verificano all'interno dello stesso gruppo, scegliendo la parità pari, non è rilevabile.
+
+Ora esamineremo un codice di rilevamento degli errori molto interessante. Si tratta di un codice di rilevamento di tipo bidimensionale, utilizzato sia nell'ambito della trasmissione dati, sia nell'ambito della memorizzazione e/o archiviazione di grandi quantità di dati su una memoria secondaria, o terziaria, come un HD (Hard Drive), o una SSD (Solid State Drive). In sostanza, i bit di dati vengono organizzati in una matrice di N righe e di M colonne. Si aggiungono N bit di parità (uno per ciascuna riga) ed M bit di parità (uno per ciascuna colonna), ovvero si hanno in totale N + M bit di parità. La parità nel 2D parity check (2 dimensional parity check) si calcola nel seguente modo:
+
+1. Si sceglie quale parità utilizzare (se dispari, o pari). Per esempio la parità pari.
+2. Per ciascuna riga si calcola il valore del bit di parità, ovvero si effettua un VRC (Vertical Redundancy Check). Per esempio, se la riga è costituita da un numero pari di 1, il bit di parità deve essere 0; differentemente, se la riga è costituita da un numero dispari di 1, il bit di parità deve essere 1.
+3. Per ciascuna colonna si calcola il valore del bit di parità, ovvero si effettua un LRC (Longitudinal Redundancy Check). Se la colonna ha un numero pari di 1, il bit di parità da aggiungere deve assumere il valore 0; se ha un numero dispari di 1, deve avere il valore 1.
+4. Si aggiunge il bit di parità delle righe, calcolato considerando i bit di parità delle righe (capiremo meglio a breve).
+
+Ma facciamo un esempio molto semplice. Immaginiamo di avere 18 bit di dati, organizzati in 3 righe di 6 bit (normalmente vengono utilizzati valori corrisopondenti alle potenze del 2, ma ciò funziona ugualmente anche con valori differenti):
+
+```
+1 1 0 0 1 0
+0 1 1 1 0 0
+1 0 0 1 1 1
+```
+
+Aggiungiamo i bit di parità, sempre tenendo la nostra struttura a matrice:
+
+```
+      c0  c1  c2  c3  c4  c5
+----------------------------
+r0  | 1 | 1 | 0 | 0 | 1 | 0
+r1  | 0 | 1 | 1 | 1 | 0 | 0
+r2  | 1 | 0 | 0 | 1 | 1 | 1
+```
+
+I bit di parità delle righe sono `r0`, `r1` e `r2`, ovvero 3. I bit di parità delle colonne vanno da `c0` a `c5` e sono 6 in totale. Scegliendo la parità pari, possiamo calcolare il valore di ciascun bit nel seguente modo:
+
+```
+     0   0   1   0   0   1
+----------------------------
+1  | 1 | 1 | 0 | 0 | 1 | 0
+1  | 0 | 1 | 1 | 1 | 0 | 0
+0  | 1 | 0 | 0 | 1 | 1 | 1
+```
+
+Ora calcoliamo il parity bit delle rige, ovvero aggiungiamo un bit di parità in alto a sinistra che considera solo i bit di parità di ogni riga:
+
+```
+0  | 0   0   1   0   0   1
+----------------------------
+1  | 1 | 1 | 0 | 0 | 1 | 0
+1  | 0 | 1 | 1 | 1 | 0 | 0
+0  | 1 | 0 | 0 | 1 | 1 | 1
+```
+
+Bene, a questo punto i dati si possono trasmettere sul canale. Il ricevente, una volta ricevuti tutti i dati, ricalcola i bit di parità e, poiché si tratta di un codice di rilevamento degli errori con struttura a matrice, il ricevente è in grado di scoprire errori multipli a seconda dei bit di parità che differiscono. Si tratta di un codice dispendioso dal punto di vista computazionale, anche se oggigiorno esiste dell'hardware apposito che realizza tutte queste funzionalità.
+
+Il CRC (Cyclic Redundancy Check) è una tecnica matematica utilizzata per rilevare errori nei dati durante la trasmissione, o la memorizzazione di dati. Funziona calcolando un codice univoco (detto resto, o remainder) basato su un polinomio generatore e aggiungendolo al messaggio originale. La tecnica CRC è molto affidabile (considerata tra le più affidabili presenti oggi), ma necessita di una standardizzazione apposita. Inoltre è dispendiosa a livello di calcolo (in quanto si effettuano divisioni e si calcolano resti, operazioni normalmente svolte in più cicli di clock). Ma andiamo dritti al nocciolo della questione. Nei CRC si utilizza quella che normalmente viene denominata rappresentazione polinomiale di una stringa di bit, in cui tutti i bit di un messaggio sono considerati come dei veri e propri coefficienti di un polinomio di un certo grado. Ad esempio, la sequenza binaria 1011 corrisponde al seguente polinomio:
+
+$$
+(1 \cdot x^3 + 0 \cdot x^2 + 1 \cdot x^1 + 1 \cdot x^0 = x^3 + x + 1)
+$$
+
+La posizione di ciascuna cifra indica l'esponente al quale deve essere elevata la variabile $x$ del polinomio stesso. Il processo di generazione di un codice CRC è il seguente:
+
+1. Si sceglie anzitutto un polinomio generatore, detto $G(x)$. La standardizzazione dei codici CRC permette di scegliere tra diversi polinomi generatori che, dal punto di vista matematico, hanno caratteristiche particolari e molto interessanti (ma non le tratteremo qui).
+2. Dato il messaggio di m bit di dati, ad esso si aggiungono tanti 0 quanto è il grado del polinomio generatore, solitamente indicato con $G(x)$. Per esempio, se si utilizza un polinomio generatore il cui grado è $13$, allora si aggiungono $13$ bit ridondanti al messaggio, ottenendo una stringa di m + r bit. Inizialmente, tutti questi bit sono posti a 0. Nell'ambito dei CRC si dice spesso che il messaggio costituito dai soli m bit è un polinomio $M(x)$, mentre gli r bit ridondanti sono un polinomio detto $R(x)$. Ma questa è pura nomenclatura.
+3. Il messaggio "esteso" di m + r bit viene diviso sfruttando l'aritmetica in modulo due per il polinomio generatore scelto, $G(x)$. Possiamo indicare il messaggio esteso come un terzo polinomio, $N(x)$. In pratica si effettua la divisone in modulo 2: $N(x) / G(x)$.
+4. Si calcola il resto (remainder) della divisione $N(x) / G(x)$, ovvero il codice CRC vero e proprio, lungo esattamente r bit. In pratica esiste una proprietà matematica che afferma quanto segue: dato il grado r di un certo polinomio $G(x)$, se si divide un qualsiasi altro polinomio per $G(x)$, esso genererà sempre un resto di al massimo r cifre. Queste r cifre sono il codice di ridondanza ciclica, ovvero il CRC.
+5. Il mittente invia il messaggio originale, a cui accoda il CRC calcolato al punto precedente.
+6. Il ricevitore, una volta ricevuti dati e CRC, effettua la stessa divisione sull'intero pacchetto ricevuto. Se il resto è zero, non ci sono errori.
+
+Ora parliamo del codice di rilevamento degli errori più utilizzato nel mondo delle reti di calcolatori: insieme al CRC analizzato precedenemente, il checksum è un codice considerato tra i più efficienti ed affidabili presenti oggigiorno e viene realmente usato nella comunicazione via Internet, sia dai livelli inferiori dello stack TCP/IP (come il livello datalink), sia da quelli superiori. Il metodo checksam sfrutta un generatore di bit (checksum generator) lato mittente della comunicazione, mentre sfrutta un controllore dei bit generati (checksum checker) lato destinatario della comunicazione. Una checksum non è altro che un gruppo di bit generato a partire dai bit da inviare nel mezzo trasmissivo considerato univoco ed usato per verificare l'integrità dei dati stessi. In pratica, dati N bit di dati (con N anche molto grande), si produce un insieme di M bit di checksum, dove solitamente M è di 8, 16, 32, o 64 bit (esistono checksum anche di lunghezza maggiore). Se la checksum calcolata lato ricevente combacia con la checksum calcolata e inviata dal mittente, allora i dati sono giunti a destinazione senza erore. Questo metodo è schematizzato nella seguente figura:
+
+<!-- to add -->
+*In Figura: il modo in cui funziona la checksum*
+
+Lato mittente, i bit di dati vengono suddivisi in segmenti lunghi solitamente 16 bit. Sfruttando l'aritmetica in complemento a 1, tutti i segmenti dei dati vengono sommati. Infine, si effettua il complemento a uno del risultato ottenuto, ovvero la checksum. Questo processo è descritto nella precedente figura utilizzando blocchi, somme e frecce: sebbene per grandi quantità di dati possa sembrare un processo dispendioso, in realtà qualsiasi calcolatore moderno dispone di hardware apposito in grado di eseguire somme (specie se di pochi bit, come 16 bit) in modo diretto, in un singolo ciclo di clock. Nel canale viene trasmessa prima la checksum calcolata e, successivamente, i dati originali.
+
+Lato destinatario, una volta ricevuti tutti i bit di dati, essi vengono suddivisi in segmenti di 16 bit ciascuno. Il processo consiste nella somma in complemento a uno di ciascun segmento di dati, esattamente come è stato fatto lato mittente. La differenza rispetto a quanto fatto dal mittente, però, è che il ricevente aggiunge anche la checksum ricevuta al risultato dell'intera somma. Il valore ottenuto da tutte le somme (segmenti di dati e checksum), una volta fatto il suo complemento a uno, deve essere interpretato nel seguente modo:
+
+- Se il valore calcolato è costituito da tutti i bit 0, allora i dati inviati non hanno subito alcun errore.
+- Se il valore calcolato è un valore diverso da 0, allora i dati inviati hanno subito uno, o più errori.
+
+Attenzione a una particolarità della checksum: questa non indica alcuna posizione in cui si è verificato l'errore all'interno dei dati, bensì essa rileva solamente se si è verificato un errore.
 
 ##### 03.04.03. ECCs (Error Correction Codes)
 <!-- to do - distanza di Hamming -->
@@ -196,11 +321,26 @@ La principali tecniche di framing sono le seguenti:
 <!-- to do - codici convoluzionali -->
 
 ### 03.05. Controllo del flusso
-<!-- to do - introduzione al controllo del flusso -->
-<!-- to do - il problema del buffering -->
-<!-- to do - il problema del mittente veloce e ricevente lento -->
-<!-- to do - il problema del ritardo di propagazione -->
-<!-- to do - throughput ed efficienza -->
+
+Il controllo del flusso è l'insieme delle pratiche utilizzate nel datalink layer dello stack TCP/IP per garantire una trasmissione dati efficacie ed efficiente dal punto di vista sia del mittente (trasmissione dati), sia del destinatario (ricezione dati). Il controllo del flusso è un insieme di tecniche che consentono di regolare la velocità di trasmissione dei dati tra mittente e destinatario, evitando che il ricevente venga sovraccaricato da una quantità di dati superiore alla sua capacità di elaborazione, o memorizzazione. Lo scopo principale del controllo del flusso è garantire che il mittente trasmetta dati a una velocità compatibile con quella del ricevente, prevenendo la perdita di informazioni e migliorando l'affidabilità della comunicazione. In assenza di controllo del flusso, un dispositivo molto veloce potrebbe inviare dati più rapidamente di quanto il destinatario sia in grado di processarli (perché magari si tratta di un dispositivo più lento), causando l'esaurimento dei buffer di ricezione e la conseguente perdita di dati.
+
+Tra le principali tecniche di controllo del flusso vi sono:
+
+- Stop-and-Wait: il mittente trasmette un frame e attende la conferma (ACK) prima di inviare il successivo. Si tratta di una famiglia di protocolli molto semplici, ma meno efficienti.
+- Sliding Window: il mittente può trasmettere più frame consecutivamente senza attendere un ACK per ciascuno di essi, migliorando l'efficienza della comunicazione. Si tratta di una famiglia di protocolli più complessi, ma anche più efficeinte.
+
+Il problema del mittente veloce e del destinatario lento è particolarmente rilevante quando si parla di controllo di flusso. Se il destinatario è più veloce del mittente, non c'è alcun problema: il mittente spedisce i dati alla propria velocità e, dal momento che il destinatario è più veloce, riesce tranquillamente a ricevere, memorizzare ed elaborare ciascun frame. Ma nella situazione contraria, con un destinatario lento e un mittente veloce, si potrebbe congestionare il collegamento tra i due host, fino anche a saturare la memoria del destinatario: questo è un problema grave che deve essere gestito, altrimenti ne risente l'intera comunicazione, che inizia a subire ritardi sempre più lunghi.
+
+Uno dei principali motivi per cui è necessario il controllo del flusso è il problema del buffering. Ogni dispositivo ricevente dispone infatti di una memoria temporanea, detta buffer, utilizzata per memorizzare i dati ricevuti prima che vengano elaborati dall'applicazione, o dal sistema operativo. Se il mittente trasmette dati a una velocità superiore rispetto a quella con cui il destinatario riesce a elaborarli, i dati si accumulano nel buffer di ricezione. Quando il buffer si riempie completamente (buffer overflow), i nuovi dati in arrivo non possono più essere memorizzati e vengono scartati, causando perdita di informazioni e possibili ritrasmissioni. Il controllo del flusso ha quindi il compito di evitare la saturazione del buffer del ricevente, regolando la velocità di trasmissione del mittente in funzione della capacità disponibile presso il destinatario. In sintesi, il problema del buffering consiste nel possibile riempimento dei buffer di ricezione quando il mittente è più veloce del destinatario; il controllo del flusso nasce proprio per prevenire questa situazione e garantire una trasmissione affidabile dei dati.
+
+Infine, il problema del ritardo di propagazione. Il ritardo di propagazione può causare un utilizzo inefficiente del canale: il mittente, dopo aver inviato un frame, deve attendere che l'ACK raggiunga nuovamente la sorgente prima di poter continuare la trasmissione. Se il ritardo è elevato, il collegamento rimane inutilizzato per una parte significativa del tempo, riducendo il throughput complessivo.
+
+Quindi i problemi da risolvere sono sostanziamente i seguenti:
+
+- Problema del mittente lento e del destinatario veloce: massimizzare l'invio dei dati da parte del mittente.
+- Problema del mittente veloce e del destinatario lento: limitare l'invio dei dati da parte del mittente.
+- Problema del buffering: limitare l'invio dei dati da parte del mittente in modo che la memoria di ricezione del destinatario non si saturi.
+- Problema del ritardo di propagazione: regolare la quantità di ACK restituiti dal destinatario in modo da minimizzare i ritardi dovuti all'invio ed alla ricezione degli ACK stessi.
 
 ##### 03.05.01. Comunicazione simplex senza restrizione
 <!-- to do -->
