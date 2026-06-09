@@ -312,13 +312,88 @@ Lato destinatario, una volta ricevuti tutti i bit di dati, essi vengono suddivis
 Attenzione a una particolarità della checksum: questa non indica alcuna posizione in cui si è verificato l'errore all'interno dei dati, bensì essa rileva solamente se si è verificato un errore.
 
 ##### 03.04.03. ECCs (Error Correction Codes)
-<!-- to do - distanza di Hamming -->
-<!-- to do - codici di Hamming -->
-<!-- to do - FEC (Froward Error Correction) -->
-<!-- to do - codici lineari -->
-<!-- to do - codici Reed-Solomon -->
+
+I codici di correzione degli errori, detti ECCs (Error Correction Codes) sono più difficili da comprendere rispetto ai codici di rilevamento degli errori, in quanto hanno dei meccanismi mediante il quale, fino ad un certo numero di errori, si può ricostruire il messaggio originale. Gli ECCs sono quindi in grado non solo di rilevare gli errori, ma comprendere anche i bit afflitti da errore e, fin a un numero opportuno, correggerli.
+
+Prima di tutto, consideriamo due sequenze di bit aventi la stessa lunghezza $N$, per esempio con $N = 4$:
+
+```
+A   1101
+B   0001
+```
+
+Definiamo distanza di Hamming tra due sequenze di bit $A$ e $B$ aventi la stessa lunghezza $N$, indicandola con $d_h(A, B)$, il numero di bit che differiscono tra le due sequenze. Nell'esempio fatto prima, notiamo come i due bit più significativi di $A$ siano $11$, mentre quelli più significativi di $B$ sono $00$ (il resto dei bit è uguale), per cui si ha:
+
+$$
+d_h(A B) = 2
+$$
+
+ossia la loro distanza di Hamming è pari a $2$, in quanto due soli bit differiscono tra $A$ e $B$. La distanza di Hamming è fondamentale nell'ambito dello studio e dell'applicazione degli ECCs nelle reti di calcolatori, in quanto essa parmette di scoprire la capacità di un codice di rilevare e correggere un certo numero di errori. In generale:
+
+- Per rilevare fino a un numero $k$ di errori occorre una distanza di Hamming minima di almeno $k + 1$ tra le due sequenze di bit.
+- Per correggere fino a $k$ errori è necessario avere una distanza di Hamming minima di almeno $2k + 1$.
+
+Partiamo con uno dei primissimi tra gli ECCs proposti nel corso della storia delle reti di calcolatori. Il codice di Hamming è una tecnica di rilevamento e correzione degli errori che permette di identificare e correggere un errore su un singolo bit in un messaggio trasmesso. Il principio di funzionamento di un codice di Hamming è molto semplice: si aggiungono dei bit di parità in specifiche posizioni all'interno della stringa di bit da trasmettere, in cui ciascun bit di parità (detto anche bit di controllo) calcola la parità di un insieme ben preciso di bit. Facciamo un semplice esempio considerando 4 bit da trasmettere sul canale (nella realtà possono essere molti di più, come 256, 512, 1024, o molti di più). I bit del messaggio vanno da $m_1$ a $m_4$ e sono quattro in totale, mentre i bit di controllo sono tre in totale e vanno da $p_1$ a $p_3$. La parola di codice, detta anche codeword, da trasmettere sul canale è quindi la seguente:
+
+$$
+p_1\ p_2\ m_1\ p_3\ m_2\ m_3\ m_4 
+$$
+
+In pratica: $p_1$ è il primo bit di parità e deve andare alla posizione $2^0 = 1$. Nell'ambito dei codici di Hamming, la posizione di un certo bit si conta sempre partendo dall'estrema sinistra e procedendo verso destra. Poi abbiamo $p_2$, il secondo bit di parità, che deve andare alla posizione $2^1 = 2$. Poi abbiamo il primo bit del messaggio, $m_1$, che sta nella posizione 3. Successivamente abbiamo il terzo e ultimo bit di parità, $p_3$, che sta nella posizione $2^2 = 4$. La codeword si conclude con i successivi tre bit del messaggio. In pratica i bit di parità stanno nelle posizioni che sono delle potenze di due:
+
+- $2^0 = 1$: primo bit di parità, o $p_1$.
+- $2^1 = 2$: secondo bit di parità, o $p_2$.
+- $2^2 = 4$: terzo bit di parità, o $p_3$.
+- $2^3 = 8$: quarto bit di parità, o $p_4$.
+- ...
+- $2^N = M$: N-esimo bit di parità, o $p_M$.
+
+Torniamo al nostro esempio di bit da inviare di quattro bit e poniamo che siano: 1011. La precedente codeword diventa:
+
+$$
+p_1\ p_2\ 1\ p_3\ 0\ 1\ 1
+$$
+
+Ma come vengono calcolati i bit di parità? Ogni bit di parità copre posizioni specifiche in base al codice binario della loro posizione. Utilizziamo una parità pari (il numero totale di bit a 1 nei bit controllati deve essere un numero pari). Ciascun bit di parità copre un ben preciso insieme di posizioni:
+
+- Il bit di controllo $p_1$ controlla i bit nelle posizioni 1, 3 5 e 7, che attualmente è $p_1\ 1\ 0\ 1$. Poiché abbiamo scelto una parità pari, $p_1$ deve essere 0.
+- Il bit di controllo $p_2$ controlla i bit nelle posizioni 2, 3 6 e 7, che attualmente è $p_2\ 1\ 1\ 1$. Poiché abbiamo scelto una parità pari, $p_2$ deve essere 1.
+- Il bit di controllo $p_3$ controlla i bit nelle posizioni 4, 5 6 e 7, che attualmente è $p_1\ 0\ 1\ 1$. Poiché abbiamo scelto una parità pari, $p_3$ deve essere 0.
+
+La codeword finale da trasmettere sul canale è la seguente:
+
+```
+0110011
+```
+
+Lato ricevente, se durante la trasmissione il quinto bit subisce un'inversione e il ricevitore ottiene 0110[1]11 (dove il bit tra parentesi quadre è quello errato), il sistema esegue dei test di parità (sindrome) per scoprire l'errore.Ripetendo lo stesso calcolo di parità, il sistema individua quali bit di controllo rilevano un errore. Sommando le posizioni dei bit di controllo errati, si ottiene direttamente l'indice esatto del bit danneggiato. L'algoritmo individua la posizione 5, permettendo al ricevitore di invertire l'1 in 0 e ripristinare il messaggio originale. Questo è il modo principale in cui sono utilizzati i codici di Hamming. Ma ve ne sono molti altri parecchio interessanti, che qui ci limiteremo solo a descrivere. 
+
+FEC (Forward Error Correction) è una tecnica di elaborazione del segnale utilizzata nelle trasmissioni digitali per rilevare e correggere gli errori di trasmissione senza richiedere la ripetizione dei dati. Un pò come i codici di Hamming, il trasmettitore aggiunge dei bit di controllo al messaggio da trasmettere sul canale, mentre il ricevitore ricalcola i bit di controllo e valuta il messaggio per comprendere se si è verificato un errore e dove si è verificato. In pratica, il principio di base dei codici FEC è il seguente: anziché sprecare tempo chiedendo al mittente di inviare nuovamente un pacchetto danneggiato (come accade in tantissimi protocolli del livello transport, giusto per fare un esempio), l'algoritmo FEC trasforma matematicamente i dati stessi. Se una parte del messaggio viene persa, o viene alterata durante il transito per via del rumore, o di un guasto improvviso del canale trasmissivo, il ricevitore applica la formula opposta per ricostruire perfettamente le informazioni originali. In pratica lo schema dei codici FEC è il seguente:
+
+<!-- to add -->
+*In Figura: come funziona, in generale, un codice FEC*
+
+I codici FEC sono una famiglia di codici vasta, ma che grossomodo si può classificare in due categorie. I codici FEC includono quindi entrambi i seguenti tipi di codici:
+
+- Codici a blocchi: in cui i dati vengono suddivisi in blocchi della stessa lunghezza e, per ciascun blocco, vengono calcolati i relativi bit di controllo. Il codice Reed-Solomon è l'esempio più celebre, anche se viene utilizzato soprattutto nei supporti di memorizzazione secondaria, come i CD ed i DVD.
+- Codici convoluzionali (o continui): in cui si elaborano i dati in modo continuo, basandosi non solo sul messaggio attuale, ma anche su quelli precedenti.
+
+Per quanto i codici FEC richiedano generalmente una banda maggiore, riducono drasticamente un indice della qualità della comunicazione che prende il nome di BER (Bit Error Rate, tasso di errore dei bit).
+
+Ma approfondiamo il codice Reed-Solomon. Quest'ultimo è un codice a blocchi lineare che rientra nella famiglia dei codici FEC. I codici lineari (detti anche codici a blocchi lineari) sono speciali tecniche matematiche utilizzate nelle reti e nelle telecomunicazioni per aggiungere ridondanza ai dati. Questo permette di rivelare e correggere gli errori introdotti da disturbi (rumore) durante la trasmissione dei pacchetti sul canale fisico. Il codice Reed-Solomon:
+- è un codice a blocchi in quanto i dati da trasmettere sul canale trasmissivo vengono suddivisi in blocchi di dimensione fissa prima della trasmissione, o della memorizzazione.
+- è un codice lineare perché consiste nella somma (o combinazione lineare) di due codeword valide, che genera sempre un'altra parola di codice valida appartenente allo stesso spazio vettoriale.
+
+In sostanza, ciò che fa il codice Reed-Solomon prende un blocco di $k$ simboli informativi e aggiunge $2t$ simboli di ridondanza, creando una parola di codice lunga $n = k + 2t$. Il numero massimo di errori rilevabili e correggibili è pari esattamente a $t$. Attenzione al termine che abbiamo utilizzato: simboli, non bit. Infatti, a differenza di molti altri codici (basati prettamente sui bit), il codice Reed-Solomon non lavora sui singoli bit, ma su insiemi di bit raggruppati in simboli (come interi Byte, composti da 8 bit). Questo lo rende formidabile nel correggere i cosiddetti errori a raffica (burst errors), ovvero pacchetti di dati contigui danneggiati. Il codice Reed-Solomon è anche un codice pasato sulle rappresentazioni polinomiali di un gruppo di bit, che abbiamo già visto (in parte, almeno) per i CRC, analizzati nel precedente paragrafo, ma non la tratteremo in questo contesto.
+
+Adesso passiamo alla seconda categoria dei FEC: i codici convoluzionali. Spiegato in breve, un codice convoluzionale è un tipo di codice per la correzione d'errore nel quale:
+
+- Ogni simbolo d'informazione a m bit (ogni stringa a m bit) da codificare è trasformato in un simbolo a n bit, dove $\frac{m}{n}$ è il rapporto (rate) del codice (con n che è sempre maggiore, o al massimo uguale a m).
+- La trasformazione è una funzione degli ultimi k simboli d'informazione, dove k è la lunghezza dei vincoli (constraint length) del codice.
+
+I codici convoluzionali si utilizzano in numerose applicazioni allo scopo di ottenere un trasferimento di dati affidabile, comprese il video digitale, la radio, la telefonia mobile e le comunicazioni via satellite. I codici convoluzionali sono fortemente basati sui registri a scorrimento (shift registers) e sull'operazione logica XOR: lato trasmettitore, man mano che si inseriscono i bit nel buffer di invio, un piccolo circuito (formato da registri a scorrimento e porte logiche XOR) elabora il bit attualmente in fase di trasmissione con un numero preciso di bit precedenti. Questo processo crea gruppi di bit di output maggiori rispetto all'input, rendendo il segnale più robusto. Inoltre, non è necessario rieasaminare più e più volte l'intero messaggio: c'è un supporto hardware diretto per l'implementazione di questa tipologia di codici di errore, per cui non è molto dispendiosa come tecnica dal punto di vista computazionale. Lato ricevente quando i dati arrivano, il ricevitore conosce le regole usate per creare il codice. Uno degli algoritmi più famosi per fare questa operazione è l'algoritmo di Viterbi, che confronta la sequenza ricevuta con tutte le possibili sequenze originali e sceglie quella più logica, ricostruendo eventuali bit corrotti.
+
 <!-- to do - LDPC (Low-Density Parity Check) -->
-<!-- to do - codici convoluzionali -->
 
 ### 03.05. Controllo del flusso
 

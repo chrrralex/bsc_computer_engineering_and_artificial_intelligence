@@ -53,3 +53,6 @@
 
 ##### 07.03.04. Firma digitale
 <!-- to do -->
+
+##### 07.04. Autenticazione e autorizzazione
+<!-- to do -->
