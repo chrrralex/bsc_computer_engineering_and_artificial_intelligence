@@ -393,7 +393,11 @@ Adesso passiamo alla seconda categoria dei FEC: i codici convoluzionali. Spiegat
 
 I codici convoluzionali si utilizzano in numerose applicazioni allo scopo di ottenere un trasferimento di dati affidabile, comprese il video digitale, la radio, la telefonia mobile e le comunicazioni via satellite. I codici convoluzionali sono fortemente basati sui registri a scorrimento (shift registers) e sull'operazione logica XOR: lato trasmettitore, man mano che si inseriscono i bit nel buffer di invio, un piccolo circuito (formato da registri a scorrimento e porte logiche XOR) elabora il bit attualmente in fase di trasmissione con un numero preciso di bit precedenti. Questo processo crea gruppi di bit di output maggiori rispetto all'input, rendendo il segnale più robusto. Inoltre, non è necessario rieasaminare più e più volte l'intero messaggio: c'è un supporto hardware diretto per l'implementazione di questa tipologia di codici di errore, per cui non è molto dispendiosa come tecnica dal punto di vista computazionale. Lato ricevente quando i dati arrivano, il ricevitore conosce le regole usate per creare il codice. Uno degli algoritmi più famosi per fare questa operazione è l'algoritmo di Viterbi, che confronta la sequenza ricevuta con tutte le possibili sequenze originali e sceglie quella più logica, ricostruendo eventuali bit corrotti.
 
-<!-- to do - LDPC (Low-Density Parity Check) -->
+Ora parliamo di uno dei codici di correzione degli errori più utilizzati oggigiorno nell'ambito delle reti di calcolatori: il LDPC (Low Density Parity Check, controllo di parità a bassa densità). Il LDPC è un algoritmo matematico ad alta efficienza utilizzato nelle telecomunicazioni e nell'informatica per correggere gli errori nei dati trasmessi attraverso canali di comunicazione soggetti a rumore, o durante l'archiviazione su supporti di memorizzazione digitali, come HD, SSD, CD e DVD. Così come il codice Reed-Solomon, anche il codice LDPC è un codice a blocchi e lineare. Il significato di tali due termini è già stato spiegato in precedenza. LDPC è talmente efficiente e relativamente semplice da utilizzare che viene impiegato perfino nelle reti wireless (senza fili), come le reti Wi-Fi e le reti 5G. Il principio di funzionamento, descritto in modo molto semplificato, è il seguente:
+
+1. Prima di inviare i dati, il sistema aggiunge dei bit di controllo (bit di parità). Tali bit non sono casuali, ma contengono informazioni matematiche collegate ai bit originali: in pratica vengono calcolati scegliendo un opportunoo protocollo (parità pari, o dispari) considerando i bit del messaggio che risiedono in una determinata posizione.
+2. Il nome bassa densità deriva dal modo in cui vengono calcolati questi controlli. La struttura matematica (matrice) usata per legare i dati contiene moltissimi 0 e pochissimi 1: questa è una caratteristica importante per questo tipo di codici. Questo rende i calcoli molto efficienti.
+3. All'arrivo, il ricevitore controlla se i dati soddisfano le regole matematiche. Se trova un errore (ad esempio, uno 0 che è diventato un 1 a causa di un'interferenza), l'algoritmo effettua dei tentativi successivi (iterazioni) analizzando i bit vicini, riuscendo a ricostruire e correggere il dato originale con estrema precisione.
 
 ### 03.05. Controllo del flusso
 
@@ -418,39 +422,127 @@ Quindi i problemi da risolvere sono sostanziamente i seguenti:
 - Problema del ritardo di propagazione: regolare la quantità di ACK restituiti dal destinatario in modo da minimizzare i ritardi dovuti all'invio ed alla ricezione degli ACK stessi.
 
 ##### 03.05.01. Comunicazione simplex senza restrizione
-<!-- to do -->
+
+La comunicazione simplex senza restrizione è la più semplice che si possa immaginare. In pratica, in questo tipo di comunicazione si ragiona come se il canale trasmissivo fosse perfetto:
+
+- Si hanno due soli host in comunicazione tra loro: il mittente (che trasmette i dati) e il destinatario (che li legge, o li riceve).
+- Si ha un solo verso in cui possono scorrere i dati: dal mittente al destinatario. Si tratta di una comunicazione simplex.
+- Non c'è alcun ritardo nella comunicazione.
+- Il mittente trasmette i dati alla massima velocità consentita.
+- Il destinatario non iniva alcuna conferma di ricezione, detta ACK.
+- Assenza di qualsiasi forma d'errore.
+- Nessun buffer di invio, o di ricezione necessario.
+
+Questo protocollo non viene (e probabilmente non verrà mai) implementato nell'effettiva pratica, in quanto non esiste un canale trasmissivo perfetto. Anche se il BER con le moderne tecnologie è stato decrementato parecchio, è quasi impossibile ottenere un canale trasmissivo perfetto. Il minimo rumore, o qualche interferenza elettromagnetica potrebbe causare disallineamenti della sincronizzazione, o fluttuazioni improvvise del segnale, che scambiano i valori 1 con 0 e viceversa.
 
 ##### 03.05.02. Comunicazione simplex stop-and-wait
-<!-- to do -->
 
-##### 03.05.03. Comunicazione con ACK e NACK
-<!-- to do -->
+Qui il gioco inizia a farsi più carino. A differenza della comunicazione simplex senza restrizione, in questo caso si valuta la possobilità che un frame possa subire errori, oppureche possa non arrivare a destinazione (magari a causa di un guasto improvviso di qualche apparato di livello datalink frapposto tra gli host, o che affligge il mezzo trasmissivo stesso). Questo tipo di comunicazione è basata sui seguenti presupposti:
 
-##### 03.05.04. Comunicazione con timeout
-<!-- to do -->
+- Si hanno due soli host in comunicazione tra loro: il mittente (che trasmette i dati) e il destinatario (che li legge, o li riceve).
+- Si ha un solo verso in cui possono scorrere i dati: dal mittente al destinatario. Si tratta di una comunicazione simplex.
+- Non c'è alcun ritardo nella comunicazione.
 
-##### 03.05.05. Comunicazione con numerazione dei frame
-<!-- to do -->
+Bisogna fare una piccolaprecisazione: i dati scorrono in una sola direzione (dal mittente al destinatario), ma i messaggi di controllo possono scorrere in ambedue le direzioni. Ad esempio, gli ACK restituiti dal destinatario possono scorrere nel verso opposto rispetto a quello dei dati. Questi sono gli stessi punti della comunicazione precedente. In aggiunta ad essi vanno considerati i seguenti:
 
-##### 03.05.06. Comunicazione con gestione dei duplicati
-<!-- to do -->
+- C'è la possibile che il segnale subisca degli errori, o venga perso.
+- Il mittente trasmette un frame alla volta e, dopo l'invio di ciascun frame, si mette in attesa di un'ACK da parte del destinatario.
+- Il destinatario iniva una conferma di ricezione (ACK) ogni volta che riceve un frame.
+- Assenza di qualsiasi forma d'errore.
+- Nessun buffer di invio, o di ricezione necessario.
 
-##### 03.05.067. Comunicazione rate-based
-<!-- to do -->
+La situazione descritta dai precedenti punti è la seguente:
+
+<!-- to add -->
+*In Figura: la comunicazione simplex stop-and-wait*
+
+In pratica, il mittente invia il frame si mette in attesa di una ACK (fase stop), nel mentre che il messaggio arriva il destinatario e quest'ultimo invia l'ACK, il mittente rimane in attesa (wait). Dopo che il mittente ha ricevuto l'ACK, invia il frame successivo.
+
+##### 03.05.03. Comunicazione con ACK e NACK e timeout
+
+In questi protocolli di comunicazione il modo con il quale si inviano frame i due host è molto simile a quanto abbiamo analizzato per la comunicazione simplex stop-and-wait, ma vi è l'aggiunta di un altro elemento: la conferma di non ricezione, detta anche UNACK, o più comunemente NACK. Si tratta di un frame di controllo molto simile al frame ACK, ma che al posto di indicare che un determinato frame è stato ricevuto con successo, indica che un frame (o un determinato gruppo di frame) non è stato ricevuto, per cui il mittente, alla ricezione del NACK, iniva nuovamente i frame non ricevuti dal destinatario.
+
+Vi è l'introduzione di un secondo elemento: il timeout. In pratica, esiste un tempo ben definito e prestabilito secondo il quale, una volta inviato il frame, il mittente si aspetta un'ACK, o un NACK. Questa finestra temporale è fondamentale nei protocolli del livello datalink e dipende in genere sia dalla velcoità di trasmissione dell'host stesso, sia dal mezzo trasmissivo. Che succede se il mittente riceve un'ACK, o un NACK fuori dal tempo di timeout? Gli scarta. Analogamente, che succede se il mittente non riceve alcun ACK, o NACK entro il timeout per uno, o più frame? Invia nuovamente i frame che aveva inviato. In alcuni protocolli esiste una politica per il quale se il mittente arriva ad inviare per un certo numero di volte lo stesso frame senza ricevere ACK, o NACK, allora c'è un problema nel mezzo trasmissivo, oppure nell'host destinatario.
+
+I due nuovi elementi, NACK e timeout, si possono rappresentare in modo molto schematico in questo modo:
+
+<!-- to add -->
+*In Figura: comunicazione con ACK e NACK e timout*
+
+##### 03.05.06. Comunicazione con numerazione dei frame
+
+In questo nuovo tipo di comunicazione, si aggiunge un nuovo elemento alla comunicazione con ACK/NACK e timeout: la numerazione dei frame. A seconda del protocollo del livello datalink utilizzato, esiste un campo di una certa lunghezza (2 Byte, solitamente) per la numerazione dei frame: si possono numerare 65536 frame, da 0 a 65525. L'idea di base è questa: il mittente spedisce i frame contenenti ciascuno una determinata porzione del messaggio originale (che può essere un file di grandi dimensioni, o altro), ma numera i frame della comunicazione partendo da 0 e incremento di una unità ciascun frame che invia. Quindi il mittente invia il frame numero 0, poi il frame numero 1, poi il 2 e così via, fino ad arrivare a 65 535. Che succede quando si raggiunge il massimo valore possibile per la numerazione dei frame? Molto semplice, a rotaazione, si riparte da 0 e la numerazione riprende da capo. Esistono protocolli che consentono anche al destinatario di comprendere questo tipo di casistica: se un host riceve il frame 65 535 e poi, successivamente, per la stessa comunicazione riceve il frame 0, allora quest'ultimo frame è il successivo del frame precedente, anche se ha un numero inferiore. Il numero dei frame viene anche detto sequence number (numero di sequenza).
+
+Ecco che i frame ACK/NACK assumono un ruolo leggermente diverso: all'interno di essi il destinatario specifica il numero di frame che ha ricevuto, per cui il mittente dovrà occuparsi di spedire solo i frame con numero di sequenza maggiore a quello indicato nella ACK. Il caso è differente nel caso di una NACK, in quanto quest'ultima indica che proprio uno specifico frame, con un determinato numero di sequenza, non è stato ricevuto (magari per un guasto improvviso, o per un elevato traffico sul mezzo trasmissivo). In questo caso il mittente invia solo il frame con lo stesso numero di sequenza indicato nel NACK.
+
+In questo modo si rende possibile una cosa molto interessante: perché inviare un ACK/NACK ad ogni frame, come accade nei protocolli di tipo stop-and-wait puro, in cui si invia un frame e ci si mette in attesa di un ACK? Ebbene, grazie alla numerazione di sequenza, il mittente può inviare più frame senza aspettarsi un ACK (tipicamente da 2 a 8 frame, o più se il protocollo lo prevede), ma esso si aspetta solo l'ACK dopo aver inviato l'ultimo frame del gruppo. Questa situazione è tipica dei protocolli a finestra scorrevole (SWPs, Sliding Window Protocols), che esamineremo in seguito.
+
+Questa situazione si può rappresentare nel seguente modo:
+
+<!-- to add -->
+*In Figura: utilizzare il sequence number per numerare i frame ed anche una ACK per un gruppo di frame*
+
+C'è una piccola cosa che abbiamo detto in precedenza, ma che in realtà in questo nuovo modo di comunicare potrebbe tranquillamente non essere vera. Prima abbiamo detto che se il mittente dovesse ricevere un ACK dopo il timeout, questo verrebbe scartato. Ma in realtà un ACK può giungere al mittente in ritardo per svariati motivi ed alcuni protocolli non associano un timeout particolare all'invio degli ACK: così, se il mittente riceve un ACK anche dopo molto tempo, questo lo accetta ed invia i frame che hanno sequence number maggiore rispetto a quello indicato nel frame.
+
+##### 03.05.07. Comunicazione con gestione dei duplicati
+
+La gestione dei duplicati nel datalink layer si basa sull'uso dei sequence number, gli stessi di cui abbiamo parlato nel paragrafo precedente. I sequence number inseriti nell'header del frame sono fortemente usati dai protocolli di ritrasmissione con riscontro, anche noti con l'acronimo (ARQ -Automatic Repeat Request-).
+
+Il meccanismo per evitare che lo stesso frame venga elaborato più volte segue questi principi:
+
+- Numerazione dei frame: ogni frame inviato riceve un numero di sequenza univoco.- Controllo del destinatario: quando il ricevitore ottiene un frame, confronta il numero di sequenza con il valore atteso.
+- Scarto dei duplicati: se il numero di sequenza è già stato ricevuto ed elaborato, il frame viene scartato, inviando comunque un ACK al mittente.
+
+I protocolli più noti che gestiscono i duplicati sono Stop-and-Wait ARQ, Go-Back-N ARQ e Selective Repeat ARQ.
+
+##### 03.05.08. Comunicazione rate-based
+
+Ed ecco che qui analizziamo la comunicazione più complessa (e realmente utilizzata nell'Internet odierna). La comunicazione rate-based a livello datalink è un meccanismo che regola la velocità di trasmissione dei frame tra due host adiacenti, posti in diretta comunicazione tra loro mediante un opportuno mezzo trasmissivo. A differenza dei sistemi guidati dalle sole richieste del ricevitore (flow control reattivo), il rate-based pacing impone un limite preciso al flusso di bit. I due punti chiave secondo il quale funziona questo tipo di comunicazione sono i seguenti:
+
+- Regolazione del ritmo: il mittente della comunicazione invia i frame a una velocità fissa, o concordata (ad esempio tramite un speciale frame che prende il nome di token bucket) per evitare di congestionare il ricevitore, oppure i nodi intermedi. Ricordiamo che per "nodi intermedi" si intendono gli host intermedi del livello datalink (come switch, hub, bridge e ripetitori, nel caso di LAN più estese).
+- Controllo della congestione: previene il riempimento dei buffer del ricevitore. L'invio è spaziato nel tempo per adattarsi esattamente alla capacità di elaborazione del dispositivo adiacente. I protocolli rate-based evitano il più possibile di saturare il buffer del ricevitore (ma anche quello del mittente), avendo un controllo diretto sulla congestione del traffico.
+
+In pratica questo protocollo di comunicazione prevede:
+
+- Un meccanismo stop-and-wait basato su gruppi di frame.
+- Il sequence number da utilizzare nell'header dei frame.
+- Il timeout per l'invio di un frame, o un gruppo di frame.
+- L'utilizzo di ACK per confermare la ricezione di uno, o più frame.
+- L'utilizzo di NACK per confermare la non-ricezione di un frame preciso.
+- Meccanismi di rate limiting dell'invio dei dati lato mittente.
+- Meccanismi di feedback per limitare la congestione del traffico lato destinatario.
+- Finestre temporali e finestre a scorrimento (elementi molto importanti analizzati nel prossimo paragrafo).
 
 ### 03.06. SWPs (Sliding Window Protocols)
-<!-- to do - concetto di window -->
-<!-- to do - concetto di sliding window -->
-<!-- to do - pipeline dei frame -->
-<!-- to do - protocollo Go-Back-N ARQ (Automatic Repeat reQuest) -->
-<!-- to do - protocollo Selective Repat ARQ (Automatic Repeat reQuest) -->
+
+Gli SWPs (Sliding Window Protocols) sono una famiglia di protocolli molto utilizzata nel livello datalink dello stack TCP/IP che prevede la trasmissione di più frame in sequenza, senza attendere una ACK da parte del destinatario. Questa famiglia di protocolli consente una comunicazione rate-based tra i due host collegati in modo diretto, quindi si parla di protocolli molto complessi e dotati di numerosi meccanismi per gestire la congestione del traffico.
+
+Ma che cosa è una finestra? Una finestra (o finestra a scorrimento) è un insieme di numeri di sequenza che sono tenuti sotto controllo da parte del mittente nell'ambito di una determinata comunicazione. Una finestra scorrevole (in inglese sliding window) è una finestra che si inizia al sequence number $n$ e termina al sequence number $m$, ovviamente con $n < m$: l'ampiezza (o larghezza) della finestra è data dalla differenza $m - n$. Solitamente l'ampiezza è uguale ad una potenza di due, ma è un parametro che varia a seconda della comunicazione, della congestione e del servizio richiesto da mittente e destinatario. Alcune comunicazioni possono avere finestre molto ampie, mentre altri finestre molto corte.
+
+Esistono due tipi principali di finestre:
+
+- Finestra del mittente (sender window): contiene i sequence number dei frame che devono essere spediti. Attenzione che, in un dato momento, la finestra del mittente può avere alcuni frame già trasmessi, mentre altri ancora da trasmettere: la finestra NON indica i frame inviati, ma solo quelli che sono abilitati all'invio.
+- Finestra del ricevente (receiver window): definisce i sequence number dei frame che il ricevitore è consentito a ricevere. Questo significa che qualsiasi frame con numero di sequenza al di fuori di quelli indicati nella propria finestra vengono automaticamente scartati.
+
+Normalmente, la finestra del ricevente è più ampia rispetto a quella del mittente. Il meccanismo fondamentale di tutti i protocolli SWPs è il seguente: quando il ricevente invia un'ACK con un certo numero di sequenza, le sliding window di mittente e ricevitore si spostano in avanti, includendo i successivi sequence number dei frame che devono essere trasmessi. Ciò garantisce un controllo diretto e molto preciso del traffico.
+
+##### 03.06.01. Protocollo Go-Back-N ARQ (Automatic Repeat reQuest)
+<!-- to do -->
+
+##### 03.06.02. Protocollo Selective Repat ARQ (Automatic Repeat reQuest)
+<!-- to do -->
 
 ### 03.07. Accesso al mezzo trasmissivo 
-<!-- to do - problema dell'accesso condiviso -->
-<!-- to do - problema delle collisioni -->
-<!-- to do - canali condivisi e dedicati -->
-<!-- to do - allocazione static dei canali -->
-<!-- to do - allocazione dinamica dei canali -->
+
+Uno dei problemi più importanti che il livello datalink deve affrontare è quello dell'accesso al mezzo trasmissivo, ovvero il modo in cui più host che condividono lo stesso mezzo trasmissivo possono trasmettere i propri dati senza interferire l'uno con l'altro. Questo problema, noto anche come problema dell'accesso condiviso, si presenta in tutte quelle situazioni in cui il mezzo trasmissivo non è dedicato a una singola coppia di host (come avviene, ad esempio, in una connessione punto-a-punto tra due dispositivi collegati direttamente da un cavo), ma è condiviso da più host che possono potenzialmente voler trasmettere nello stesso istante. Esempi tipici sono le reti Ethernet basate su hub, le reti Wi-Fi, le reti radio, le reti satellitari ed in generale tutte le reti con topologia a bus, o ad anello.
+
+Il principale problema che nasce dalla condivisione del mezzo trasmissivo è quello delle collisioni. Una collisione si verifica quando due, o più host, trasmettono contemporaneamente sullo stesso mezzo trasmissivo: i segnali generati dai diversi host si sovrappongono, dando origine a un segnale risultante che, nella maggior parte dei casi, è completamente illeggibile per qualsiasi host della rete. Quando si verifica una collisione, i frame coinvolti vengono persi e devono essere ritrasmessi, con conseguente spreco di banda e aumento dei tempi di latenza della comunicazione. Nel caso peggiore, se le collisioni avvengono con una frequenza molto elevata (ad esempio in una rete molto congestionata, con tanti host che cercano di trasmettere contemporaneamente), il throughput effettivo della rete può crollare drasticamente, rendendo la comunicazione di fatto impraticabile. Per questo motivo, è fondamentale che il livello datalink disponga di meccanismi efficaci per gestire l'accesso al mezzo trasmissivo, riducendo al minimo la probabilità di collisioni e, quando queste si verificano, gestendole in modo appropriato.
+
+Prima di analizzare le varie tecniche di accesso al mezzo trasmissivo, è utile distinguere tra due categorie principali di canali: i canali dedicati ed i canali condivisi. Un canale dedicato è un canale trasmissivo riservato esclusivamente a una determinata coppia di host: tutto il traffico che vi transita è generato da uno dei due host e destinato all'altro, per cui non esiste il problema delle collisioni e non sono necessari meccanismi particolari di accesso al mezzo. Un esempio tipico di canale dedicato è il collegamento punto-a-punto tra due router di un'azienda, oppure il collegamento via cavo tra un computer ed una stampante. Un canale condiviso, invece, è un canale trasmissivo utilizzato da più host contemporaneamente, ciascuno dei quali può potenzialmente voler trasmettere i propri dati in un qualsiasi istante. In questo caso, è necessario adottare opportune tecniche per regolare l'accesso al mezzo trasmissivo, in modo da evitare (o gestire) le collisioni e garantire una comunicazione efficiente tra gli host. Esempi tipici di canali condivisi sono le reti Wi-Fi (in cui più dispositivi condividono la stessa banda radio) e le reti Ethernet tradizionali basate su hub (in cui più dispositivi condividono lo stesso cavo).
+
+Per quanto riguarda i canali condivisi, le tecniche utilizzate per gestire l'accesso al mezzo trasmissivo si suddividono in due grandi famiglie: l'allocazione statica e l'allocazione dinamica. L'allocazione statica prevede che la banda disponibile sul canale trasmissivo venga suddivisa a priori tra tutti gli host della rete, assegnando a ciascuno una porzione fissa della banda totale. Le tecniche più note di allocazione statica sono il TDM (Time Division Multiplexing), in cui ciascun host può trasmettere solo in determinati intervalli di tempo prestabiliti, ed il FDM (Frequency Division Multiplexing), in cui ciascun host può trasmettere solo su una determinata banda di frequenze. L'allocazione statica è semplice da implementare e garantisce l'assenza di collisioni, ma è anche estremamente inefficiente: se un host non ha dati da trasmettere, la sua porzione di banda rimane inutilizzata e non può essere sfruttata dagli altri host della rete. Inoltre, l'allocazione statica funziona bene solo quando il numero di host della rete è noto a priori e rimane costante nel tempo, situazione che si verifica raramente nelle reti moderne.
+
+L'allocazione dinamica, invece, prevede che la banda disponibile sul canale trasmissivo venga assegnata agli host in modo dinamico, in base alle effettive esigenze di trasmissione di ciascuno. In altre parole, ciascun host può accedere al mezzo trasmissivo solo quando ha effettivamente dei dati da trasmettere, lasciando libero il canale negli altri istanti. Questo approccio è molto più efficiente dell'allocazione statica, in quanto consente di sfruttare al meglio la banda disponibile, ma introduce il problema della gestione delle collisioni, in quanto più host possono potenzialmente cercare di trasmettere contemporaneamente. Per questo motivo, sono state sviluppate numerose tecniche di allocazione dinamica, ciascuna delle quali adotta un approccio diverso per ridurre la probabilità di collisioni e gestirle quando si verificano. Tra le tecniche più note, che analizzeremo nei prossimi sottoparagrafi, vi sono ALOHA puro, Slotted ALOHA, CSMA (con le sue varianti CSMA/CD e CSMA/CA) ed il meccanismo del backoff esponenziale.
 
 ##### 03.07.01. ALOHA puro
 <!-- to do -->
@@ -498,8 +590,85 @@ Quindi i problemi da risolvere sono sostanziamente i seguenti:
 <!-- to do -->
 
 ### 03.10. Sicurezza e problematiche del livello datalink
-<!-- to do - problematiche di Ethernet -->
-<!-- to do - MAC spoofing -->
-<!-- to do - ARP spoofing -->
-<!-- to do - VLAN hopping -->
-<!-- to do - WPA -->
+
+Il livello datalink, pur essendo un livello relativamente basso dello stack TCP/IP, è soggetto a numerose problematiche di sicurezza. Storicamente, infatti, i protocolli del livello datalink sono stati progettati ponendo l'attenzione principalmente sull'efficienza e sull'affidabilità della comunicazione, trascurando in larga parte gli aspetti di sicurezza. Questo ha portato, nel corso degli anni, alla scoperta di numerose vulnerabilità che possono essere sfruttate da attaccanti malintenzionati per compromettere la riservatezza, l'integrità e la disponibilità dei dati scambiati nella rete locale. In questo paragrafo analizzeremo le principali problematiche di sicurezza del livello datalink, partendo dalle vulnerabilità intrinseche di Ethernet e proseguendo con alcuni dei più noti attacchi che possono essere messi in atto a questo livello, come il MAC spoofing, l'ARP spoofing ed il VLAN hopping. Concluderemo, infine, parlando del protocollo WPA, utilizzato per proteggere le comunicazioni nelle reti wireless.
+
+##### 03.10.01. Problematiche di Ethernet
+
+Ethernet è, senza ombra di dubbio, lo standard più diffuso al mondo per le reti LAN cablate. La sua semplicità, la sua efficienza ed il suo costo contenuto lo hanno reso lo standard de facto per il collegamento di host all'interno di reti locali, sia in ambito domestico, sia in ambito aziendale. Tuttavia, Ethernet presenta alcune problematiche di sicurezza intrinseche, dovute principalmente al modo in cui è stato progettato:
+
+- Assenza di cifratura nativa: i frame Ethernet vengono trasmessi in chiaro sul mezzo trasmissivo, senza alcuna forma di cifratura. Questo significa che chiunque abbia accesso fisico al mezzo trasmissivo (ad esempio collegando un proprio dispositivo a uno switch, oppure intercettando il segnale su un cavo) può leggere il contenuto dei frame trasmessi. Sebbene oggigiorno le reti Ethernet siano basate prevalentemente su switch (che inviano i frame solo al destinatario, riducendo notevolmente la possibilità di sniffing), in passato le reti Ethernet erano basate su hub (dispositivi che ripetono il segnale su tutte le porte), rendendo banale l'intercettazione del traffico.
+- Assenza di autenticazione: i frame Ethernet non prevedono alcuna forma di autenticazione del mittente. Questo significa che un host malintenzionato può facilmente falsificare il proprio indirizzo MAC (MAC spoofing, vedremo a breve) e fingersi un altro host della rete, ingannando gli altri dispositivi.
+- Vulnerabilità a livello di switch: gli switch Ethernet mantengono una tabella, detta MAC address table (o CAM table, da Content Addressable Memory), in cui associano ciascun indirizzo MAC alla porta dello switch a cui è collegato l'host corrispondente. Questa tabella ha una dimensione limitata e può essere saturata da un attaccante che invii un grande numero di frame con indirizzi MAC differenti, costringendo lo switch a comportarsi come un hub (situazione detta MAC flooding, o CAM table overflow), inoltrando i frame su tutte le porte e rendendo possibile lo sniffing del traffico.
+- Vulnerabilità a livello di STP (Spanning Tree Protocol): lo STP è un protocollo utilizzato dagli switch per evitare la formazione di loop nella topologia della rete. Un attaccante può inviare appositi messaggi BPDU (Bridge Protocol Data Unit) per manipolare la topologia logica della rete, ad esempio facendo in modo che il proprio dispositivo diventi il root bridge della rete e, di conseguenza, vedendo passare la maggior parte del traffico attraverso di sé.
+- Vulnerabilità a livello di DHCP: sebbene il DHCP sia un protocollo del livello applicativo, esso viene spesso utilizzato nelle reti Ethernet per assegnare automaticamente gli indirizzi IP agli host. Un attaccante può attivare un server DHCP malevolo (rogue DHCP server) all'interno della rete, distribuendo configurazioni di rete falsificate (ad esempio impostando il proprio dispositivo come gateway predefinito), riuscendo così a intercettare e/o manipolare il traffico degli altri host.
+
+Queste vulnerabilità intrinseche di Ethernet hanno portato allo sviluppo di numerose contromisure, come ad esempio l'utilizzo di switch managed che supportano funzionalità di sicurezza avanzate (port security, DHCP snooping, dynamic ARP inspection, BPDU guard, ecc.), oppure l'utilizzo di VLAN per segmentare la rete e ridurre la superficie d'attacco.
+
+##### 03.10.02. MAC spoofing
+
+Il MAC spoofing è una tecnica con cui un attaccante modifica l'indirizzo MAC della propria scheda di rete in modo da fingersi un altro host della rete. Come abbiamo visto nel paragrafo 03.03.01, l'indirizzo MAC è teoricamente un identificativo univoco a livello mondiale di una scheda di rete. Tuttavia, nella pratica, l'indirizzo MAC può essere modificato in modo molto semplice via software, in quanto non c'è alcun meccanismo hardware che impedisca tale operazione. La maggior parte dei sistemi operativi moderni (Linux, macOS, Windows, ecc.) consente di modificare l'indirizzo MAC di una scheda di rete in pochi semplici passaggi.
+
+Gli scopi del MAC spoofing possono essere molteplici, e non sono sempre malevoli. Alcuni esempi di utilizzo legittimo del MAC spoofing sono i seguenti:
+
+- Aggirare restrizioni basate sull'indirizzo MAC: alcuni provider di servizi Internet (ISP) associano la connessione a un indirizzo MAC specifico (ad esempio quello del router fornito in comodato). Sostituendo il router con uno proprio, è necessario impostare lo stesso indirizzo MAC del router originale per mantenere la connessione attiva.
+- Garantire la privacy: alcuni sistemi operativi (come iOS e Android) consentono di utilizzare un indirizzo MAC casuale quando ci si collega a una rete Wi-Fi, in modo da impedire il tracciamento degli utenti basato sull'indirizzo MAC.
+
+Tuttavia, il MAC spoofing può essere utilizzato anche per scopi malevoli, come ad esempio:
+
+- Aggirare l'autenticazione basata sull'indirizzo MAC: alcuni sistemi di controllo dell'accesso alla rete (NAC, Network Access Control) si basano sull'indirizzo MAC per autenticare gli host. Un attaccante che riesca a scoprire l'indirizzo MAC di un host autorizzato (ad esempio attraverso lo sniffing del traffico) può falsificare il proprio indirizzo MAC e fingersi quell'host, ottenendo accesso alla rete.
+- Effettuare attacchi di tipo man-in-the-middle: combinando il MAC spoofing con altre tecniche (come l'ARP spoofing, vedremo a breve), un attaccante può intercettare il traffico tra due host della rete, leggendolo, modificandolo, oppure bloccandolo.
+- Effettuare attacchi di tipo denial of service: un attaccante può falsificare il proprio indirizzo MAC per fingersi un host legittimo, causando conflitti di indirizzi e impedendo all'host legittimo di comunicare correttamente nella rete.
+
+Per mitigare il MAC spoofing, è possibile utilizzare diverse contromisure, come ad esempio la port security sugli switch managed (che consente di limitare il numero di indirizzi MAC associabili a una determinata porta dello switch), oppure l'utilizzo di sistemi di autenticazione più robusti basati su standard come 802.1X (che prevede l'autenticazione dell'host tramite credenziali, certificati digitali, o altri meccanismi).
+
+##### 03.10.03. ARP spoofing
+
+L'ARP spoofing (detto anche ARP poisoning, o ARP cache poisoning) è uno degli attacchi più noti e più diffusi a livello datalink. Per comprenderlo, è necessario prima fare un breve cenno al protocollo ARP (Address Resolution Protocol), che verrà comunque trattato più nel dettaglio nel capitolo successivo, dedicato al livello network. Il protocollo ARP è utilizzato per associare un indirizzo IP (utilizzato dal livello network) a un indirizzo MAC (utilizzato dal livello datalink) all'interno di una rete locale. Quando un host vuole inviare un pacchetto a un altro host della stessa rete locale, conosce l'indirizzo IP del destinatario, ma non il suo indirizzo MAC. Per scoprirlo, invia un messaggio ARP request in broadcast a tutti gli host della rete, chiedendo: "Chi ha l'indirizzo IP X.X.X.X? Mi dica il suo indirizzo MAC". L'host che ha quell'indirizzo IP risponde con un messaggio ARP reply, contenente il proprio indirizzo MAC. A questo punto, il mittente può inviare il pacchetto al destinatario. Per ottimizzare le prestazioni, ciascun host mantiene una cache locale (detta ARP cache, o ARP table) in cui memorizza le associazioni IP-MAC degli altri host con cui ha comunicato di recente.
+
+Il problema del protocollo ARP è che non prevede alcuna forma di autenticazione. Qualsiasi host della rete può inviare un messaggio ARP reply, anche se non è stato richiesto, e gli altri host lo accetteranno come valido, aggiornando la propria ARP cache. Questo apre la strada all'attacco di ARP spoofing, che funziona nel seguente modo:
+
+1. L'attaccante invia messaggi ARP reply falsificati ai due host che vuole attaccare (ad esempio un host vittima ed il gateway della rete). Nei messaggi falsificati, l'attaccante associa il proprio indirizzo MAC all'indirizzo IP dell'altro host. Ad esempio, all'host vittima invia un messaggio che dice: "L'indirizzo IP del gateway è associato al mio indirizzo MAC". Al gateway, invece, invia un messaggio che dice: "L'indirizzo IP della vittima è associato al mio indirizzo MAC".
+2. I due host, ricevendo i messaggi ARP reply falsificati, aggiornano la propria ARP cache con le associazioni errate.
+3. Da questo momento in poi, tutto il traffico tra l'host vittima ed il gateway passerà attraverso l'attaccante, che potrà leggerlo, modificarlo, oppure bloccarlo a piacimento. Si tratta di un classico attacco di tipo man-in-the-middle.
+
+L'attacco di ARP spoofing è particolarmente pericoloso perché è molto semplice da realizzare (esistono numerosi tool open source, come Ettercap, Bettercap, o arpspoof, che lo automatizzano completamente) ed è difficile da rilevare per un utente comune. Inoltre, può essere utilizzato come base per attacchi più sofisticati, come ad esempio il DNS spoofing, l'intercettazione di credenziali di accesso, o la sostituzione di contenuti web.
+
+Per mitigare l'ARP spoofing, è possibile utilizzare diverse contromisure, come ad esempio:
+
+- ARP statico: configurare manualmente le associazioni IP-MAC nella ARP cache degli host, in modo che non possano essere modificate dai messaggi ARP reply ricevuti dalla rete. Questa soluzione è efficace, ma poco scalabile e di difficile gestione in reti di grandi dimensioni.
+- Dynamic ARP Inspection (DAI): funzionalità disponibile sugli switch managed che ispeziona i messaggi ARP in transito sulla rete e blocca quelli che non corrispondono a una mappatura IP-MAC valida (basata, ad esempio, sulle informazioni fornite dal DHCP snooping).
+- Utilizzo di software di rilevamento dell'ARP spoofing: esistono diversi tool (come ArpWatch, XArp, ecc.) che monitorano la rete e rilevano eventuali anomalie nelle associazioni IP-MAC, segnalandole all'amministratore di rete.
+- Utilizzo di protocolli sicuri: anche se l'ARP spoofing non può essere completamente prevenuto a livello datalink, l'utilizzo di protocolli sicuri ai livelli superiori (come HTTPS, SSH, VPN, ecc.) consente di proteggere la riservatezza e l'integrità dei dati scambiati, anche in presenza di un attaccante che intercetti il traffico.
+
+##### 03.10.04. VLAN hopping
+
+Le VLAN (Virtual LAN) sono una tecnologia che consente di segmentare logicamente una rete LAN fisica in più reti LAN virtuali, ciascuna delle quali costituisce un dominio di broadcast separato. Le VLAN sono ampiamente utilizzate nelle reti aziendali per separare il traffico di diversi dipartimenti, di diversi gruppi di utenti, o di diversi servizi, migliorando sia la sicurezza, sia le prestazioni della rete. Ad esempio, è comune avere una VLAN dedicata al personale amministrativo, una VLAN dedicata agli ospiti, una VLAN dedicata ai server, e così via. Gli host appartenenti a VLAN differenti non possono comunicare direttamente tra loro a livello datalink: per farlo, devono passare attraverso un router (o uno switch layer 3) che effettua il routing tra le VLAN.
+
+Il VLAN hopping è un attacco con cui un attaccante riesce a inviare traffico a una VLAN diversa da quella a cui è effettivamente assegnato, aggirando le restrizioni imposte dalla segmentazione VLAN. Esistono due principali varianti dell'attacco di VLAN hopping:
+
+- Switch spoofing: in questa variante, l'attaccante configura il proprio dispositivo in modo da fingersi uno switch, sfruttando il protocollo DTP (Dynamic Trunking Protocol) utilizzato dagli switch Cisco per negoziare automaticamente le trunk link (collegamenti tra switch che trasportano traffico di più VLAN). Se la porta dello switch a cui è collegato l'attaccante è configurata in modalità auto, o desirable (modalità di default su molti switch Cisco), l'attaccante può negoziare con successo una trunk link e ricevere, quindi, il traffico di tutte le VLAN configurate sullo switch. Per mitigare questo attacco, è sufficiente disabilitare il DTP sulle porte degli utenti finali e configurarle esplicitamente in modalità access (ovvero come porte appartenenti a una singola VLAN).
+- Double tagging: in questa variante, l'attaccante sfrutta il modo in cui gli switch gestiscono i tag VLAN nei frame Ethernet (standard 802.1Q). L'attaccante invia un frame con due tag VLAN: il primo tag corrisponde alla VLAN nativa del trunk link (ovvero la VLAN i cui frame vengono trasmessi senza tag sul trunk link), mentre il secondo tag corrisponde alla VLAN di destinazione dell'attacco. Quando il frame raggiunge il primo switch, quest'ultimo rimuove il primo tag (perché corrisponde alla VLAN nativa) e inoltra il frame sul trunk link. Quando il frame raggiunge il secondo switch, quest'ultimo legge il secondo tag e inoltra il frame alla VLAN di destinazione, anche se l'attaccante non appartiene a quella VLAN. Per mitigare questo attacco, è possibile utilizzare diverse contromisure, come ad esempio configurare la VLAN nativa del trunk link in modo che sia una VLAN dedicata e non utilizzata da alcun host, oppure abilitare la funzionalità di tagging esplicito anche per i frame della VLAN nativa.
+
+Il VLAN hopping è un attacco particolarmente insidioso perché consente all'attaccante di aggirare la segmentazione della rete, accedendo a risorse che dovrebbero essere protette. Per questo motivo, è fondamentale configurare correttamente gli switch e seguire le best practice di sicurezza per le VLAN, come ad esempio: disabilitare il DTP sulle porte degli utenti finali, utilizzare una VLAN nativa dedicata, disabilitare le porte non utilizzate, configurare la port security, ecc.
+
+##### 03.10.05. WPA (Wi-Fi Protected Access)
+
+Le reti wireless, come abbiamo visto nel paragrafo 03.09, sono particolarmente esposte a problematiche di sicurezza, in quanto il mezzo trasmissivo (l'aria) è condiviso e chiunque si trovi nel raggio di copertura della rete può potenzialmente intercettare il segnale. Per questo motivo, è fondamentale utilizzare protocolli di sicurezza che garantiscano la riservatezza, l'integrità e l'autenticazione delle comunicazioni wireless. Il primo protocollo di sicurezza utilizzato nelle reti Wi-Fi è stato il WEP (Wired Equivalent Privacy), introdotto nel 1997 insieme allo standard 802.11. Tuttavia, il WEP si è rivelato fin da subito molto debole, a causa di numerose vulnerabilità nel suo design (ad esempio l'utilizzo di un vettore di inizializzazione troppo corto per l'algoritmo di cifratura RC4, che consente di recuperare la chiave di cifratura analizzando un sufficiente numero di frame). Oggigiorno il WEP è considerato completamente insicuro e non deve essere utilizzato.
+
+Per superare le vulnerabilità del WEP, la Wi-Fi Alliance ha introdotto nel 2003 il protocollo WPA (Wi-Fi Protected Access), che ha rappresentato un significativo passo avanti in termini di sicurezza. Il WPA è stato progettato per essere compatibile con l'hardware esistente (in modo da poter essere implementato come aggiornamento firmware sui dispositivi già in uso) e introduce diverse migliorie rispetto al WEP, tra cui:
+
+- TKIP (Temporal Key Integrity Protocol): un protocollo di gestione delle chiavi che genera dinamicamente una nuova chiave di cifratura per ciascun frame, eliminando il problema della chiave statica del WEP. Inoltre, TKIP utilizza un vettore di inizializzazione di 48 bit (rispetto ai 24 bit del WEP), riducendo la probabilità di collisioni.
+- MIC (Message Integrity Check): un codice di controllo dell'integrità del messaggio (detto anche Michael) che protegge i frame da modifiche non autorizzate, sostituendo il debole CRC-32 del WEP.
+- Autenticazione robusta: il WPA supporta due modalità di autenticazione: WPA-Personal (detta anche WPA-PSK, Pre-Shared Key), in cui tutti gli host condividono una chiave segreta comune; e WPA-Enterprise, in cui ciascun host si autentica utilizzando credenziali individuali (ad esempio username e password, o certificati digitali) tramite un server RADIUS (Remote Authentication Dial-In User Service) e il protocollo 802.1X.
+
+Tuttavia, anche il WPA ha mostrato nel tempo alcune vulnerabilità (in particolare il TKIP, che pur essendo significativamente più sicuro del WEP, presenta comunque debolezze sfruttabili da attaccanti esperti). Per questo motivo, nel 2004 è stato introdotto il WPA2, basato sullo standard IEEE 802.11i. Il WPA2 sostituisce TKIP con il protocollo CCMP (Counter Mode with Cipher Block Chaining Message Authentication Code Protocol), basato sull'algoritmo di cifratura AES (Advanced Encryption Standard) a 128 bit, considerato estremamente sicuro. Come il WPA, anche il WPA2 supporta le due modalità di autenticazione Personal ed Enterprise. Per molti anni il WPA2 è stato considerato lo standard di sicurezza per le reti Wi-Fi, anche se nel 2017 è stata scoperta una vulnerabilità nel meccanismo di handshake a quattro vie (4-way handshake) utilizzato dal WPA2, nota come KRACK (Key Reinstallation Attack), che consente a un attaccante di decifrare il traffico di un host vittima sfruttando la reinstallazione di una chiave già utilizzata.
+
+Per superare le vulnerabilità del WPA2 e fornire un ulteriore livello di sicurezza, nel 2018 la Wi-Fi Alliance ha introdotto il WPA3, l'attuale standard di sicurezza per le reti Wi-Fi. Le principali migliorie introdotte dal WPA3 rispetto al WPA2 sono:
+
+- SAE (Simultaneous Authentication of Equals): un nuovo meccanismo di handshake che sostituisce il 4-way handshake del WPA2, rendendo molto più difficili gli attacchi di tipo dictionary attack (in cui un attaccante prova a indovinare la chiave provando un gran numero di combinazioni) e proteggendo il traffico anche in caso di compromissione della chiave (forward secrecy).
+- Cifratura individuale per ciascun host: nelle reti WPA3-Personal, ciascun host utilizza una chiave di cifratura individuale, anche se la chiave segreta condivisa è la stessa per tutti. Questo significa che, anche se un attaccante riuscisse a intercettare il traffico di un host, non sarebbe in grado di decifrare il traffico degli altri host della rete.
+- Maggiore protezione per le password deboli: il WPA3 introduce meccanismi che proteggono gli host anche quando vengono utilizzate password deboli, rendendo molto più difficili gli attacchi di tipo brute force.
+- WPA3-Enterprise a 192 bit: una modalità di sicurezza avanzata pensata per ambienti che richiedono il massimo livello di protezione (ad esempio enti governativi, militari, o finanziari), basata su algoritmi crittografici a 192 bit.
+
+In sintesi, l'evoluzione dei protocolli di sicurezza wireless (WEP &rarr; WPA &rarr; WPA2 &rarr; WPA3) riflette la continua ricerca di un equilibrio tra sicurezza, prestazioni e compatibilità con l'hardware esistente. Oggigiorno, quando si configura una rete Wi-Fi, è fortemente consigliato utilizzare il WPA3 (se supportato da tutti i dispositivi della rete) o, in alternativa, il WPA2 con AES/CCMP. L'utilizzo del WEP, o del WPA con TKIP, è invece da evitare, in quanto offre un livello di sicurezza del tutto inadeguato per gli standard moderni.
