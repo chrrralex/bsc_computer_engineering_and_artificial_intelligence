@@ -527,10 +527,58 @@ Esistono due tipi principali di finestre:
 Normalmente, la finestra del ricevente è più ampia rispetto a quella del mittente. Il meccanismo fondamentale di tutti i protocolli SWPs è il seguente: quando il ricevente invia un'ACK con un certo numero di sequenza, le sliding window di mittente e ricevitore si spostano in avanti, includendo i successivi sequence number dei frame che devono essere trasmessi. Ciò garantisce un controllo diretto e molto preciso del traffico.
 
 ##### 03.06.01. Protocollo Go-Back-N ARQ (Automatic Repeat reQuest)
-<!-- to do -->
 
-##### 03.06.02. Protocollo Selective Repat ARQ (Automatic Repeat reQuest)
-<!-- to do -->
+Il protocollo Go-Back-N ARQ è uno dei più importanti protocolli a finestra scorrevole del livello datalink. L'idea centrale è molto semplice: il mittente non si limita ad inviare un solo frame e attendere il relativo ACK, ma può inviare consecutivamente un intero gruppo di frame, purché i loro sequence number rientrino all'interno della propria sender window. Il valore $N$ del nome del protocollo indica proprio il numero massimo di frame che il mittente può avere "in volo" (cioè trasmessi ma non ancora confermati) nello stesso istante.
+
+Nel protocollo Go-Back-N il ricevente adotta un comportamento molto rigido: accetta soltanto il frame che possiede esattamente il sequence number atteso. Se riceve correttamente il frame atteso, lo consegna al livello superiore e aggiorna il numero di sequenza successivo atteso. Se invece riceve un frame fuori ordine, lo scarta. In altre parole, il ricevente non memorizza i frame arrivati in anticipo rispetto a quello mancante, ma li considera inutilizzabili finché non giunge il frame corretto. Per questo motivo si dice che, dal punto di vista logico, la receiver window del protocollo Go-Back-N ha ampiezza pari a 1.
+
+La conferma di ricezione utilizzata in Go-Back-N è cumulativa. Questo significa che un ACK non conferma solo un singolo frame, ma tutti i frame ricevuti correttamente fino a quel momento in ordine. Se, ad esempio, il destinatario invia un ACK riferito al frame 4, ciò significa che tutti i frame fino al 4 sono stati ricevuti correttamente e che il prossimo frame atteso è il 5. Questo meccanismo riduce il numero di messaggi di controllo necessari e rende il protocollo più efficiente rispetto allo stop-and-wait.
+
+Il comportamento del mittente può essere riassunto così:
+
+- mantiene una finestra di ampiezza $N$ contenente i frame che può trasmettere;
+- invia tutti i frame consentiti dalla finestra senza fermarsi dopo ciascuno di essi;
+- avvia un timer per il frame meno recente ancora privo di conferma;
+- quando riceve un ACK cumulativo, fa scorrere in avanti la finestra e può inviare nuovi frame;
+- se scade il timeout del frame più vecchio non confermato, ritrasmette quel frame e tutti i successivi già inviati ma non ancora confermati.
+
+È proprio quest'ultimo comportamento a dare il nome al protocollo: go back significa infatti "tornare indietro". Se, per esempio, il mittente invia i frame 0, 1, 2, 3 e 4 e il frame 2 viene perso, il destinatario riceverà magari i frame 3 e 4, ma li scarterà perché sta ancora aspettando il frame 2. Quando il timer del frame 2 scade, il mittente non ritrasmette soltanto il frame mancante, bensì riparte dal frame 2 e invia nuovamente anche i frame 3 e 4. In pratica torna indietro al primo frame non confermato e ritrasmette tutto il blocco successivo.
+
+La seguente situazione può essere rappresentata come segue:
+
+<!-- to add -->
+*In Figura: funzionamento del protocollo Go-Back-N con perdita di un frame e ritrasmissione cumulativa*
+
+I vantaggi principali del protocollo Go-Back-N sono la relativa semplicità di implementazione e la buona efficienza quando il canale trasmissivo è poco rumoroso, cioè quando gli errori e le perdite di frame sono rari. In queste condizioni, il mittente riesce a sfruttare bene il canale inviando più frame consecutivamente e ricevendo ACK cumulativi.
+
+Tuttavia, il protocollo presenta anche un importante svantaggio: se un singolo frame viene perso, o arriva con errore, tutti i frame successivi già trasmessi e ricevuti fuori ordine devono essere inviati nuovamente, anche se erano arrivati correttamente al destinatario. Questo può causare uno spreco significativo di banda nei canali soggetti a rumore, o nelle reti con ritardi elevati. Proprio per ridurre questo problema è stato introdotto un protocollo più evoluto, chiamato Selective Repeat ARQ, che analizzeremo nel prossimo paragrafo.
+
+##### 03.06.02. Protocollo Selective Repeat ARQ (Automatic Repeat reQuest)
+
+Il protocollo Selective Repeat ARQ rappresenta una evoluzione del Go-Back-N ARQ ed è stato progettato proprio per evitare la ritrasmissione inutile di frame che, in realtà, erano già arrivati correttamente al destinatario. L'idea fondamentale è che non tutti gli errori devono obbligare il mittente a tornare indietro e reinviare un intero blocco di frame: è spesso sufficiente ritrasmettere soltanto i frame effettivamente persi, o danneggiati. Da qui deriva il termine selective repeat, cioè "ritrasmissione selettiva".
+
+Nel protocollo Selective Repeat sia il mittente, sia il destinatario utilizzano una vera finestra scorrevole di ampiezza maggiore di 1. Questo significa che il ricevente non si limita più ad accettare il solo frame atteso, ma può anche accettare frame arrivati fuori ordine, purché il loro sequence number rientri all'interno della receiver window. I frame ricevuti correttamente ma fuori ordine non vengono scartati: vengono temporaneamente memorizzati in un buffer, in attesa che arrivino i frame mancanti che permettono di ricostruire la corretta sequenza dei dati.
+
+Il comportamento del protocollo può essere descritto così:
+
+- il mittente invia più frame consecutivi, purché rientrino nella propria sender window;
+- ciascun frame trasmesso ha normalmente un proprio timer associato;
+- il destinatario conferma singolarmente i frame ricevuti correttamente, oppure segnala esplicitamente quelli mancanti;
+- i frame arrivati fuori ordine vengono memorizzati dal ricevente e non scartati;
+- se scade il timeout di un certo frame, il mittente ritrasmette soltanto quel frame, e non l'intero gruppo successivo.
+
+Questo è il punto di maggiore differenza rispetto al Go-Back-N. Supponiamo, per esempio, che il mittente invii i frame 0, 1, 2, 3 e 4 e che il frame 2 venga perso. Se il destinatario riceve i frame 3 e 4, non li elimina: li conserva nel proprio buffer e invia gli opportuni ACK per segnalare che quei frame sono stati ricevuti. Quando il mittente si accorge, tramite timeout o tramite un NACK, che il frame 2 non è arrivato, ritrasmette soltanto il frame 2. Appena il ricevente lo riceve, può ricostruire l'intera sequenza e consegnare al livello superiore anche i frame 3 e 4 che aveva già memorizzato.
+
+La situazione può essere rappresentata nel seguente modo:
+
+<!-- to add -->
+*In Figura: funzionamento del protocollo Selective Repeat con memorizzazione dei frame fuori ordine e ritrasmissione selettiva*
+
+Affinché il protocollo funzioni correttamente, bisogna prestare particolare attenzione alla dimensione della finestra e all'intervallo dei numeri di sequenza. Poiché i sequence number vengono riutilizzati ciclicamente, una finestra troppo ampia potrebbe generare ambiguità tra frame nuovi e frame vecchi duplicati. Per questo motivo, nei protocolli Selective Repeat la dimensione della finestra è scelta in modo più restrittivo rispetto al Go-Back-N: in termini generali, essa non deve superare la metà dello spazio totale dei numeri di sequenza disponibili.
+
+I vantaggi del Selective Repeat ARQ sono evidenti nei canali rumorosi, o nelle reti con ritardi elevati. Poiché vengono ritrasmessi solo i frame realmente persi o corrotti, si ha un utilizzo della banda molto più efficiente rispetto al Go-Back-N. Inoltre, il destinatario non spreca il lavoro già svolto sui frame ricevuti correttamente fuori ordine, ma li conserva per usarli non appena la sequenza diventa completa.
+
+Naturalmente questi benefici si pagano con una maggiore complessità implementativa. Il mittente deve gestire più timer contemporaneamente, uno per ciascun frame non ancora confermato. Il destinatario, invece, deve mantenere un buffer per i frame fuori ordine e una logica più sofisticata per decidere quando la sequenza è completa e può essere consegnata al livello superiore. In sintesi, il Selective Repeat è più efficiente del Go-Back-N, ma anche più costoso in termini di memoria, controllo e logica di gestione.
 
 ### 03.07. Accesso al mezzo trasmissivo 
 
@@ -545,25 +593,146 @@ Per quanto riguarda i canali condivisi, le tecniche utilizzate per gestire l'acc
 L'allocazione dinamica, invece, prevede che la banda disponibile sul canale trasmissivo venga assegnata agli host in modo dinamico, in base alle effettive esigenze di trasmissione di ciascuno. In altre parole, ciascun host può accedere al mezzo trasmissivo solo quando ha effettivamente dei dati da trasmettere, lasciando libero il canale negli altri istanti. Questo approccio è molto più efficiente dell'allocazione statica, in quanto consente di sfruttare al meglio la banda disponibile, ma introduce il problema della gestione delle collisioni, in quanto più host possono potenzialmente cercare di trasmettere contemporaneamente. Per questo motivo, sono state sviluppate numerose tecniche di allocazione dinamica, ciascuna delle quali adotta un approccio diverso per ridurre la probabilità di collisioni e gestirle quando si verificano. Tra le tecniche più note, che analizzeremo nei prossimi sottoparagrafi, vi sono ALOHA puro, Slotted ALOHA, CSMA (con le sue varianti CSMA/CD e CSMA/CA) ed il meccanismo del backoff esponenziale.
 
 ##### 03.07.01. ALOHA puro
-<!-- to do -->
+
+ALOHA puro è uno dei primi protocolli di accesso dinamico al mezzo trasmissivo sviluppati nella storia delle reti di calcolatori. Fu ideato per reti radio, quindi per canali condivisi nei quali più host possono tentare di trasmettere nello stesso istante senza avere un controllo centralizzato del mezzo. L'idea di base del protocollo è estremamente semplice: quando un host ha un frame da trasmettere, lo trasmette immediatamente, senza attendere alcun istante particolare e senza verificare in anticipo se il canale sia libero, oppure occupato.
+
+Questa scelta rende il protocollo molto semplice da implementare, ma introduce un problema evidente: due host potrebbero decidere di trasmettere quasi nello stesso istante. In tal caso i frame si sovrappongono nel mezzo trasmissivo, generando una collisione. Poiché il canale è condiviso, il destinatario non riesce più a distinguere correttamente i dati ricevuti e i frame coinvolti devono essere considerati persi.
+
+Il funzionamento di ALOHA puro può essere descritto nei seguenti passi:
+
+- un host genera un frame da inviare;
+- il frame viene trasmesso immediatamente sul canale condiviso;
+- il mittente attende una conferma di ricezione, oppure un tempo massimo di risposta;
+- se la conferma arriva correttamente, la trasmissione è considerata completata;
+- se la conferma non arriva entro il tempo previsto, il mittente assume che si sia verificata una collisione e ritrasmette il frame dopo un intervallo di tempo casuale.
+
+L'attesa di un intervallo casuale prima della ritrasmissione è fondamentale. Se due host che hanno colliso ritrasmettessero immediatamente il frame nello stesso istante, colliderebbero di nuovo. Introducendo un ritardo casuale, si aumenta la probabilità che le successive ritrasmissioni avvengano in istanti differenti, riducendo quindi il rischio di nuove collisioni ripetute.
+
+Il principale limite di ALOHA puro è che il protocollo non impone alcuna sincronizzazione temporale tra gli host. Un frame può iniziare in qualsiasi istante e può quindi collidere con un altro frame che sia iniziato poco prima, o poco dopo. In termini teorici, se indichiamo con $T$ il tempo necessario a trasmettere un frame, un frame è vulnerabile alle collisioni per un intervallo totale pari a $2T$: può infatti entrare in collisione con un altro frame iniziato fino a un tempo $T$ prima, oppure fino a un tempo $T$ dopo il suo inizio. Questo intervallo prende il nome di periodo vulnerabile (vulnerable period).
+
+La seguente situazione può essere rappresentata nel seguente modo:
+
+<!-- to add -->
+*In Figura: funzionamento di ALOHA puro con trasmissione immediata e possibile collisione tra due frame*
+
+Dal punto di vista delle prestazioni, ALOHA puro è piuttosto inefficiente. Il massimo throughput teorico del protocollo è pari a circa il 18% della capacità del canale. Questo significa che, anche nelle condizioni migliori, una parte molto ampia della banda disponibile viene sprecata a causa delle collisioni e delle conseguenti ritrasmissioni. Per questo motivo ALOHA puro è importante soprattutto dal punto di vista storico e concettuale: ha mostrato che era possibile progettare protocolli distribuiti per l'accesso al mezzo, ma ha anche evidenziato la necessità di meccanismi più efficienti.
+
+I vantaggi di ALOHA puro sono quindi la semplicità, la totale decentralizzazione e la facilità di utilizzo in reti radio molto semplici. Gli svantaggi, invece, sono numerosi: elevata probabilità di collisione, scarso sfruttamento della banda, numero elevato di ritrasmissioni e throughput ridotto. Proprio per migliorare questi aspetti è stato introdotto il protocollo Slotted ALOHA, che analizzeremo nel prossimo paragrafo.
 
 ##### 03.07.02. Slotted ALOHA
-<!-- to do -->
 
-##### 03.07.03. CSMA (Carrier Sense Multiple Access)
-<!-- to do -->
+Il protocollo Slotted ALOHA nasce come miglioramento diretto di ALOHA puro. L'idea fondamentale è introdurre una sincronizzazione temporale tra tutti gli host della rete, in modo da ridurre la probabilità di collisione. Invece di permettere l'inizio della trasmissione in un qualsiasi istante, il tempo viene suddiviso in intervalli discreti di uguale durata, detti slot temporali (time slots). Ciascuno slot ha una durata sufficiente a trasmettere esattamente un frame.
 
-##### 03.07.04. CSMA/CD (Carrier Sense Multiple Access with Collision Detection)
-<!-- to do -->
+La regola del protocollo è molto semplice: un host che ha un frame da inviare può iniziare a trasmettere solo all'inizio di uno slot. Se il frame viene generato mentre uno slot è già in corso, il mittente deve attendere l'inizio dello slot successivo. In questo modo vengono eliminate tutte le collisioni parziali tipiche di ALOHA puro: due frame non possono più sovrapporsi solo in parte, ma collidono soltanto se due o più host iniziano a trasmettere esattamente nello stesso slot.
 
-##### 03.07.05. Backoff esponenziale
-<!-- to do -->
+Il funzionamento di Slotted ALOHA può essere riassunto nei seguenti punti:
 
-##### 03.07.06. CSMA/CA (Carrier Sense Multiple Access with Collision Avoidance)
-<!-- to do -->
+- il tempo del canale è suddiviso in slot consecutivi, tutti della stessa lunghezza;
+- ogni host conosce la sincronizzazione comune degli slot;
+- se un host ha un frame da trasmettere, aspetta l'inizio del primo slot disponibile;
+- se nello stesso slot trasmette un solo host, il frame viene ricevuto correttamente;
+- se nello stesso slot trasmettono due o più host, si verifica una collisione e tutti i frame di quello slot vengono persi;
+- in caso di collisione, ciascun mittente ritenta la trasmissione in uno slot successivo scelto secondo un criterio casuale.
+
+La differenza rispetto ad ALOHA puro è quindi sostanziale. In ALOHA puro un frame è vulnerabile alle collisioni per un intervallo totale pari a $2T$, dove $T$ è il tempo di trasmissione del frame. In Slotted ALOHA, invece, il periodo vulnerabile si riduce a $T$, perché le collisioni possono avvenire soltanto all'interno dello stesso slot temporale. Questo semplice accorgimento raddoppia, in termini teorici, l'efficienza massima del protocollo.
+
+La situazione può essere rappresentata nel seguente modo:
+
+<!-- to add -->
+*In Figura: funzionamento di Slotted ALOHA con tempo suddiviso in slot e collisione solo se più host trasmettono nello stesso slot*
+
+Dal punto di vista delle prestazioni, Slotted ALOHA è sensibilmente migliore di ALOHA puro. Il throughput teorico massimo raggiunge circa il 37% della capacità del canale, cioè circa il doppio rispetto ad ALOHA puro. Questo miglioramento deriva proprio dalla riduzione del periodo vulnerabile e dal fatto che le collisioni sono possibili solo in corrispondenza degli allineamenti sugli slot.
+
+Nonostante questo miglioramento, Slotted ALOHA presenta ancora limiti importanti. Se molti host desiderano trasmettere contemporaneamente, più nodi tenderanno comunque a scegliere gli stessi slot, provocando collisioni e ritrasmissioni. Inoltre, la sincronizzazione degli slot richiede un meccanismo comune di temporizzazione, che rende il protocollo più complesso rispetto ad ALOHA puro. Esiste poi un'ulteriore inefficienza: se in uno slot nessun host trasmette, quello slot resta completamente inutilizzato e la banda va persa.
+
+I vantaggi principali di Slotted ALOHA sono quindi il miglior sfruttamento del canale rispetto ad ALOHA puro, la riduzione delle collisioni parziali e una migliore prevedibilità temporale delle trasmissioni. Gli svantaggi sono la necessità di sincronizzazione globale, la persistenza delle collisioni quando più host scelgono lo stesso slot e un'efficienza ancora limitata rispetto ai protocolli più evoluti. Proprio per superare anche questi limiti sono stati sviluppati protocolli che ascoltano il canale prima di trasmettere, come il CSMA, che analizzeremo nel prossimo paragrafo.
+
+##### 03.07.03. Backoff esponenziale
+
+Il backoff esponenziale è una tecnica utilizzata per gestire le ritrasmissioni dopo una collisione in un canale condiviso. L'idea di base è molto intuitiva: quando due, o più host collidono, non devono ritentare immediatamente la trasmissione, perché rischierebbero di collidere di nuovo nello stesso istante. Occorre invece introdurre un tempo di attesa casuale prima del nuovo tentativo. Il termine esponenziale indica proprio il fatto che, al crescere del numero di collisioni consecutive, cresce anche l'intervallo di tempo entro cui il nodo sceglie casualmente quando ritrasmettere.
+
+Questa tecnica è estremamente importante perché consente di ridurre la probabilità di collisioni ripetute nelle reti in cui più host competono per lo stesso mezzo trasmissivo. Il backoff esponenziale non è, di per sé, un protocollo completo di accesso al mezzo, ma un meccanismo di supporto utilizzato da protocolli più complessi, come per esempio CSMA/CD e, in forme differenti, anche in altri sistemi di accesso distribuito.
+
+Il funzionamento generale è il seguente:
+
+- un host tenta di trasmettere un frame;
+- se non si verifica alcuna collisione, la trasmissione procede normalmente;
+- se si verifica una collisione, il frame viene considerato non trasmesso con successo;
+- il mittente attende un intervallo di tempo casuale prima di ritentare;
+- se la collisione si ripete, l'intervallo casuale da cui scegliere il ritardo viene ampliato progressivamente.
+
+L'idea matematica alla base del backoff esponenziale consiste nell'aumentare la finestra di attesa dopo ogni collisione. Dopo il primo insuccesso il nodo sceglie casualmente un piccolo ritardo; dopo il secondo, sceglie il ritardo da un insieme più ampio; dopo il terzo, da un insieme ancora più grande, e così via. Se indichiamo con $k$ il numero di collisioni consecutive subite da un frame, il nodo sceglie tipicamente un numero casuale in un intervallo proporzionale a $2^k$. In termini qualitativi, quindi, la finestra di attesa raddoppia dopo ciascuna collisione, almeno fino a un limite massimo stabilito dal protocollo.
+
+Questo comportamento ha un vantaggio fondamentale: quando la rete è poco congestionata, i ritardi introdotti restano molto piccoli e l'efficienza è elevata. Quando invece molti host stanno collidendo tra loro, il meccanismo allarga rapidamente l'intervallo di ritrasmissione, distribuendo meglio nel tempo i successivi tentativi e diminuendo così la probabilità che i nodi si scontrino ancora tutti insieme.
+
+La situazione può essere rappresentata nel seguente modo:
+
+<!-- to add -->
+*In Figura: backoff esponenziale con aumento progressivo della finestra casuale di ritrasmissione dopo collisioni successive*
+
+Il caso più noto di utilizzo del backoff esponenziale è il binary exponential backoff impiegato nelle reti Ethernet classiche con CSMA/CD. In quel contesto, dopo la prima collisione il nodo sceglie un ritardo casuale tra due possibili valori; dopo la seconda collisione sceglie tra quattro; dopo la terza tra otto, e così via, fino a un massimo fissato dallo standard. Se si supera un certo numero di tentativi senza successo, il frame viene scartato e il protocollo segnala un errore ai livelli superiori.
+
+I vantaggi del backoff esponenziale sono la semplicità concettuale, la capacità di adattarsi dinamicamente al livello di congestione del canale e la riduzione delle collisioni ripetute. Tuttavia, esistono anche alcuni limiti: in condizioni di traffico molto elevato il ritardo medio può crescere notevolmente, aumentando la latenza; inoltre, il meccanismo non elimina del tutto le collisioni, ma si limita a renderle meno probabili. In sintesi, il backoff esponenziale è un meccanismo di stabilizzazione del traffico molto efficace, ma dà il meglio di sé quando è integrato all'interno di protocolli di accesso al mezzo più completi, come quelli che analizzeremo nel prossimo paragrafo.
+
+##### 03.07.04. CSMA (Carrier Sense Multiple Access), CSMA/CD e CSMA/CA
+
+Il CSMA (Carrier Sense Multiple Access) rappresenta un importante passo avanti rispetto ai protocolli ALOHA. L'idea centrale è semplice ma molto efficace: prima di trasmettere, un host ascolta il canale per capire se esso sia libero, oppure occupato. Il termine carrier sense indica proprio questa operazione di ascolto della portante, cioè del segnale presente sul mezzo trasmissivo. Se il canale risulta libero, l'host tenta la trasmissione; se invece il canale risulta occupato, l'host attende prima di riprovare. Come fa l'host che vorrebbe trasmettere a capire se qualcuno sta già trasmettendo? Semplicemente, esso conosce già la forma della portante (una specie di segnale di base che è sempre presente nel mezzo trasmissivo): se tale forma è modificata, allora significa che qualcuno sta già trasmettendo; diversamente, significa che il canale è libero.
+
+Questa strategia riduce notevolmente il numero di collisioni rispetto ad ALOHA puro e Slotted ALOHA, perché evita che un host trasmetta mentre un altro sta già utilizzando il mezzo. Tuttavia, il CSMA non elimina completamente le collisioni. Infatti, a causa del ritardo di propagazione del segnale, può accadere che due host lontani tra loro verifichino quasi contemporaneamente che il canale è libero e inizino entrambi a trasmettere. In questa situazione la collisione si verifica comunque, anche se con probabilità inferiore rispetto ai protocolli studiati in precedenza.
+
+Esistono diverse politiche con cui un nodo CSMA decide come comportarsi quando trova il canale occupato:
+
+- 1-persistent CSMA: l'host continua ad ascoltare il canale e trasmette immediatamente non appena lo trova libero;
+- non-persistent CSMA: l'host, se trova il canale occupato, aspetta un tempo casuale prima di effettuare un nuovo controllo;
+- p-persistent CSMA: tipico dei sistemi a slot temporali; quando il canale diventa libero, l'host trasmette con probabilità $p$ e rimanda al successivo slot con probabilità $1 - p$.
+
+La seguente situazione descrive l'idea generale del CSMA:
+
+<!-- to add -->
+*In Figura: un host ascolta il canale e trasmette solo quando il mezzo risulta libero*
+
+Il CSMA costituisce la base di due famiglie di protocolli molto importanti, che si differenziano nel modo in cui gestiscono le collisioni residue: CSMA/CD e CSMA/CA.
+
+Il protocollo CSMA/CD (Carrier Sense Multiple Access with Collision Detection) è stato storicamente utilizzato nelle reti Ethernet cablate tradizionali, specialmente quelle basate su bus e hub. In questo caso non basta ascoltare il canale prima di trasmettere: durante la trasmissione, l'host continua anche a monitorare il mezzo per accorgersi se si sta verificando una collisione. Se il nodo rileva una collisione, interrompe immediatamente l'invio del frame, trasmette un apposito segnale di disturbo (jam signal) per informare gli altri nodi dell'evento e poi attende un tempo casuale determinato dal backoff esponenziale prima di ritentare.
+
+Il funzionamento del CSMA/CD può essere riassunto così:
+
+- l'host ascolta il canale;
+- se il canale è libero, inizia a trasmettere;
+- mentre trasmette, continua a controllare il mezzo;
+- se non rileva collisioni, la trasmissione termina con successo;
+- se rileva una collisione, interrompe immediatamente la trasmissione, invia il jam signal e applica il backoff esponenziale prima del nuovo tentativo.
+
+Il vantaggio principale del CSMA/CD è che la collisione viene rilevata rapidamente, evitando di sprecare l'intero tempo necessario a trasmettere un frame completo danneggiato. Tuttavia, esso funziona bene soprattutto nei mezzi cablati condivisi, nei quali è tecnicamente possibile trasmettere e ascoltare contemporaneamente il canale. Con l'avvento degli switch Ethernet moderni e delle connessioni full-duplex, le collisioni nelle reti Ethernet locali sono diventate di fatto assenti, per cui il ruolo pratico del CSMA/CD è oggi molto meno centrale rispetto al passato.
+
+Il protocollo CSMA/CA (Carrier Sense Multiple Access with Collision Avoidance), invece, è tipico delle reti wireless, come le reti Wi-Fi. Nelle comunicazioni senza fili è molto difficile, e spesso impossibile, rilevare una collisione mentre si sta trasmettendo: il segnale inviato dal dispositivo è molto più forte di quello che esso potrebbe ricevere nello stesso istante, per cui il nodo non riesce a capire con affidabilità se un altro host stia trasmettendo contemporaneamente. Per questo motivo, nelle reti wireless si preferisce evitare le collisioni, piuttosto che tentare di rilevarle durante la trasmissione.
+
+Nel CSMA/CA il nodo ascolta il canale e, se lo trova libero, non trasmette sempre immediatamente. Spesso attende ancora per un piccolo intervallo di sicurezza e utilizza meccanismi casuali di attesa per ridurre la probabilità che più nodi inizino a trasmettere nello stesso istante. Dopo la trasmissione, il ricevitore invia normalmente un ACK per confermare la corretta ricezione del frame. Se l'ACK non arriva, il mittente presume che si sia verificata una collisione, o un errore, e ritrasmette successivamente. In molte reti wireless si usano anche meccanismi aggiuntivi, come RTS (Request To Send) e CTS (Clear To Send), che analizzeremo nei prossimi paragrafi.
+
+Le differenze essenziali tra CSMA/CD e CSMA/CA possono essere riassunte in questo modo:
+
+- CSMA/CD: ascolta prima di trasmettere e rileva le collisioni durante la trasmissione;
+- CSMA/CA: ascolta prima di trasmettere e cerca di prevenire le collisioni prima che esse avvengano;
+- CSMA/CD: è adatto soprattutto alle reti cablate condivise;
+- CSMA/CA: è adatto soprattutto alle reti wireless.
+
+In sintesi, il CSMA migliora nettamente l'efficienza rispetto ai protocolli ALOHA perché introduce l'ascolto del canale prima dell'invio. Le sue varianti CSMA/CD e CSMA/CA adattano poi questa idea a contesti differenti: il primo è orientato alle reti cablate con possibilità di rilevare direttamente le collisioni, mentre il secondo è pensato per le reti wireless, dove è più realistico tentare di evitarle. Questi protocolli costituiscono la base teorica per comprendere il funzionamento di Ethernet e delle reti Wi-Fi moderne.
 
 ### 03.08. Ethernet
-<!-- to do -->
+
+Ethernet è lo standard più diffuso per le reti LAN cablate. Le sue principali caratteristiche sono le seguenti:
+
+- utilizza frame come PDU del livello datalink;
+- identifica i dispositivi tramite indirizzi MAC a 48 bit;
+- è definita principalmente dallo standard IEEE 802.3;
+- nasce storicamente come tecnologia a mezzo condiviso con accesso CSMA/CD;
+- nelle reti moderne opera quasi sempre con switch e collegamenti point-to-point;
+- supporta modalità half-duplex e full-duplex;
+- può funzionare su diversi mezzi trasmissivi, come doppino intrecciato, fibra ottica e, storicamente, cavo coassiale;
+- supporta velocità di trasmissione molto differenti, ad esempio 10 Mbps, 100 Mbps, 1 Gbps, 10 Gbps e superiori;
+- utilizza un campo FCS per il rilevamento degli errori mediante CRC;
+- è una tecnologia economica, scalabile e semplice da integrare nelle reti locali;
+- costituisce la base di gran parte delle infrastrutture LAN moderne, sia domestiche sia aziendali.
 
 ### 03.09. Reti Wireless
 <!-- to do -->
