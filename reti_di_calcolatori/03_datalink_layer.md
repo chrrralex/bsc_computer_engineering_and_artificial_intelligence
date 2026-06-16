@@ -735,28 +735,90 @@ Ethernet è lo standard più diffuso per le reti LAN cablate. Le sue principali 
 - costituisce la base di gran parte delle infrastrutture LAN moderne, sia domestiche sia aziendali.
 
 ### 03.09. Reti Wireless
-<!-- to do -->
 
-##### 03.09.01. Problema del dispositivo nascosto
-<!-- to do -->
+Le reti wireless sono reti in cui la comunicazione tra gli host avviene senza un mezzo trasmissivo guidato, cioè senza cavi in rame, o fibra ottica. I dati vengono trasmessi sfruttando onde elettromagnetiche che si propagano nell'aria. Dal punto di vista del livello datalink, le reti wireless pongono problemi simili a quelli delle reti a mezzo condiviso già analizzate, ma con una difficoltà aggiuntiva: il canale radio è molto più variabile, più soggetto a interferenze e molto meno prevedibile di un collegamento cablato.
 
-##### 03.09.02. Problema del dispositivo esposto
-<!-- to do -->
+In una rete wireless più host condividono la stessa banda radio e possono voler trasmettere nello stesso istante. Per questo motivo, anche qui esiste un problema di accesso al mezzo trasmissivo. Tuttavia, nelle reti senza fili non è semplice applicare direttamente i meccanismi tipici delle reti Ethernet tradizionali, perché un host che trasmette non riesce quasi mai ad ascoltare con precisione il canale nello stesso istante, e quindi non può rilevare le collisioni con la stessa facilità con cui lo fa il CSMA/CD nelle reti cablate. Per questa ragione, nelle reti wireless si preferisce adottare strategie di collision avoidance, cioè tecniche che cercano di prevenire le collisioni prima che esse avvengano.
 
-##### 03.09.03. Meccanismo RTS (Request To Send)
-<!-- to do -->
+Tra i problemi più noti delle reti wireless vi è il problema del dispositivo nascosto (hidden terminal problem). Immaginiamo tre host, A, B e C. L'host A riesce a comunicare con B, e anche l'host C riesce a comunicare con B, ma A e C sono troppo lontani tra loro, oppure sono separati da un ostacolo, e quindi non riescono a sentirsi reciprocamente. In questa situazione A può ascoltare il canale e trovarlo libero, perché non sente C; allo stesso modo C può ascoltare il canale e trovarlo libero, perché non sente A. Se entrambi decidono di trasmettere verso B nello stesso istante, i loro segnali collidono proprio presso B, anche se nessuno dei due mittenti si era accorto del rischio di collisione.
 
-##### 03.09.04. Meccanismo CTS (Clear To Send)
-<!-- to do -->
+La situazione può essere rappresentata nel seguente modo:
 
-##### 03.09.05. Wi-Fi
-<!-- to do -->
+<!-- to add -->
+*In Figura: problema del dispositivo nascosto con due host che non si sentono tra loro ma trasmettono verso lo stesso destinatario*
 
-##### 03.09.06. Bluetooth
-<!-- to do -->
+Questo problema mostra chiaramente perché nelle reti wireless il semplice ascolto del canale non basta sempre. Un nodo può concludere correttamente che il mezzo è libero nella propria zona di copertura, ma non essere a conoscenza di una trasmissione che sta per interferire sul destinatario comune. Per limitare questa situazione, molti protocolli wireless introducono uno scambio preliminare di brevi frame di controllo, tra cui RTS e CTS.
 
-##### 03.09.07. Controllo degli errori nelle reti wireless
-<!-- to do -->
+Il meccanismo RTS (Request To Send) è un piccolo frame di controllo inviato dal mittente quando desidera iniziare una trasmissione. Con esso il nodo segnala al destinatario la propria intenzione di occupare il canale per il tempo necessario a spedire un frame dati e ricevere la relativa conferma. L'RTS contiene quindi informazioni utili a prenotare temporaneamente il mezzo trasmissivo. Poiché il frame RTS è molto corto rispetto a un normale frame dati, se avviene una collisione durante la sua trasmissione lo spreco di banda è più contenuto rispetto al caso in cui collidesse direttamente un frame dati lungo.
+
+Il meccanismo CTS (Clear To Send) è la risposta del destinatario a un RTS ricevuto correttamente. Con il CTS il destinatario comunica al mittente che la trasmissione può proseguire e, allo stesso tempo, informa anche gli altri host che riescono a sentire il destinatario che il canale sarà occupato per un certo intervallo di tempo. In pratica, i nodi che ascoltano il CTS si astengono dal trasmettere, riducendo il rischio di collisione attorno al destinatario.
+
+Il funzionamento complessivo può essere riassunto così:
+
+- il mittente invia un frame RTS al destinatario;
+- se il destinatario riceve correttamente l'RTS e il canale è disponibile, risponde con un CTS;
+- dopo aver ricevuto il CTS, il mittente trasmette il frame dati;
+- il destinatario, se riceve correttamente i dati, invia un ACK finale;
+- gli altri host che hanno sentito RTS, o CTS, rimangono in silenzio per il tempo indicato, evitando di interferire.
+
+L'idea centrale è che RTS e CTS non eliminano in assoluto tutte le collisioni, ma riducono in modo significativo quelle dovute ai dispositivi nascosti. In particolare, anche se due host nascosti tra loro dovessero collidere inviando contemporaneamente un RTS, la collisione coinvolgerebbe solo brevi frame di controllo e non un intero frame dati. Questo rende il protocollo più efficiente soprattutto quando i frame dati sono lunghi e il costo di una collisione sarebbe elevato.
+
+Il controllo degli errori nelle reti wireless è particolarmente importante perché il mezzo radio è molto più instabile rispetto a un collegamento cablato. Nelle comunicazioni senza fili il segnale può degradarsi a causa di rumore, interferenze prodotte da altri dispositivi, ostacoli fisici, attenuazione, propagazione multipla e mobilità dei nodi. Di conseguenza, i frame possono arrivare corrotti, incompleti, oppure non arrivare affatto.
+
+Per affrontare questo problema, le reti wireless combinano più tecniche. Anzitutto viene normalmente usato un meccanismo di rilevamento degli errori sul frame, per esempio mediante FCS e CRC, in modo che il destinatario possa capire se il frame ricevuto è integro, oppure no. Se il frame risulta danneggiato, esso viene scartato. A questo punto entra spesso in gioco un meccanismo di ritrasmissione basato su ACK: se il mittente non riceve l'ACK entro un certo intervallo di tempo, presume che il frame sia andato perso, o sia arrivato con errore, e lo ritrasmette.
+
+Nelle reti wireless moderne si utilizzano anche tecniche di correzione preventiva degli errori, cioè codici FEC (Forward Error Correction), che aggiungono ridondanza ai dati prima della trasmissione. In questo modo il ricevitore, entro certi limiti, può correggere alcuni errori senza dover richiedere una nuova trasmissione. Questa scelta è molto utile soprattutto quando il canale radio è disturbato, oppure quando ritrasmettere costa tempo e banda. Tra i codici più usati nelle tecnologie wireless moderne vi sono codici convoluzionali, Reed-Solomon, LDPC e altre tecniche simili, a seconda dello standard adottato.
+
+In pratica, il controllo degli errori nelle reti wireless si basa di solito su una combinazione dei seguenti elementi:
+
+- rilevamento degli errori sul singolo frame mediante CRC;
+- conferma di ricezione tramite ACK;
+- ritrasmissione dei frame persi, o corrotti, quando l'ACK non arriva;
+- uso di codici FEC per correggere alcuni errori direttamente lato ricevente;
+- adattamento dinamico dei parametri di trasmissione, come velocità e modulazione, quando il canale peggiora.
+
+Rispetto alle reti cablate, nelle reti wireless il controllo degli errori ha quindi un ruolo ancora più centrale. Non basta infatti limitarsi a rilevare una collisione, o un frame danneggiato: occorre anche convivere con un canale naturalmente più rumoroso e variabile. Per questo motivo i protocolli wireless moderni combinano accesso prudente al mezzo, conferme di ricezione e tecniche di codifica ridondante, così da mantenere la comunicazione il più possibile affidabile anche in presenza di disturbi.
+
+##### 03.09.01. Wi-Fi
+
+Il Wi-Fi è la tecnologia wireless più diffusa per la realizzazione di reti locali senza fili, cioè WLAN (Wireless Local Area Network). Dal punto di vista degli standard IEEE, il Wi-Fi è definito principalmente dalla famiglia 802.11 ed è pensato per permettere a computer, smartphone, tablet, stampanti e molti altri dispositivi di comunicare tra loro e di accedere a una rete locale, o a Internet, senza l'uso di cavi.
+
+Il funzionamento del Wi-Fi si basa sulla trasmissione di dati mediante onde radio, tipicamente nelle bande dei 2.4 GHz e dei 5 GHz, a cui nelle versioni più recenti si aggiungono anche altre bande, come i 6 GHz. In una rete Wi-Fi tradizionale esiste normalmente un dispositivo centrale chiamato AP (Access Point, punto di accesso), che coordina le comunicazioni e funge da punto di collegamento tra i dispositivi wireless e la rete cablata. Esistono anche configurazioni ad hoc, nelle quali i dispositivi comunicano direttamente tra loro, ma la modalità infrastrutturata con access point è di gran lunga la più comune.
+
+Dal punto di vista del livello datalink, il Wi-Fi è interessante perché utilizza meccanismi di accesso al mezzo adatti all'ambiente wireless. In particolare adotta CSMA/CA, quindi non cerca di rilevare le collisioni durante la trasmissione, ma prova a evitarle prima che si verifichino. A questo si aggiungono ACK, eventuali RTS/CTS e meccanismi di adattamento della velocità di trasmissione in funzione della qualità del canale radio.
+
+Le principali caratteristiche del Wi-Fi possono essere riassunte così:
+
+- è una tecnologia wireless per reti locali, definita dalla famiglia IEEE 802.11;
+- consente mobilità dei dispositivi all'interno dell'area di copertura radio;
+- utilizza tipicamente le bande dei 2.4 GHz e 5 GHz, con ulteriori estensioni nelle versioni più recenti;
+- impiega uno, o più APs per coordinare la comunicazione nella modalità più comune;
+- utilizza CSMA/CA come tecnica di accesso al mezzo;
+- supporta velocità molto variabili a seconda dello standard utilizzato e delle condizioni del canale;
+- è soggetto a interferenze, attenuazione e ostacoli fisici più di una rete cablata;
+- integra meccanismi di sicurezza dedicati, come WPA2 e WPA3, per proteggere la comunicazione.
+
+In sintesi, il Wi-Fi rappresenta l'equivalente wireless di una rete locale Ethernet, ma con caratteristiche molto diverse dal punto di vista del mezzo trasmissivo. Offre grande flessibilità e facilità di accesso, al prezzo però di una maggiore sensibilità ai disturbi e di una gestione dell'accesso al canale più complessa rispetto alle reti cablate.
+
+##### 03.09.02. Bluetooth
+
+Bluetooth è una tecnologia wireless pensata principalmente per reti personali a corto raggio, dette PAN (Personal Area Network). È stata progettata per consentire la comunicazione tra dispositivi vicini con consumi energetici contenuti, come smartphone, auricolari, tastiere, mouse, smartwatch, stampanti e numerosi dispositivi IoT. Dal punto di vista degli standard IEEE, Bluetooth è associato alla famiglia 802.15.
+
+L'idea di base di Bluetooth è diversa rispetto a quella di una rete Wi-Fi. Mentre il Wi-Fi è orientato soprattutto alla connessione di dispositivi a una rete locale, o a Internet, Bluetooth è pensato per collegamenti diretti e di breve distanza tra un numero ridotto di dispositivi. In genere opera nella banda ISM dei 2.4 GHz, che è una banda libera e condivisa anche con altre tecnologie wireless. Per ridurre l'effetto delle interferenze, Bluetooth utilizza tecniche di salto di frequenza (frequency hopping), cioè cambia molto rapidamente la frequenza radio utilizzata durante la comunicazione.
+
+Nella sua forma classica, Bluetooth organizza i dispositivi in piccole reti locali chiamate piconet. In una piconet esiste un dispositivo che coordina la comunicazione, tradizionalmente detto master, e uno o più dispositivi subordinati, detti slave. Più piconet possono anche sovrapporsi, formando una struttura più ampia detta scatternet, anche se questo aspetto è meno enfatizzato nelle applicazioni comuni. Questa organizzazione rende Bluetooth adatto a comunicazioni brevi, ben controllate e con numero limitato di nodi.
+
+Le principali caratteristiche di Bluetooth possono essere riassunte così:
+
+- è una tecnologia wireless a corto raggio per reti personali;
+- opera tipicamente nella banda dei 2.4 GHz;
+- utilizza tecniche di frequency hopping per limitare interferenze e collisioni persistenti;
+- supporta consumi energetici ridotti, soprattutto nelle versioni Bluetooth Low Energy (BLE);
+- è adatto allo scambio di piccole quantità di dati, oppure a flussi continui moderati, come l'audio verso auricolari;
+- consente il collegamento semplice tra pochi dispositivi vicini;
+- privilegia semplicità, compatibilità e basso consumo rispetto ad alte velocità di trasmissione.
+
+Dal punto di vista del livello datalink, Bluetooth integra meccanismi di indirizzamento, controllo dell'accesso al mezzo, rilevamento degli errori e ritrasmissione, proprio come le altre tecnologie wireless. Tuttavia, lo fa in un contesto diverso rispetto al Wi-Fi: le distanze sono minori, i dispositivi coinvolti sono meno numerosi e l'obiettivo principale è spesso il risparmio energetico insieme alla facilità di accoppiamento tra dispositivi.
 
 ### 03.10. Sicurezza e problematiche del livello datalink
 
