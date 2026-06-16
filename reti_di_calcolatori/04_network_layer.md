@@ -252,40 +252,126 @@ La seguente figura sarebbe utile per chiarire il concetto:
 *In Figura: un host mobile che si sposta dalla propria home network a una foreign network, con indicazione del reindirizzamento dei pacchetti verso la nuova posizione*
 
 ### 04.03. Protocollo IP
-<!-- to do -->
+
+Eccoci giunti all'argomento forse più importante e noto del livello network: IP. Il protocollo IP (Internet Protocol) è il protocollo fondamentale del livello network dello stack TCP/IP. Il suo compito principale è fornire un sistema di indirizzamento logico e permettere l'inoltro dei datagrammi da una sorgente a una destinazione anche attraverso reti diverse e numerosi router intermedi.
+
+IP offre un servizio di tipo connectionless e best effort: non stabilisce una connessione preventiva, non garantisce la consegna, né l'ordine dei pacchetti, ma si occupa di farli avanzare nella rete nel modo più corretto ed efficiente possibile, in relazione alla QoS (la qualità del servizio) richiesta dagli host in comunicazione. Proprio per questo motivo, tutto il funzionamento di Internet dipende in larga parte da IP e dalla struttura dei suoi indirizzi.
+
+Nei prossimi paragrafi analizzeremo le due versioni principali del protocollo, IPv4 e IPv6, la struttura degli indirizzi, i datagrammi, il NAT e le principali tecniche di suddivisione delle reti.
 
 ##### 04.03.01. IPv4 e IPv6: quali sono le differenze?
-<!-- to do -->
+
+IPv4 e IPv6 sono due versioni dello stesso protocollo di rete, ma differiscono per struttura, capacità e obiettivi progettuali. IPv4 è la versione storicamente più diffusa e usa indirizzi lunghi 32 bit, mentre IPv6 è stato introdotto soprattutto per superare il limite dello spazio di indirizzamento di IPv4 e usa indirizzi lunghi 128 bit. Parliamoci chiaro: gli ingegneri di oltre trent'anni fa non si sarebbero mai immaginati una crescita così vasta di Internet e non si sarebbero mai aspettati che miliardi e miliardi di dispositivi si potessero connettere in tutto il mondo, per questo è stato inventato IPv6.
+
+Le differenze principali possono essere riassunte così:
+
+- IPv4 usa indirizzi più brevi, scritti di solito in notazione decimale puntata, ad esempio `192.168.1.10`;
+- IPv6 usa indirizzi molto più lunghi, scritti in formato esadecimale separato da due punti, ad esempio `2001:0db8::1`;
+- IPv6 offre uno spazio di indirizzamento enormemente più ampio rispetto a IPv4;
+- IPv4 fa spesso uso del NAT per compensare la scarsità di indirizzi pubblici, mentre IPv6 è stato progettato per ridurre questa necessità;
+- l'header di IPv6 è più semplice e regolare rispetto a quello di IPv4, così da rendere più efficiente l'inoltro nei router;
+- IPv6 integra meglio funzioni moderne come l'autoconfigurazione degli indirizzi e un supporto più naturale al multicast.
+
+In sintesi, IPv4 rappresenta la base storica di Internet, mentre IPv6 costituisce la sua evoluzione naturale, pensata per reti molto più grandi, più scalabili e più adatte alle esigenze attuali.
 
 ##### 04.03.02. Struttura degli indirizzi IPv4
-<!-- to do -->
+
+Un indirizzo IPv4 è composto da 32 bit. Per renderlo più leggibile, esso viene normalmente suddiviso in 4 gruppi di 8 bit, detti ottetti, e rappresentato in notazione decimale puntata. Un esempio tipico è `192.168.1.10`.
+
+Dal punto di vista logico, un indirizzo IPv4 contiene due parti fondamentali:
+
+- una parte che identifica la rete;
+- una parte che identifica l'host all'interno di quella rete.
+
+La separazione tra queste due parti non è visibile direttamente guardando solo il numero scritto in forma decimale, ma dipende dalla subnet mask, o dalla notazione CIDR, che stabilisce quanti bit appartengono alla rete e quanti all'host.
+
+Ad esempio, nell'indirizzo `192.168.1.10/24`, i primi 24 bit identificano la rete, mentre gli ultimi 8 bit identificano il singolo host. Questo meccanismo permette di organizzare gli indirizzi in modo gerarchico, facilitando il routing e la suddivisione delle reti in sottoreti.
+
+In sintesi, la struttura di un indirizzo IPv4 è semplice solo in apparenza: dietro la notazione decimale puntata si nasconde infatti una struttura binaria precisa, fondamentale per l'indirizzamento e l'instradamento dei pacchetti.
 
 ##### 04.03.03. Struttura degli indirizzi IPv6
-<!-- to do -->
+
+Un indirizzo IPv6 è composto da 128 bit, cioè quattro volte la lunghezza di un indirizzo IPv4. Per rappresentarlo in modo leggibile, esso viene suddiviso in 8 gruppi di 16 bit, scritti in esadecimale e separati da due punti. Un esempio tipico è `2001:0db8:85a3:0000:0000:8a2e:0370:7334`.
+
+Poiché questa scrittura sarebbe spesso troppo lunga, IPv6 permette alcune abbreviazioni:
+
+- gli zeri iniziali di ciascun gruppo possono essere omessi;
+- una sequenza continua di gruppi composti solo da zeri può essere sostituita una sola volta con `::`.
+
+Per esempio, l'indirizzo precedente può essere scritto in forma abbreviata come `2001:db8:85a3::8a2e:370:7334`.
+
+Dal punto di vista logico, anche un indirizzo IPv6 è organizzato in modo gerarchico. In generale contiene:
+
+- una parte iniziale che identifica il prefisso di rete;
+- una parte finale che identifica l'interfaccia, o l'host, all'interno di quella rete.
+
+Molto spesso, nelle reti IPv6, i primi 64 bit identificano la rete e gli ultimi 64 bit identificano l'interfaccia. Questa struttura rende più semplice l'autoconfigurazione e favorisce una gestione più ordinata e scalabile dell'indirizzamento.
+
+In sintesi, la struttura degli indirizzi IPv6 è più lunga e apparentemente più complessa di quella IPv4, ma è stata progettata per essere più flessibile, gerarchica e adatta alla crescita di Internet.
 
 ##### 04.03.04. Classificazione degli indirizzi IPv4
-<!-- to do - classe A -->
-<!-- to do - classe B -->
-<!-- to do - classe C -->
-<!-- to do - classe D -->
-<!-- to do - classe E -->
-<!-- to do - classfull vs classless -->
+
+Storicamente, gli indirizzi IPv4 venivano classificati in classi, in base al valore dei bit iniziali del primo ottetto. Questo modello prende il nome di indirizzamento classful e serviva a stabilire automaticamente quanti bit fossero riservati alla rete e quanti all'host.
+
+Le classi principali erano le seguenti:
+
+- Classe A: indirizzi con primo ottetto compreso tra `1` e `126`. In questa classe il primo ottetto identifica la rete e i restanti tre identificano l'host. Era pensata per reti enormi, con un numero molto elevato di host. L'intervallo privato principale di questa classe è `10.0.0.0/8`, cioè da `10.0.0.0` a `10.255.255.255`.
+- Classe B: indirizzi con primo ottetto compreso tra `128` e `191`. In questo caso i primi due ottetti identificano la rete e gli altri due l'host. Era adatta a reti di dimensione intermedia. L'intervallo privato associato è `172.16.0.0/12`, cioè da `172.16.0.0` a `172.31.255.255`.
+- Classe C: indirizzi con primo ottetto compreso tra `192` e `223`. Qui i primi tre ottetti identificano la rete e l'ultimo l'host. Era pensata per reti più piccole, ma molto numerose. L'intervallo privato più noto è `192.168.0.0/16`, cioè da `192.168.0.0` a `192.168.255.255`.
+- Classe D: indirizzi con primo ottetto compreso tra `224` e `239`. Non sono usati per identificare singoli host, ma per il multicast.
+- Classe E: indirizzi con primo ottetto compreso tra `240` e `255`. Sono riservati a usi sperimentali, o speciali, e non vengono normalmente assegnati agli host.
+
+Questo schema aveva il vantaggio della semplicità, ma portava a uno spreco notevole di indirizzi, perché obbligava a usare blocchi di dimensione fissa, spesso troppo grandi, o troppo piccoli rispetto alle necessità reali.
+
+Per questo motivo il modello classful è stato progressivamente abbandonato in favore del modello classless, basato su CIDR (Classless Inter-Domain Routing). Con l'approccio classless non si ragiona più in termini rigidi di classi A, B e C, ma si specifica direttamente quanti bit appartengono al prefisso di rete, ad esempio `/24`, `/20` o `/27`. Questo rende l'assegnazione degli indirizzi molto più flessibile ed efficiente.
+
+In sintesi, la classificazione in classi è importante soprattutto dal punto di vista storico e didattico, mentre nelle reti moderne si usa quasi sempre l'indirizzamento classless.
 
 ##### 04.03.05. Tipi di indirizzi IPv6
-<!-- to do - global unicast -->
-<!-- to do - link-local -->
-<!-- to do - unique local unicast -->
-<!-- to do - multicast -->  
-<!-- to do - anycast -->
+
+In IPv6 non si usa una classificazione in classi come avveniva storicamente in IPv4. Esistono invece diversi tipi di indirizzi, ciascuno pensato per uno specifico uso all'interno della rete.
+
+- Global unicast: sono gli indirizzi pubblici instradabili su Internet. Identificano in modo univoco un'interfaccia a livello globale e costituiscono l'equivalente più vicino degli indirizzi pubblici IPv4. In genere appartengono allo spazio `2000::/3`.
+- Link-local: sono indirizzi validi solo all'interno del collegamento locale, cioè della singola rete fisica, o logica, a cui un host è connesso. Non vengono instradati dai router e sono usati per funzioni fondamentali come autoconfigurazione, Neighbor Discovery e comunicazioni locali. Appartengono al prefisso `fe80::/10`.
+- Unique local unicast: sono indirizzi privati IPv6, usati all'interno di reti locali, o organizzazioni, senza essere instradati pubblicamente su Internet. Sono l'equivalente concettuale degli indirizzi privati IPv4, anche se non nascono per essere usati necessariamente con NAT. Appartengono in genere al blocco `fc00::/7`.
+- Multicast: identificano un gruppo di interfacce. Un pacchetto inviato a un indirizzo multicast viene consegnato a tutti i nodi che fanno parte di quel gruppo. In IPv6 il multicast sostituisce il broadcast, che infatti non esiste più come tipo di indirizzo separato. Gli indirizzi multicast appartengono al prefisso `ff00::/8`.
+- Anycast: più interfacce condividono lo stesso indirizzo anycast e la rete consegna il pacchetto a una sola di esse, di solito quella ritenuta più vicina, o più conveniente. L'anycast è utile per distribuire servizi replicati e migliorare efficienza e disponibilità. Dal punto di vista sintattico, un indirizzo anycast ha la stessa forma di un indirizzo unicast: cambia il modo in cui viene assegnato e utilizzato.
+
+In sintesi, IPv6 distingue chiaramente tra indirizzi pubblici globali, indirizzi locali, indirizzi di gruppo e indirizzi condivisi tra più nodi equivalenti, offrendo un modello più ordinato e flessibile rispetto a IPv4.
 
 ##### 04.03.06. Notazione CIDR e subnet mask per gli indirizzi IPv4
-<!-- to do -->
+
+La notazione CIDR indica quanti bit iniziali di un indirizzo appartengono al prefisso di rete. Per esempio, in `192.168.1.10/24` il valore `/24` significa che i primi 24 bit identificano la rete.
+
+Negli indirizzi IPv4 questa informazione può essere espressa anche tramite subnet mask. Nell'esempio precedente, la subnet mask corrispondente è `255.255.255.0`, cioè una maschera con 24 bit a `1` seguiti da 8 bit a `0`. In breve, CIDR e subnet mask esprimono la stessa idea: separare la parte di rete dalla parte host.
 
 ##### 04.03.07. Notazione CIDR e subnet mask per gli indirizzi IPv6
-<!-- to do -->
+
+Anche in IPv6 si usa la notazione CIDR per indicare la lunghezza del prefisso di rete. Per esempio, in `2001:db8:abcd:0012::1/64`, il valore `/64` indica che i primi 64 bit rappresentano la rete e i restanti 64 l'interfaccia.
+
+In IPv6, però, non si usa normalmente una subnet mask scritta in forma estesa come avviene in IPv4: si preferisce quasi sempre indicare direttamente la lunghezza del prefisso con la notazione CIDR. Per questo motivo, in IPv6 il concetto di subnet mask esiste ancora dal punto di vista logico, ma nella pratica viene quasi sempre espresso come prefisso.
 
 ##### 04.03.08. Indirizzi IPv4 e IPv6 "speciali"
-<!-- to do -->
+
+Alcuni indirizzi IP non identificano normali host pubblici, ma hanno un significato speciale all'interno del protocollo e della rete.
+
+Tra gli indirizzi IPv4 speciali più importanti ricordiamo:
+
+- `0.0.0.0`, usato per indicare un indirizzo non ancora assegnato, o la rete corrente in modo generico;
+- `127.0.0.1`, e più in generale il blocco `127.0.0.0/8`, usato per il loopback, cioè per comunicare con sé stessi;
+- `255.255.255.255`, che rappresenta il broadcast limitato sulla rete locale;
+- gli indirizzi privati `10.0.0.0/8`, `172.16.0.0/12` e `192.168.0.0/16`, non instradati pubblicamente su Internet;
+- gli indirizzi APIPA `169.254.0.0/16`, assegnati automaticamente quando un host non riesce a ottenere configurazione da DHCP.
+
+Anche IPv6 possiede indirizzi speciali, tra cui:
+
+- `::`, che indica l'indirizzo non specificato;
+- `::1`, che rappresenta il loopback IPv6;
+- gli indirizzi link-local `fe80::/10`, validi solo sul collegamento locale;
+- gli unique local `fc00::/7`, usati per reti private;
+- gli indirizzi multicast `ff00::/8`, usati per comunicazioni verso gruppi di nodi.
+
+In sintesi, questi indirizzi speciali non servono semplicemente a numerare host, ma svolgono funzioni precise di configurazione, diagnostica, comunicazione locale e gestione del traffico di rete.
 
 ##### 04.03.09. Struttura di un datagramma IPv4
 <!-- to do -->
