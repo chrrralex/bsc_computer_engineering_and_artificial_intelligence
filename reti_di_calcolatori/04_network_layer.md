@@ -543,7 +543,12 @@ In questo modello, la rete cerca quindi un percorso che non sia solo raggiungibi
 In sintesi, il QoS routing estende il routing tradizionale introducendo criteri qualitativi nella scelta del cammino, così da cercare percorsi che soddisfino meglio le esigenze specifiche delle diverse applicazioni.
 
 ##### 04.05.06. IntServ (Integrated Services) e DiffServ (Differentiated Services˝)
-<!-- to do -->
+
+IntServ e DiffServ sono due modelli classici per realizzare la QoS, ma seguono filosofie differenti. IntServ cerca di offrire garanzie più precise ai singoli flussi: prima della trasmissione, il flusso può richiedere determinate risorse e la rete prova a riservarle. Questo approccio permette un controllo molto accurato, ma richiede che i router mantengano informazioni di stato per molti flussi, con conseguenti problemi di scalabilità.
+
+DiffServ, invece, adotta un approccio più semplice e più adatto a reti grandi. I pacchetti vengono marcati e inseriti in classi di servizio, e i router trattano ciascuna classe secondo politiche predefinite, senza gestire separatamente ogni singolo flusso. In questo modo si perdono alcune garanzie fini offerte da IntServ, ma si ottiene un sistema molto più leggero e più praticabile su larga scala.
+
+In sintesi, IntServ privilegia la precisione del servizio flusso per flusso, mentre DiffServ privilegia la scalabilità trattando il traffico per classi. La differenza fondamentale tra i due modelli è quindi il compromesso tra garanzie dettagliate e semplicità di gestione della rete.
 
 ##### 04.05.07. Servizi class-based
 
