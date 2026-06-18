@@ -654,7 +654,27 @@ Alcuni esempi tipici di messaggi DHCP, giusto per avere un'idea, sono i seguenti
 
 In sintesi, DHCP automatizza la configurazione degli host nelle reti IP, riduce gli errori manuali e rende molto più semplice la gestione di reti con molti dispositivi.
 
-##### 04.06.06. OSPF (Open Shortest Path First)
+##### 04.06.06. Protocolli IGP e protocolli EGP
+
+Nel routing su Internet è utile distinguere tra protocolli IGP (Interior Gateway Protocol) e protocolli EGP (Exterior Gateway Protocol). I protocolli IGP vengono usati all'interno di un singolo AS (Autonomous System), cioè dentro una rete amministrata in modo unitario; il loro compito è trovare i percorsi migliori tra router che appartengono allo stesso dominio amministrativo.
+
+I protocolli EGP, invece, vengono usati per mettere in comunicazione AS differenti. In questo caso il problema non è solo tecnico, ma anche amministrativo e politico: occorre decidere quali reti annunciare, quali percorsi preferire e come gestire il traffico tra organizzazioni diverse. Per questo motivo i protocolli esterni si basano spesso più su politiche di routing che su semplici metriche di costo.
+
+In sintesi, gli IGP governano il routing interno a un AS, mentre gli EGP governano il routing tra AS diversi. Nei prossimi paragrafi vedremo alcuni esempi tipici di IGP, come OSPF, e il principale esempio di EGP, cioè BGP.
+
+Per collegare meglio questa distinzione ai protocolli che esamineremo subito dopo, possiamo riassumere così:
+
+- OSPF: IGP di tipo LSs (Link State);
+- Integrated IS-IS: IGP di tipo LSs;
+- RIP: IGP di tipo DV (Distance Vector);
+- IGRP: IGP di tipo DV;
+- EIGRP: IGP evoluto, spesso descritto come advanced distance vector, quindi più vicino ai DV che ai LSs;
+- BGP: EGP, ma non propriamente di tipo DV, o di tipo LSs; è più corretto descriverlo come protocollo path vector;
+- IDRP: EGP, anch'esso concettualmente vicino al modello path vector più che ai classici DV, oppure LSs.
+
+Quindi, tra i protocolli dei paragrafi successivi, gli IGP sono OSPF, Integrated IS-IS, RIP, IGRP ed EIGRP, mentre gli EGP sono soprattutto BGP e IDRP. Dal punto di vista dell'algoritmo, OSPF e IS-IS appartengono ai LSs, RIP e IGRP ai DV, EIGRP è una forma evoluta intermedia ma più vicina ai DV, mentre BGP e IDRP non rientrano bene nella distinzione tra DV e LSs, perché seguono soprattutto la logica path vector e delle politiche di routing.
+
+##### 04.06.07. OSPF (Open Shortest Path First)
 
 OSPF (Open Shortest Path First) è un protocollo di routing dinamico di tipo LSs molto usato all'interno di un singolo sistema autonomo, cioè all'interno di una rete amministrata da una stessa organizzazione, o da uno stesso provider. Il suo nome richiama direttamente il fatto che il protocollo calcola i percorsi migliori applicando un algoritmo di shortest path, tipicamente l'algoritmo di Dijkstra, a una mappa della rete costruita localmente da ciascun router. Ciascun router conosce la topologia completa della rete e varie altre informazioni (come i router che appartengono al bordo del sistema e quelli che invece appartengono al centro della rete).
 
@@ -700,7 +720,33 @@ OSPF supporta anche funzionalità moderne e molto utili, come:
 
 In sintesi, OSPF è un protocollo di routing interno potente e scalabile, basato su una visione topologica della rete e sull'algoritmo di Dijkstra. I suoi punti di forza principali sono la rapidità di convergenza, la buona precisione nelle scelte di instradamento e la possibilità di organizzare reti grandi tramite aree gerarchiche. Il prezzo da pagare è una maggiore complessità rispetto ai protocolli più semplici, ma proprio questa complessità lo rende molto adatto alle reti IP moderne di media e grande dimensione.
 
-##### 04.06.07. BGP (Border Gateway Protocol)
+##### 04.06.08. Integrated IS-IS
+
+Integrated IS-IS (Integrated Intermediate System to Intermediate System) è un protocollo di routing dinamico interno, quindi un IGP, appartenente alla famiglia dei protocolli basati sui LSs (Link States). Come OSPF, anche IS-IS costruisce una rappresentazione topologica della rete e applica localmente un algoritmo di shortest path, tipicamente Dijkstra, per determinare i percorsi migliori verso le destinazioni.
+
+Storicamente IS-IS nasce nell'ambito del modello OSI, ma la variante detta integrated è stata estesa per trasportare anche informazioni di routing IP. Per questo motivo il protocollo è stato adottato con successo anche nelle reti TCP/IP ed è ancora oggi molto usato soprattutto nelle grandi reti di operatori e provider, dove è apprezzato per robustezza, scalabilità e stabilità operativa.
+
+Il funzionamento generale è concettualmente simile a quello di OSPF:
+
+1. ogni router scopre i propri vicini diretti;
+2. genera informazioni di link state che descrivono i collegamenti e le reti raggiungibili;
+3. diffonde tali informazioni agli altri router del dominio;
+4. costruisce localmente un database topologico comune;
+5. applica l'algoritmo di Dijkstra per calcolare i percorsi migliori.
+
+Anche IS-IS adotta una forma di organizzazione gerarchica, distinguendo in particolare tra level 1 e level 2. In modo semplificato, i router di level 1 si occupano del routing interno a una certa area, mentre quelli di level 2 permettono la comunicazione tra aree differenti. Questa suddivisione aiuta a migliorare la scalabilità del protocollo e a contenere la complessità della rete.
+
+Dal punto di vista concettuale, la differenza più importante rispetto ai protocolli di tipo DV, come RIP, è che IS-IS non si basa soltanto su informazioni ricevute dai vicini riguardo alle distanze, ma cerca di costruire una visione più ampia della topologia complessiva. Per questo motivo converge in genere più rapidamente ed evita alcuni problemi classici dei DV, come il count to infinity.
+
+In sintesi, Integrated IS-IS è un IGP di tipo link-state, molto vicino per filosofia a OSPF, ma con storia e struttura proprie. È un protocollo particolarmente adatto a reti grandi e ben organizzate, dove servono stabilità, gerarchia e buona scalabilità del routing interno.
+
+##### 04.06.09. RIP (Routing Information Protocol)
+<!-- to do -->
+
+##### 04.06.10. IGRP (Interior-Gateway Routing Protocol) ed EIGRP (Enhanced IGRP)
+<!-- to do -->
+
+##### 04.06.11. BGP (Border Gateway Protocol)
 
 BGP (Border Gateway Protocol) è il principale protocollo di routing usato per mettere in comunicazione ASs (Autonomous Systems, sistemi autonomi) differenti su Internet. Se OSPF lavora tipicamente all'interno di un singolo AS, BGP opera soprattutto tra AS diversi e permette ai router di confine di scambiarsi informazioni su quali reti siano raggiungibili e attraverso quali domini amministrativi sia possibile raggiungerle. Proprio per questo motivo BGP è considerato il protocollo fondamentale del routing interdominio, anche noto come IDR (Inter-Domain Routing), cioè del routing tra domini distinti.
 
@@ -748,7 +794,15 @@ Dal punto di vista pratico, BGP è il protocollo che rende possibile la struttur
 
 In sintesi, BGP è il protocollo di routing interdomain per eccellenza: collega sistemi autonomi differenti, usa un approccio path vector, tiene conto di attributi e politiche amministrative e rende possibile l'instradamento globale di Internet. È più complesso e meno immediato di un protocollo interno come OSPF, ma è indispensabile quando il problema non è più semplicemente trovare un percorso dentro una rete, bensì coordinare il traffico tra reti appartenenti a organizzazioni diverse.
 
-##### 04.06.08. Ping
+##### 04.06.13. IDRP (Inter-Domain Routing Protocol)
+
+IDRP (Inter-Domain Routing Protocol) è un protocollo pensato per il routing tra domini amministrativi differenti, quindi per un contesto concettualmente simile a quello di BGP. Anche IDRP nasce dall'esigenza di scambiare informazioni di raggiungibilità tra grandi reti distinte, tenendo conto non solo della connettività tecnica, ma anche di politiche di instradamento.
+
+Dal punto di vista concettuale, IDRP è vicino all'idea di path vector: l'informazione di routing non si limita a dire che una destinazione è raggiungibile, ma porta con sé anche informazioni sul cammino interdominio. Questo lo rende più adatto al routing esterno rispetto ai modelli classici DV e LSs, che sono invece più tipici del routing interno.
+
+In pratica, però, nella Internet reale il protocollo che si è affermato davvero è BGP, mentre IDRP è rimasto soprattutto di interesse storico e teorico. In sintesi, IDRP è un protocollo EGP pensato per il routing tra domini, concettualmente vicino al path vector e importante soprattutto per comprendere l'evoluzione del routing tra domini differenti. Non viene quindi concretamente utilizzato nell'Internet odierna.
+
+##### 04.06.14. Ping
 
 `ping` è uno strumento di diagnostica di rete usato per verificare se un host remoto è raggiungibile e per misurare il tempo necessario a ricevere una risposta. Il suo funzionamento si basa su ICMP: il mittente invia uno, o più, messaggi Echo Request e attende i corrispondenti Echo Reply provenienti dall'host destinatario.
 
@@ -761,7 +815,7 @@ In pratica, `ping` è uno strumento semplice, ma molto utile per un primo contro
 
 In sintesi, `ping` serve a capire rapidamente se un host è raggiungibile e a ottenere una stima elementare della qualità della connessione.
 
-##### 04.06.09. Traceroute
+##### 04.06.15. Traceroute
 
 `traceroute` è uno strumento di diagnostica usato per scoprire quali router attraversa un pacchetto nel percorso dalla sorgente alla destinazione. A differenza di `ping`, che verifica soprattutto la raggiungibilità finale, `traceroute` cerca di ricostruire passo dopo passo il cammino seguito nella rete.
 
@@ -774,7 +828,7 @@ In pratica, `traceroute` è utile per capire dove si trovano ritardi, interruzio
 
 In sintesi, `traceroute` permette di osservare il cammino seguito dai pacchetti nella rete ed è molto utile per analizzare problemi di instradamento e latenza.
 
-##### 04.06.10. Mobile IP
+##### 04.06.16. Mobile IP
 
 Mobile IP è un insieme di tecniche e protocolli progettati per permettere a un host mobile di cambiare rete senza perdere, o dover cambiare continuamente, il proprio indirizzo IP logico principale. Il problema di fondo è questo: normalmente un indirizzo IP identifica non solo un host, ma anche la rete in cui esso si trova. Se un dispositivo si sposta da una rete a un'altra, dovrebbe quindi cambiare indirizzo IP, ma questo interromperebbe facilmente le comunicazioni già in corso. Mobile IP nasce proprio per risolvere questo problema e permettere a un host in movimento di mantenere le proprie comunicazioni anche durante il cambiamento del proprio indirizzo IP.
 
