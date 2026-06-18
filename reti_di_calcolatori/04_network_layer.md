@@ -374,34 +374,110 @@ Anche IPv6 possiede indirizzi speciali, tra cui:
 In sintesi, questi indirizzi speciali non servono semplicemente a numerare host, ma svolgono funzioni precise di configurazione, diagnostica, comunicazione locale e gestione del traffico di rete.
 
 ##### 04.03.09. Struttura di un datagramma IPv4
-<!-- to do -->
+
+Un datagramma IPv4 è composto da due parti: un header e un payload. L'header contiene tutte le informazioni necessarie per l'instradamento e il controllo del pacchetto, mentre il payload contiene i dati del livello superiore, ad esempio un segmento TCP, o UDP.
+
+I campi principali dell'header IPv4 sono:
+
+- Version, che indica la versione del protocollo IP usata;
+- IHL (Internet Header Length), che specifica la lunghezza dell'header;
+- Type of Service, oggi interpretato soprattutto per priorità e QoS;
+- Total Length, cioè la lunghezza totale del datagramma;
+- Identification, Flags e Fragment Offset, usati per la frammentazione e il riassemblaggio;
+- TTL (Time To Live), che limita il numero di salti del pacchetto nella rete;
+- Protocol, che indica il protocollo del livello superiore trasportato, come TCP, UDP o ICMP;
+- Header Checksum, usato per controllare errori nell'header;
+- Source Address e Destination Address, cioè gli indirizzi IPv4 del mittente e del destinatario.
+
+L'header IPv4 ha una lunghezza minima di 20 byte, ma può essere più lungo se sono presenti opzioni. Dopo l'header si trova il payload vero e proprio. In sintesi, il datagramma IPv4 è una struttura compatta che combina informazioni di controllo e dati, permettendo ai router di inoltrare correttamente il pacchetto fino alla destinazione. L'header di IPv4 è un esempio di header di lunghezza variabile: a seconda delle opzioni inserite e/o utilizzate da ciascun router, l'header può avere una lunghezza superiore, o inferiore.
 
 ##### 04.03.10. Struttura di un datagramma IPv6
-<!-- to do -->
+
+Anche un datagramma IPv6 è formato da un header e da un payload, ma rispetto a IPv4 la sua struttura è stata semplificata. L'header base di IPv6 ha infatti lunghezza fissa di 40 byte, scelta che rende più semplice e veloce l'elaborazione da parte dei router.
+
+I campi principali dell'header IPv6 sono:
+
+- Version, che indica la versione del protocollo;
+- Traffic Class, usato per priorità e QoS;
+- Flow Label, pensato per identificare particolari flussi di traffico dal punto di vista logico;
+- Payload Length, cioè la lunghezza del contenuto trasportato dopo l'header di base;
+- Next Header, che indica il protocollo del livello superiore oppure un eventuale header di estensione;
+- Hop Limit, equivalente del TTL di IPv4;
+- Source Address e Destination Address, cioè gli indirizzi IPv6 di sorgente e destinazione.
+
+Dopo l'header base possono comparire uno, o più extension headers, usati per funzioni aggiuntive come frammentazione, sicurezza o instradamento speciale. Infine si trova il payload vero e proprio. In sintesi, il datagramma IPv6 mantiene la stessa logica generale di IPv4, ma con una struttura più regolare, più estendibile e più efficiente. L'heade rdi IPv6 è ancora più estendibile rispetto all'header di IPv4.
 
 ##### 04.03.11. NAT (Network Address Translation)
-<!-- to do -->
+
+Il NAT (Network Address Translation) è una tecnica con cui un router, o un gateway, modifica gli indirizzi IP presenti nei pacchetti mentre essi attraversano il confine tra una rete privata e una rete pubblica. In pratica, molti host interni con indirizzi privati possono condividere uno, o pochi, indirizzi IPv4 pubblici.
+
+Consideriamo la seguente figura, che mostra le due reti A e B: la rete A è un'area a cui si accede mediante il router R1, mentre la rete B è un'area a cui si accede mediante il router R2:
+
+<!-- to add -->
+*In Figura: un esempio di applicazione del protocollo NAT alle reti A e B*
+
+Tutti gli host della rete A condividono lo stesso indirizzo pubblico, ovvero quello dell'interfacca del router R1 a cui è collegata l'intera rete A. Analogamente, tutti gli host della rete B condividono l'indirizzo pubblico posseduto dall'interfacca a cui la rete B è collegata del router R2. Quando l'host H4, della rete B, invia un pacchetto IP all'host H2 della rete A:
+
+- Il router R2 sostituisce l'indirizzo IP sorgente di H4 nel proprio indirizzo IP pubblico.
+- Il router R1 accetta il pacchetto IP proveniente da R2 e, grazie al livello datalink, consegnerà il pacchetto all'host H2.
+
+Un caso molto tipico di utilizzo del protocollo NAT è il PAT (Port Address Translation), in cui non viene tradotto solo l'indirizzo IP, ma anche il numero di porta, così da distinguere più comunicazioni contemporanee provenienti da host diversi. Questo meccanismo ha avuto enorme diffusione perché ha permesso di rallentare l'esaurimento degli indirizzi IPv4 pubblici.
+
+Il vantaggio principale del NAT è quindi il risparmio di indirizzi pubblici e una maggiore separazione tra rete interna e rete esterna. Lo svantaggio è che rompe in parte il principio end-to-end di Internet, perché i pacchetti vengono modificati lungo il percorso e alcune applicazioni, o protocolli, richiedono accorgimenti aggiuntivi per funzionare correttamente.
 
 ##### 04.03.12. Subnetting IPv4 e IPv6
-<!-- to do -->
+
+Il subnetting è la tecnica con cui una rete IP viene suddivisa in sottoreti più piccole, così da organizzare meglio gli indirizzi e rendere più efficiente la gestione del traffico. In IPv4 il subnetting si realizza scegliendo quanti bit dedicare al prefisso di rete e quanti agli host, mediante subnet mask, o notazione CIDR. In IPv6 il principio è lo stesso, ma si usa quasi sempre direttamente la lunghezza del prefisso. In entrambi i casi, il subnetting serve a migliorare ordine, scalabilità e controllo dell'infrastruttura di rete. In questo breve corso introduttivo sulle reti di calcolatori non c'è sufficiente spazio per analizzare il subnetting IPv4 e IPv6, ma sappiate che si tratta di una tecnica molto utilizzata oggigiorno e che permette di risparmiare tantissiimi indirizzi IPv4, oltre che migliorare la gestione delle reti. Si tratta di una tecnica molto usata da piccole e grandi istituzioni e da piccole e grandi aziende per organizzare le proprie sedi ed i propri uffici.
 
 ### 04.04. Controllo del traffico
-<!-- to do -->
+
+Il controllo del traffico comprende l'insieme delle tecniche usate per regolare il flusso dei pacchetti nella rete, evitare situazioni di congestione e sfruttare meglio le risorse disponibili. Quando troppi pacchetti attraversano contemporaneamente gli stessi collegamenti, o gli stessi router, ritardi, code e perdite possono aumentare rapidamente. Per questo motivo la rete deve essere in grado non solo di instradare i pacchetti, ma anche di gestire il carico in modo efficiente. Nei prossimi paragrafi vedremo alcuni dei principali strumenti usati per raggiungere questo obiettivo.
 
 ##### 04.04.01. Grafico del traffico e capacità della rete
-<!-- to do -->
+
+Per capire il problema della congestione è utile immaginare un grafico in cui sull'asse orizzontale compare il traffico offerto alla rete, mentre su quello verticale compare il throughput effettivo, cioè la quantità di dati che la rete riesce davvero a trasportare. Finché il traffico resta inferiore alla capacità disponibile, il throughput cresce quasi proporzionalmente: la rete riesce ad assorbire il carico e i ritardi restano contenuti.
+
+Quando però il traffico si avvicina troppo alla capacità massima, la situazione cambia rapidamente. Le code nei router aumentano, i ritardi diventano più elevati e possono comparire perdite di pacchetti. Se il carico continua a crescere oltre il limite sostenibile, la rete entra in congestione: in questo caso il throughput non aumenta più in modo utile e può perfino peggiorare, perché molte risorse vengono sprecate per gestire attese, ritrasmissioni e pacchetti scartati.
+
+In sintesi, il grafico traffico-capacità mostra che una rete non può essere caricata indefinitamente senza conseguenze: esiste una soglia oltre la quale l'aumento del traffico porta a un degrado complessivo delle prestazioni. La seguente figura mostra questo grafico:
+
+<!-- to add -->
+*In Figura: il grafico del traffico e della capacità della rete*
 
 ##### 04.04.02. Traffic-aware routing
-<!-- to do -->
+
+Si tratta di una tecnica che effettua il routing (ovvero, la scelta di un determinato percorso che deve seguire un pacchetto IP) sulla base delle condizioni di traffico attuali della rete. Facciamo un esempio, per comprendere meglio come opera il traffic-aware routing, considerando la seguente figura:
+
+<!-- to add -->
+*In Figura: il router R ha tre interfacce d'uscita per il pacchetto P, ovvero i percorsi I1, I2 e I3*
+
+Il router effettua il routing non solo eseguendo, ad esempio, un determinato algoritmo di routing (come l'algoritmo di Dijkstra, o un algoritmo basato sui DVs, o sui LSs); bensì, il router "ascolta" una serie di metriche che provengono direttamente dalle interfacce, quali l'attuale traffico e/o congestione del canale. A seconda di quanto traffico è presente nella rete, il router intrada il pacchetto P nell'interfaccia in cui ce n'è di meno.
+
+In pratica, il traffic-aware routing combina le classiche modalità di routing basate su uno, o più algoritmi di routing con le reali condizioni di traffico della rete percepite dal router stesso.
 
 ##### 04.04.03. Controllo di ammissione
-<!-- to do -->
+
+Il controllo di ammissione è una tecnica con cui la rete decide se accettare, oppure rifiutare, una nuova comunicazione in base alle risorse disponibili in quel momento. L'idea è semplice: se un nuovo flusso rischia di peggiorare troppo il servizio già offerto agli altri flussi attivi, allora conviene non ammetterlo.
+
+Questo meccanismo è particolarmente utile quando si vogliono garantire certe prestazioni minime, ad esempio in termini di banda disponibile, ritardo o probabilità di perdita. Prima di autorizzare un nuovo traffico, la rete verifica quindi se collegamenti, code e router siano in grado di sostenerlo senza entrare in congestione.
+
+In sintesi, il controllo di ammissione agisce come un filtro preventivo: invece di lasciare entrare tutto il traffico e gestire i problemi solo dopo, cerca di evitare in anticipo il sovraccarico della rete.
 
 ##### 04.04.04. Traffic throttling
-<!-- to do -->
+
+Il traffic throttling consiste nel ridurre in modo controllato la velocità con cui un host, un'applicazione, o un flusso di traffico può immettere pacchetti nella rete. In pratica, invece di bloccare completamente la comunicazione, si rallenta il ritmo di trasmissione per evitare che il carico cresca troppo rapidamente.
+
+Questa tecnica viene usata quando la rete è vicina alla congestione, oppure quando si vuole impedire che alcuni flussi occupino una quantità eccessiva di banda a scapito degli altri. Limitando temporaneamente il traffico in ingresso, si cerca di mantenere più stabili code, ritardi e perdite di pacchetti.
+
+In sintesi, il traffic throttling è una forma di regolazione del flusso: non elimina il traffico, ma lo dosa nel tempo per proteggere l'equilibrio complessivo della rete.
 
 ##### 04.04.05. Load shedding
-<!-- to do -->
+
+Il load shedding è una tecnica usata nelle situazioni di congestione più gravi, quando la rete non riesce più a gestire tutto il traffico ricevuto. In questi casi alcuni pacchetti, o addirittura alcuni flussi, vengono scartati intenzionalmente per ridurre rapidamente il carico complessivo.
+
+Si tratta quindi di una misura più drastica rispetto al traffic throttling: invece di limitare soltanto la velocità di trasmissione, si rinuncia a trasportare una parte del traffico per evitare che l'intero sistema peggiori ulteriormente. In genere si cerca di scartare prima il traffico meno importante, o meno prioritario, così da proteggere quello considerato più critico.
+
+In sintesi, il load shedding sacrifica una parte del traffico per salvaguardare la stabilità generale della rete quando le risorse disponibili non sono più sufficienti.
 
 ### 04.05. QoS (Quality of Service)
 <!-- to do -->
@@ -431,22 +507,100 @@ In sintesi, questi indirizzi speciali non servono semplicemente a numerare host,
 <!-- to do -->
 
 ### 04.06. Il routing su Internet
-<!-- to do -->
+
+Bene, abbiamo analizzato tutte le vari sfacetturature del livello network dello stack TCP/IP. Adesso entreremo nel dettaglio e comprendero quali sono i reali protocolli e le reali applicazioni di essi all'interno di Internet, la grande rete mondiale che intercollega la stragrande maggioranza degli host presenti nel mondo. Analizzeremo anche alcune tecniche molto utili per permettere a due, o più host di comunicare fra loro.
 
 ##### 04.06.01. Tecnica Tunnelig
-<!-- to do -->
+
+La tecnica di tunneling consiste nell'incapsulare un pacchetto all'interno di un altro pacchetto, così da permettergli di attraversare una rete intermedia come se viaggiasse in un "tunnel" logico. In pratica, il contenuto originale viene trattato come payload di un nuovo pacchetto, dotato di un header adatto alla rete che deve attraversare.
+
+Questo meccanismo è utile quando due estremi della comunicazione usano un certo protocollo, ma tra di essi esiste una porzione di rete che ne usa un altro, oppure quando si vuole creare un collegamento logico sicuro, o isolato, sopra una rete pubblica. Un caso tipico è il trasporto di pacchetti IPv6 sopra una rete IPv4, oppure il funzionamento di molte VPN. La seguente figura mostra come funziona la tecnica tunneling quando si vuole trasportare un pacchetto IPv6 all'interno di un pacchetto IPv4:
+
+<!-- to add -->
+*In Figura: tecnica tunneling per trasportare i pacchetti IPv6 all'interno di pacchetti IPv4*
+
+In sintesi, il tunneling non modifica la comunicazione logica tra sorgente e destinazione, ma aggiunge un livello di incapsulamento temporaneo che consente ai pacchetti di superare reti intermedie differenti.
 
 ##### 04.06.02. MTU (Maximum Transmission Unit) e packet fragmentation
-<!-- to do -->
+
+La MTU (Maximum Transmission Unit) è la dimensione massima di pacchetto che può essere trasportata su un certo collegamento senza dover essere suddivisa. Poiché reti differenti possono avere MTU diverse, può accadere che un datagramma IP valido in una parte del percorso risulti troppo grande per attraversare il collegamento successivo.
+
+Quando questo accade, in IPv4 il pacchetto può essere frammentato, cioè diviso in più frammenti più piccoli, ciascuno dotato delle informazioni necessarie per essere riconosciuto e riassemblato correttamente a destinazione. La frammentazione permette quindi al pacchetto di continuare il viaggio, ma introduce anche costi aggiuntivi in termini di elaborazione, ritardo e probabilità di perdita: se anche un solo frammento va perso, infatti, l'intero datagramma originale non può essere ricostruito correttamente.
+
+In sintesi, la MTU stabilisce il limite di dimensione dei pacchetti su un collegamento, mentre la frammentazione è il meccanismo usato per adattare i datagrammi troppo grandi ai vincoli della rete attraversata. A differenza del livello datalink dello stack TCP/IP (in cui i frame hanno tutti una lunghezza fissa), i pacchetti del livello network dello stack TCP/IP possono avere una lunghezza variabile.
 
 ##### 04.06.03. ICMP (Internet Control Message Protocol)
-<!-- to do -->
+
+ICMP (Internet Control Message Protocol) è un protocollo di supporto a IP usato per trasmettere messaggi di controllo, diagnostica e segnalazione di errori. Non serve a trasportare i dati delle applicazioni, ma a informare host e router su problemi che possono verificarsi durante l'inoltro dei datagrammi.
+
+Per esempio, ICMP viene usato per segnalare che una destinazione è irraggiungibile, che il tempo di vita di un pacchetto è scaduto, oppure che un datagramma è troppo grande per essere inoltrato senza frammentazione. Proprio grazie a questi messaggi è possibile capire meglio che cosa sta accadendo nella rete e sviluppare strumenti diagnostici molto utili.
+
+In sintesi, ICMP accompagna il funzionamento di IP fornendo un canale di feedback essenziale per il controllo e la diagnostica della rete. È inoltre alla base di strumenti molto noti, come `ping` e `traceroute`, che analizzeremo più avanti.
+
+Dal punto di vista della struttura, un messaggio ICMP contiene in genere alcuni campi fondamentali:
+
+- un campo Type, che indica il tipo di messaggio;
+- un campo Code, che ne specifica meglio il significato;
+- un campo Checksum per il controllo degli errori;
+- e un payload, che dipende dal tipo di messaggio.
+
+In molti casi questa parte finale include informazioni utili a identificare il pacchetto che ha causato il problema, così che il mittente possa capire con maggiore precisione l'origine dell'errore.
+
+Alcuni esempi tipici di messaggi ICMP, giusto per farsi un'idea, sono i seguenti:
+
+- Echo Request ed Echo Reply, usati da `ping` per verificare se un host è raggiungibile;
+- Destination Unreachable, usato quando una destinazione, una rete, un host, o una porta non possono essere raggiunti;
+- Time Exceeded, usato quando il valore di TTL (per IPv4) e di Hop Limit (per IPv6) del pacchetto arriva a zero durante il percorso;
+- Redirect, usato da un router per suggerire a un host un percorso migliore verso una certa destinazione;
+- Fragmentation Needed, usato per segnalare che un pacchetto è troppo grande rispetto alla MTU del collegamento successivo.
 
 ##### 04.06.04. ARP (Address Resolution Protocol)
-<!-- to do -->
+
+ARP (Address Resolution Protocol) è il protocollo usato nelle reti IPv4 per associare un indirizzo IP a un indirizzo fisico di livello datalink, cioè in pratica a un indirizzo MAC. Questo è necessario perché un host può sapere a quale indirizzo IP deve inviare un datagramma, ma per trasmettere realmente il frame sulla rete locale deve conoscere anche l'indirizzo MAC del destinatario, o del router a cui consegnarlo. Proprio per questo motivo il protocollo ARP si dice che è un protocollo intermedio tra il livello datalink ed il livello network, poiché sta tra i due ed opera sia con gli indirizzi IP, sia con gli indirizzi MAC.
+
+Il funzionamento di ARP è abbastanza semplice: quando un host conosce l'indirizzo IP di destinazione, ma non conosce il corrispondente indirizzo MAC, invia nella rete locale una ARP Request in broadcast, chiedendo quale dispositivo possieda quell'indirizzo IP. Il nodo interessato risponde con una ARP Reply, comunicando il proprio indirizzo MAC. A questo punto il mittente può aggiornare la propria ARP cache e inviare correttamente i frame.
+
+Dal punto di vista della struttura, un messaggio ARP contiene in genere alcuni campi fondamentali:
+
+- il tipo di hardware e il tipo di protocollo usato;
+- la lunghezza dell'indirizzo MAC e dell'indirizzo IP;
+- un campo Operation, che indica se il messaggio è una ARP Request, o una ARP Reply;
+- l'indirizzo MAC e l'indirizzo IP del mittente;
+- l'indirizzo MAC e l'indirizzo IP del destinatario.
+
+Alcuni esempi tipici di messaggi ARP, giusto per avere un'idea, sono i seguenti:
+
+- ARP Request: "Chi ha l'indirizzo IP `192.168.1.20`? Risponda a `192.168.1.10`";
+- ARP Reply: "L'indirizzo IP `192.168.1.20` corrisponde al MAC `AA:BB:CC:DD:EE:FF`".
+
+In sintesi, ARP fa da collegamento tra livello network e livello datalink nelle reti IPv4 locali, permettendo di tradurre gli indirizzi IP in indirizzi fisici realmente usabili per la trasmissione dei frame.
 
 ##### 04.06.05. DHCP (Dynamic Host Configuration Protocol)
-<!-- to do -->
+
+DHCP (Dynamic Host Configuration Protocol) è il protocollo usato per assegnare automaticamente ai dispositivi i parametri di configurazione necessari per comunicare in rete. Invece di configurare manualmente ogni host, un server DHCP (un host della rete predisposto per fungere da "arbitro" in questo protocollo) può fornire in modo dinamico un indirizzo IP, la subnet mask, il gateway predefinito, i server DNS e altre informazioni utili. In pratica, il protocollo DHCP rende la configurazione degli host automatica.
+
+Il funzionamento di DHCP è spesso descritto con la sequenza DORA (Discover, Offer, Request, Acknowledge). Quando un host si collega alla rete e non possiede ancora un indirizzo IP valido, invia un messaggio DHCP Discover in broadcast per cercare un server DHCP. Il server risponde con un DHCP Offer, proponendo una configurazione. Il client invia quindi un DHCP Request per richiedere formalmente quei parametri, e infine il server conferma l'assegnazione con un DHCP Ack. In questo modo l'host ottiene automaticamente la configurazione necessaria per iniziare a comunicare. Questo tipo di comunicazione è rappresentato nella seguente figura:
+
+<!-- to add -->
+*In Figura: ecco come opera il protocollo DHCP quando un host vorrebbe una configurazione da parte del server DHCP della rete locale*
+
+Dal punto di vista della struttura, un messaggio DHCP contiene in genere alcuni campi fondamentali:
+
+- un campo Operation, che indica se il messaggio è una DHCP Request, o una DHCP Ack;
+- identificatori del client, come ad esempio il suo indirizzo MAC;
+- gli indirizzi IP coinvolti, se già noti, o proposti;
+- un insieme di opzioni DHCP, usate per trasportare parametri come subnet mask, gateway, DNS e durata della lease.
+
+Una caratteristica del protocollo DHCP che merita una parentesi è la lease, cioè il periodo di tempo stabilito per cui un server DHCP assegna un determinato indirizzo IP a un dispositivo di rete.
+
+Alcuni esempi tipici di messaggi DHCP, giusto per avere un'idea, sono i seguenti:
+
+- DHCP Discover: il client chiede se nella rete è presente un server DHCP;
+- DHCP Offer: il server propone, per esempio, l'indirizzo IP `192.168.1.50` con una certa durata di lease;
+- DHCP Request: il client dichiara di voler accettare quella configurazione proposta;
+- DHCP Ack: il server conferma definitivamente l'assegnazione dei parametri di rete.
+
+In sintesi, DHCP automatizza la configurazione degli host nelle reti IP, riduce gli errori manuali e rende molto più semplice la gestione di reti con molti dispositivi.
 
 ##### 04.06.06. OSPF (Open Shortest Path First)
 <!-- to do -->
@@ -455,10 +609,80 @@ In sintesi, questi indirizzi speciali non servono semplicemente a numerare host,
 <!-- to do -->
 
 ##### 04.06.08. Ping
-<!-- to do -->
+
+`ping` è uno strumento di diagnostica di rete usato per verificare se un host remoto è raggiungibile e per misurare il tempo necessario a ricevere una risposta. Il suo funzionamento si basa su ICMP: il mittente invia uno, o più, messaggi Echo Request e attende i corrispondenti Echo Reply provenienti dall'host destinatario.
+
+Se la risposta arriva correttamente, `ping` permette di capire che la destinazione è raggiungibile e consente anche di misurare il tempo di andata e ritorno del pacchetto, detto RTT (Round-Trip Time, lo analizzeremo meglio quando parleremo dei protocolli TCP e UDP nel prossimo livello dello stack TCP/IP). Se invece non arriva alcuna risposta, oppure arrivano messaggi ICMP di errore, ciò può indicare problemi di connettività, instradamento, filtraggio, o congestione.
+
+In pratica, `ping` è uno strumento semplice, ma molto utile per un primo controllo dello stato della rete. Un esempio tipico di utilizzo è il seguente: il comando `ping 8.8.8.8` invia messaggi Echo Request all'host con indirizzo IP `8.8.8.8` e misura se, e in quanto tempo, arrivano gli Echo Reply. Tale esempio è mostrato nella seguente figura (dove l'indirizzo IPv4 8.8.8.8 è il server DNS primario di Google):
+
+<!-- to add -->
+*In Figura: un esempio di ping mediante l'esecuzione del comando `ping 8.8.8.8`*
+
+In sintesi, `ping` serve a capire rapidamente se un host è raggiungibile e a ottenere una stima elementare della qualità della connessione.
 
 ##### 04.06.09. Traceroute
-<!-- to do -->
+
+`traceroute` è uno strumento di diagnostica usato per scoprire quali router attraversa un pacchetto nel percorso dalla sorgente alla destinazione. A differenza di `ping`, che verifica soprattutto la raggiungibilità finale, `traceroute` cerca di ricostruire passo dopo passo il cammino seguito nella rete.
+
+Il suo funzionamento si basa sul campo TTL in IPv4, o Hop Limit in IPv6. Il programma invia una serie di pacchetti con valori iniziali sempre più grandi: prima con valore `1`, poi con `2`, poi con `3` e così via. Quando un router riceve un pacchetto e ne decrementa il TTL fino a zero, scarta il pacchetto e restituisce un messaggio ICMP Time Exceeded. In questo modo il mittente scopre l'indirizzo del router corrispondente a quel determinato salto. Ripetendo il procedimento, `traceroute` ricostruisce progressivamente l'intero percorso fino alla destinazione finale.
+
+In pratica, `traceroute` è utile per capire dove si trovano ritardi, interruzioni o percorsi anomali nella rete. Un esempio tipico di utilizzo è il seguente: il comando `traceroute www.google.com` mostra la sequenza dei router attraversati per raggiungere il server associato a quel nome di dominio. Questa situazione, in modo semplificato è concettualmente rappresentata nella seguente figura:
+
+<!-- to add -->
+*In Figura: un esempio di traceroute durante l'esecuzione del comando `traceroute www.google.com`*
+
+In sintesi, `traceroute` permette di osservare il cammino seguito dai pacchetti nella rete ed è molto utile per analizzare problemi di instradamento e latenza.
 
 ##### 04.06.10. Mobile IP
-<!-- to do -->
+
+Mobile IP è un insieme di tecniche e protocolli progettati per permettere a un host mobile di cambiare rete senza perdere, o dover cambiare continuamente, il proprio indirizzo IP logico principale. Il problema di fondo è questo: normalmente un indirizzo IP identifica non solo un host, ma anche la rete in cui esso si trova. Se un dispositivo si sposta da una rete a un'altra, dovrebbe quindi cambiare indirizzo IP, ma questo interromperebbe facilmente le comunicazioni già in corso. Mobile IP nasce proprio per risolvere questo problema e permettere a un host in movimento di mantenere le proprie comunicazioni anche durante il cambiamento del proprio indirizzo IP.
+
+L'idea fondamentale è separare l'identità logica del nodo dalla sua posizione attuale nella rete. Un host mobile mantiene un indirizzo stabile, detto home address, associato alla sua rete originaria, chiamata home network. Quando però il dispositivo si trova temporaneamente in un'altra rete, detta foreign network, la rete deve comunque essere in grado di recapitargli i pacchetti. Per fare questo si introduce un indirizzo temporaneo, detto care-of address, che rappresenta il punto attuale in cui il nodo mobile è raggiungibile.
+
+Nel modello classico di Mobile IP compaiono in genere tre elementi principali:
+
+- il mobile node, cioè l'host che si sposta da una rete all'altra;
+- l'home agent, cioè il router, o agente, presente nella home network che tiene traccia della posizione temporanea del nodo mobile;
+- il foreign agent, cioè il router, o agente, della rete visitata che aiuta il nodo mobile a ricevere i pacchetti nella foreign network.
+
+In alcune varianti moderne il nodo mobile può anche ottenere e usare direttamente un care-of address senza dipendere sempre da un foreign agent dedicato, ma il modello con home agent e foreign agent resta molto utile dal punto di vista didattico per capire il meccanismo generale.
+
+Il funzionamento può essere descritto in modo semplificato così:
+
+1. il nodo mobile si collega alla propria home network e comunica normalmente usando il suo home address;
+2. quando si sposta in una foreign network, rileva che si trova in una rete diversa e ottiene un care-of address;
+3. il nodo mobile registra il nuovo care-of address presso il proprio home agent;
+4. quando un host remoto invia un pacchetto verso l'home address del nodo mobile, il pacchetto arriva alla home network;
+5. l'home agent intercetta il pacchetto e lo inoltra verso il care-of address, spesso mediante tunneling;
+6. il pacchetto raggiunge la foreign network e viene consegnato al nodo mobile nella sua posizione attuale.
+
+La seguente figura mostra l'idea generale del meccanismo:
+
+<!-- to add -->
+*In Figura: un mobile node che lascia la home network, ottiene un care-of address nella foreign network e riceve i pacchetti tramite home agent e tunneling*
+
+Il ruolo del tunneling è particolarmente importante. Quando l'home agent riceve un pacchetto destinato all'home address del nodo mobile, non può semplicemente consegnarlo localmente, perché il nodo non si trova più nella rete originaria. Per questo motivo l'home agent incapsula il datagramma originale dentro un nuovo pacchetto IP e lo invia verso il care-of address. Arrivato nella foreign network, il pacchetto viene decapsulato e consegnato al destinatario mobile. In pratica, Mobile IP sfrutta proprio la tecnica di tunneling che abbiamo già introdotto nei paragrafi precedenti.
+
+Dal punto di vista logico, il vantaggio principale è la trasparenza verso i corrispondenti. Un host remoto, spesso chiamato correspondent node, può continuare a inviare i pacchetti verso l'home address del nodo mobile senza dover sapere in quale rete esso si trovi realmente in quel momento. Sarà poi l'infrastruttura di Mobile IP a occuparsi del reindirizzamento.
+
+Questo meccanismo, però, introduce anche alcune inefficienze. Il caso più noto è il cosiddetto triangular routing. Supponiamo che un correspondent node voglia comunicare con un host mobile che si è spostato lontano dalla sua home network. I pacchetti inviati dal corrispondente raggiungono prima la home network, vengono intercettati dall'home agent e solo dopo sono ritrasmessi verso la foreign network. Il percorso reale del traffico può quindi risultare più lungo del necessario, formando idealmente un triangolo tra mittente, home agent e host mobile.
+
+La seguente figura aiuta a visualizzare questo problema:
+
+<!-- to add -->
+*In Figura: esempio di triangular routing, in cui i pacchetti passano prima per la home network e solo dopo raggiungono il nodo mobile nella foreign network*
+
+Per ridurre questo inconveniente, alcune evoluzioni del protocollo introducono meccanismi di route optimization, con cui il correspondent node può imparare il care-of address corrente del nodo mobile e inviargli più direttamente i pacchetti. Tuttavia, questa ottimizzazione rende il sistema più complesso e richiede maggiore attenzione alla sicurezza e all'aggiornamento delle informazioni di posizione.
+
+Un altro aspetto importante è la gestione della mobilità durante una comunicazione già attiva. Quando il nodo mobile cambia nuovamente rete, deve ottenere un nuovo care-of address e registrarlo rapidamente presso il proprio home agent. Questo processo deve essere abbastanza veloce da limitare interruzioni, ritardi e perdite di pacchetti. Qui entra in gioco il concetto di handoff, o handover, cioè il passaggio da una rete, o da un punto di accesso, a un altro.
+
+In sintesi, Mobile IP cerca di conciliare due esigenze che normalmente entrano in conflitto:
+
+- mantenere stabile l'identità logica del nodo mobile;
+- permettere al nodo di spostarsi fisicamente tra reti differenti;
+- continuare a ricevere traffico anche mentre la sua posizione cambia.
+
+Dal punto di vista storico e concettuale, Mobile IP è stato molto importante perché ha mostrato come gestire la mobilità a livello network. Nelle reti moderne molte soluzioni pratiche per la mobilità usano approcci differenti, spesso integrati con livelli superiori, reti cellulari e meccanismi applicativi, ma le idee introdotte da Mobile IP restano fondamentali per comprendere il problema del routing verso nodi in movimento.
+
+In conclusione, Mobile IP permette a un host di conservare un'identità IP stabile pur cambiando rete, grazie a meccanismi di registrazione della posizione, care-of address, home agent e tunneling. Il prezzo da pagare è una maggiore complessità del sistema e, in alcuni casi, percorsi non ottimali dei pacchetti.
