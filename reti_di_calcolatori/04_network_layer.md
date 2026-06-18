@@ -429,6 +429,8 @@ Il vantaggio principale del NAT è quindi il risparmio di indirizzi pubblici e u
 
 Il subnetting è la tecnica con cui una rete IP viene suddivisa in sottoreti più piccole, così da organizzare meglio gli indirizzi e rendere più efficiente la gestione del traffico. In IPv4 il subnetting si realizza scegliendo quanti bit dedicare al prefisso di rete e quanti agli host, mediante subnet mask, o notazione CIDR. In IPv6 il principio è lo stesso, ma si usa quasi sempre direttamente la lunghezza del prefisso. In entrambi i casi, il subnetting serve a migliorare ordine, scalabilità e controllo dell'infrastruttura di rete. In questo breve corso introduttivo sulle reti di calcolatori non c'è sufficiente spazio per analizzare il subnetting IPv4 e IPv6, ma sappiate che si tratta di una tecnica molto utilizzata oggigiorno e che permette di risparmiare tantissiimi indirizzi IPv4, oltre che migliorare la gestione delle reti. Si tratta di una tecnica molto usata da piccole e grandi istituzioni e da piccole e grandi aziende per organizzare le proprie sedi ed i propri uffici.
 
+Una variante molto importante del subnetting IPv4 è il VLSM (Variable Length Subnet Mask), cioè l'uso di maschere di sottorete di lunghezza variabile. Con il VLSM non tutte le sottoreti devono avere la stessa dimensione: si possono creare sottoreti più grandi dove servono molti host e sottoreti più piccole dove ne servono pochi. Questo permette di sfruttare gli indirizzi IPv4 in modo molto più efficiente, evitando sprechi e adattando meglio la struttura della rete alle reali necessità organizzative.
+
 ### 04.04. Controllo del traffico
 
 Il controllo del traffico comprende l'insieme delle tecniche usate per regolare il flusso dei pacchetti nella rete, evitare situazioni di congestione e sfruttare meglio le risorse disponibili. Quando troppi pacchetti attraversano contemporaneamente gli stessi collegamenti, o gli stessi router, ritardi, code e perdite possono aumentare rapidamente. Per questo motivo la rete deve essere in grado non solo di instradare i pacchetti, ma anche di gestire il carico in modo efficiente. Nei prossimi paragrafi vedremo alcuni dei principali strumenti usati per raggiungere questo obiettivo.
@@ -480,31 +482,76 @@ Si tratta quindi di una misura più drastica rispetto al traffic throttling: inv
 In sintesi, il load shedding sacrifica una parte del traffico per salvaguardare la stabilità generale della rete quando le risorse disponibili non sono più sufficienti.
 
 ### 04.05. QoS (Quality of Service)
-<!-- to do -->
+
+La QoS (Quality of Service) è l'insieme delle tecniche usate per offrire a determinati flussi di traffico una qualità di trasmissione più prevedibile e controllata. In una rete reale, infatti, non tutti i pacchetti hanno la stessa importanza: alcune applicazioni, come voce, video e servizi interattivi, tollerano poco ritardo, variazione del ritardo, o perdita di pacchetti, mentre altre sono più elastiche. Parlare di QoS significa quindi studiare come la rete possa differenziare il trattamento del traffico e cercare di garantire parametri come banda disponibile, ritardo, jitter e affidabilità. Nei prossimi paragrafi vedremo i principali meccanismi usati per raggiungere questo obiettivo.
 
 ##### 04.05.01. Caratteristiche del QoS
-<!-- to do -->
+
+Le caratteristiche principali del QoS sono i parametri con cui si descrive la qualità percepita da un certo flusso di traffico. I più importanti sono in genere i seguenti:
+
+- banda disponibile, cioè la quantità di capacità trasmissiva che la rete riesce a riservare, o a rendere stabilmente disponibile, per un certo traffico;
+- ritardo (delay, o latenza), cioè il tempo necessario a un pacchetto per attraversare la rete dalla sorgente alla destinazione;
+- jitter, cioè la variazione del ritardo tra pacchetti successivi: è particolarmente importante per voce e video in tempo reale;
+- perdita di pacchetti, cioè la probabilità che alcuni pacchetti vengano scartati lungo il percorso;
+- affidabilità, cioè la capacità della rete di mantenere nel tempo un comportamento stabile e prevedibile per un certo servizio.
+
+Non tutte le applicazioni attribuiscono lo stesso peso a questi parametri. Per esempio, un trasferimento di file tollera abbastanza bene un ritardo elevato, purché i dati arrivino correttamente; al contrario, una chiamata VoIP, o una videoconferenza, richiedono ritardo e jitter bassi, anche a costo di tollerare qualche perdita limitata di pacchetti.
+
+In sintesi, parlare di QoS significa definire quali caratteristiche debbano essere privilegiate per un certo tipo di traffico e progettare la rete in modo che tali requisiti siano soddisfatti nel modo più coerente possibile.
 
 ##### 04.05.02. Traffic shaping
-<!-- to do -->
+
+Il traffic shaping è una tecnica usata per regolare il ritmo con cui i pacchetti vengono immessi nella rete, così da rendere il traffico più regolare e prevedibile. L'idea di fondo è evitare che un host, o un'applicazione, trasmetta grandi raffiche di dati tutte insieme, perché queste raffiche potrebbero riempire rapidamente le code dei router, aumentare il jitter e provocare congestione.
+
+Diversamente da altre tecniche più drastiche, il traffic shaping non mira anzitutto a scartare pacchetti, ma a ritardarne opportunamente l'invio per distribuire meglio il traffico nel tempo. In pratica, il flusso viene "modellato" in modo da rispettare certi limiti di velocità media, di picco, o di burst massimo.
+
+Questo approccio è molto utile nella QoS perché permette di rendere più stabile il comportamento della rete e di proteggere i flussi sensibili al ritardo e al jitter. Se il traffico in ingresso è più regolare, infatti, risulta più facile gestire le code, pianificare l'inoltro dei pacchetti e offrire un servizio più prevedibile.
+
+Tra i meccanismi classici di traffic shaping si ricordano soprattutto:
+
+- il leaky bucket, che fa uscire i pacchetti a ritmo pressoché costante, come se un secchio forato lasciasse uscire l'acqua poco alla volta;
+- il token bucket, che consente maggiore flessibilità, perché permette piccoli burst di traffico purché siano disponibili i token necessari.
+
+In sintesi, il traffic shaping serve a trasformare un traffico irregolare e impulsivo in un traffico più controllato, così da migliorare la QoS complessiva e ridurre il rischio di congestione.
 
 ##### 04.05.03. Scheduling dei datagrammi
-<!-- to do -->
+
+Lo scheduling dei datagrammi riguarda il criterio con cui un router sceglie quale pacchetto trasmettere per primo quando nella coda di uscita sono presenti più datagrammi in attesa. Quando le risorse sono contese, infatti, non basta accumulare i pacchetti nelle code: bisogna anche decidere l'ordine di servizio, perché da questa scelta dipendono ritardo, jitter, equità e priorità percepite dai diversi flussi.
+
+Il metodo più semplice è il FIFO (First In, First Out), in cui i pacchetti vengono serviti nell'ordine di arrivo. Questo approccio è facile da implementare, ma non distingue tra traffico urgente e traffico meno sensibile ai ritardi. Per questo, nelle reti che vogliono offrire QoS, si usano spesso meccanismi più evoluti, come:
+
+- priority scheduling, in cui i pacchetti più importanti vengono serviti prima degli altri;
+- fair queuing, o sue varianti, che cercano di distribuire in modo più equo la capacità trasmissiva tra più flussi;
+- weighted scheduling, in cui alcune classi di traffico ricevono una quota maggiore di servizio rispetto ad altre.
+
+L'obiettivo generale è evitare che un solo flusso occupi tutta l'uscita del router e, allo stesso tempo, fare in modo che traffico sensibile al tempo, come voce e video, riceva un trattamento più favorevole. In sintesi, lo scheduling dei datagrammi è il meccanismo con cui la rete decide chi trasmettere prima e con quale priorità, così da tradurre concretamente i requisiti di QoS nel comportamento delle code e dei router.
 
 ##### 04.05.04. Controllo di ammissione
-<!-- to do -->
+
+Nel contesto della QoS, il controllo di ammissione è il meccanismo con cui la rete decide se accettare un nuovo flusso soltanto quando esistono risorse sufficienti per garantirgli un certo livello di servizio senza peggiorare troppo quello dei flussi già presenti. L'idea è quindi preventiva: prima di far entrare nuovo traffico, si verifica se banda, code, ritardo e capacità dei router siano compatibili con i requisiti richiesti.
+
+Se la rete ritiene di poter sostenere il nuovo flusso, esso viene ammesso; in caso contrario viene rifiutato, oppure rinviato. Questo approccio è particolarmente importante per applicazioni sensibili al ritardo e al jitter, perché evita che un eccesso di traffico faccia degradare rapidamente la qualità complessiva del servizio.
+
+In sintesi, il controllo di ammissione protegge la QoS trattando la rete come una risorsa limitata: non tutto il traffico viene accettato automaticamente, ma solo quello che può essere gestito mantenendo prestazioni sufficientemente stabili e prevedibili.
 
 ##### 04.05.05. QoS routing
+
+Il QoS routing è un approccio al routing in cui la scelta del percorso non dipende soltanto dal numero di salti, o da un costo generico, ma anche da parametri di qualità del servizio come banda disponibile, ritardo, jitter e probabilità di perdita. L'idea è che flussi diversi possano richiedere percorsi diversi a seconda delle loro esigenze: un traffico voce, per esempio, privilegia ritardo e jitter bassi, mentre un trasferimento dati può tollerare latenze maggiori.
+
+In questo modello, la rete cerca quindi un percorso che non sia solo raggiungibile, ma anche compatibile con i vincoli richiesti dal flusso. Questo rende il problema del routing più complesso, perché le condizioni della rete possono cambiare nel tempo e i parametri utili alla QoS non sono sempre facili da misurare e mantenere aggiornati.
+
+In sintesi, il QoS routing estende il routing tradizionale introducendo criteri qualitativi nella scelta del cammino, così da cercare percorsi che soddisfino meglio le esigenze specifiche delle diverse applicazioni.
+
+##### 04.05.06. IntServ (Integrated Services) e DiffServ (Differentiated Services˝)
 <!-- to do -->
 
-##### 04.05.06. IntServ (Integrated Services)
-<!-- to do -->
+##### 04.05.07. Servizi class-based
 
-##### 04.05.07. DiffServ (Differentiated Services˝)
-<!-- to do -->
+I servizi class-based sono un approccio alla QoS in cui il traffico non viene gestito flusso per flusso, ma viene raggruppato in classi. Ogni classe raccoglie pacchetti con caratteristiche simili, o con importanza simile, e riceve un trattamento specifico in termini di priorità, banda assegnata, ritardo tollerato e probabilità di scarto.
 
-##### 04.05.08. Servizi class-based
-<!-- to do -->
+Questo modello è molto utile perché semplifica la gestione della rete: invece di mantenere informazioni dettagliate su ogni singola comunicazione, i router applicano politiche comuni a intere categorie di traffico, come voce, video, traffico dati ordinario o traffico di controllo. In questo modo si ottiene un buon compromesso tra differenziazione del servizio e scalabilità.
+
+In sintesi, i servizi class-based realizzano la QoS trattando gruppi di pacchetti secondo regole diverse, così da favorire il traffico più sensibile, o più importante senza dover gestire separatamente ogni singolo flusso.
 
 ### 04.06. Il routing su Internet
 
@@ -603,10 +650,98 @@ Alcuni esempi tipici di messaggi DHCP, giusto per avere un'idea, sono i seguenti
 In sintesi, DHCP automatizza la configurazione degli host nelle reti IP, riduce gli errori manuali e rende molto più semplice la gestione di reti con molti dispositivi.
 
 ##### 04.06.06. OSPF (Open Shortest Path First)
-<!-- to do -->
+
+OSPF (Open Shortest Path First) è un protocollo di routing dinamico di tipo LSs molto usato all'interno di un singolo sistema autonomo, cioè all'interno di una rete amministrata da una stessa organizzazione, o da uno stesso provider. Il suo nome richiama direttamente il fatto che il protocollo calcola i percorsi migliori applicando un algoritmo di shortest path, tipicamente l'algoritmo di Dijkstra, a una mappa della rete costruita localmente da ciascun router. Ciascun router conosce la topologia completa della rete e varie altre informazioni (come i router che appartengono al bordo del sistema e quelli che invece appartengono al centro della rete).
+
+Apriamo una breve parentesi sugli AS (Autonomous Systems, cioè sistemi autonomi). Un AS è un insieme di reti e router che appartengono alla stessa amministrazione tecnica e che seguono una politica di routing comune. In pratica, dal punto di vista di Internet, un AS rappresenta un dominio amministrativo coerente, come ad esempio la rete di un grande provider, di un'università o di una grande azienda. OSPF opera tipicamente all'interno di un singolo AS, mentre protocolli come BGP servono soprattutto a mettere in comunicazione AS differenti tra loro, come vedremo nel successivo paragrafo.
+
+OSPF nasce per superare alcuni limiti dei protocolli più semplici basati sui distance vector. Invece di conoscere solo il costo verso le destinazioni tramite i vicini, ogni router OSPF cerca di ottenere una visione molto più completa della topologia della rete. Per farlo, i router si scambiano informazioni sullo stato dei propri collegamenti, cioè sui link disponibili e sul loro costo. In questo modo ciascun router può costruire una rappresentazione interna della rete e calcolare autonomamente i percorsi migliori verso tutte le destinazioni.
+
+Il funzionamento generale di OSPF può essere riassunto così:
+
+1. ogni router scopre i propri vicini OSPF sulle interfacce abilitate;
+2. stabilisce con essi una relazione di adiacenza;
+3. genera e diffonde messaggi LSP (Link-State Packet) che descrivono i propri collegamenti;
+4. raccoglie i vari LSP ricevuti dagli altri router e costruisce un database comune della topologia, detto LSs database, che sarebbe più corretto chiamare grafo;
+5. applica localmente l'algoritmo di Dijkstra su tale grafo;
+6. ricava così la propria tabella di routing con i next hop migliori verso le varie reti di destinazione. Il next hop migliore è il prossimo router nel percorso il cui collegamento ha il costo minore.
+
+La seguente figura aiuta a visualizzare questa idea:
+
+<!-- to add -->
+*In Figura: più router OSPF che si scambiano LSP, costruiscono lo stesso grafo della rete e applicano localmente l'algoritmo di Dijkstra*
+
+Uno degli aspetti più importanti di OSPF è l'uso di una metrica di costo. In generale, ogni collegamento viene associato a un costo, che può dipendere ad esempio dalla larghezza di banda, dalla politica di rete o da scelte amministrative. Il percorso preferito non è quindi necessariamente quello con meno salti, ma quello con costo totale minore. Questo rende OSPF abbastanza flessibile e adatto a reti complesse, in cui non basta contare semplicemente il numero di router attraversati.
+
+Un'altra caratteristica fondamentale di OSPF è la sua organizzazione gerarchica in aree. Quando la rete diventa grande, non conviene che tutti i router conoscano ogni minimo dettaglio dell'intera topologia globale. Per questo OSPF permette di suddividere la rete in aree: all'interno di una stessa area i router condividono informazioni dettagliate, mentre tra aree differenti si scambiano informazioni più riassunte. In questo modo si riduce il traffico di controllo, si limita la dimensione del database topologico e si migliora la scalabilità del protocollo.
+
+L'area più importante prende il nome di backbone area, o area 0. Le altre aree vengono normalmente collegate proprio a questa area centrale. I router che collegano aree differenti svolgono un ruolo particolare, perché devono propagare e riassumere le informazioni di routing tra le varie parti della rete.
+
+Dal punto di vista operativo, OSPF usa diversi tipi di messaggi per svolgere il proprio lavoro. Senza entrare troppo nei dettagli implementativi, è utile sapere che esistono messaggi per:
+
+- scoprire e mantenere i vicini, come gli Hello packets;
+- descrivere il contenuto del database topologico;
+- richiedere aggiornamenti mancanti;
+- diffondere nuovi LSP quando la topologia cambia. Questa diffusione avviene mediante la comunicazione di tipo flooding, che abbiamo già analizzato in precedenza in questo stesso capitolo.
+
+I messaggi Hello sono particolarmente importanti, perché permettono ai router di capire chi sono i propri vicini attivi e di verificare periodicamente che essi siano ancora raggiungibili. Se un collegamento cade, oppure cambia il costo di un link, le nuove informazioni vengono propagate e ciascun router ricalcola i percorsi migliori. Questo rende OSPF piuttosto rapido nella convergenza rispetto ai protocolli basati sui DV (Distance Vector) tradizionali.
+
+OSPF supporta anche funzionalità moderne e molto utili, come:
+
+- VLSM e CIDR, quindi la gestione flessibile delle sottoreti;
+- autenticazione dei messaggi di routing;
+- equal-cost multipath, cioè la possibilità di usare più percorsi con lo stesso costo;
+- distinzione tra routing interno all'area, routing tra aree e routing verso reti esterne al dominio OSPF.
+
+In sintesi, OSPF è un protocollo di routing interno potente e scalabile, basato su una visione topologica della rete e sull'algoritmo di Dijkstra. I suoi punti di forza principali sono la rapidità di convergenza, la buona precisione nelle scelte di instradamento e la possibilità di organizzare reti grandi tramite aree gerarchiche. Il prezzo da pagare è una maggiore complessità rispetto ai protocolli più semplici, ma proprio questa complessità lo rende molto adatto alle reti IP moderne di media e grande dimensione.
 
 ##### 04.06.07. BGP (Border Gateway Protocol)
-<!-- to do -->
+
+BGP (Border Gateway Protocol) è il principale protocollo di routing usato per mettere in comunicazione ASs (Autonomous Systems, sistemi autonomi) differenti su Internet. Se OSPF lavora tipicamente all'interno di un singolo AS, BGP opera soprattutto tra AS diversi e permette ai router di confine di scambiarsi informazioni su quali reti siano raggiungibili e attraverso quali domini amministrativi sia possibile raggiungerle. Proprio per questo motivo BGP è considerato il protocollo fondamentale del routing interdominio, anche noto come IDR (Inter-Domain Routing), cioè del routing tra domini distinti.
+
+Dal punto di vista concettuale, BGP non si limita a cercare il percorso tecnicamente più corto, o con costo minore, come farebbe un protocollo interno basato su metriche puramente topologiche. BGP tiene conto soprattutto delle politiche di routing. Questo significa che un AS può preferire, evitare, filtrare, o annunciare certi percorsi non solo in base alla distanza, ma anche in base a scelte amministrative, economiche e contrattuali. Ad esempio, un provider può preferire instradare il traffico attraverso un partner commerciale piuttosto che attraverso un altro, oppure può decidere di non propagare certe rotte a specifici vicini.
+
+Per questa ragione BGP viene spesso descritto come un protocollo di tipo path vector. In modo semplificato, ogni annuncio BGP non comunica soltanto che una certa rete è raggiungibile, ma porta con sé anche informazioni sul cammino di AS da attraversare per arrivarci. In particolare, uno degli attributi più noti è l'AS-PATH, cioè la sequenza dei sistemi autonomi attraversati. Questo attributo è utile sia per scegliere i percorsi sia per evitare cicli di instradamento tra AS.
+
+La seguente figura mostra come è organizzata una grande rete (come una rete WAN), che magari coinvolge anche più nazioni, o addirittura più continenti:
+
+<!-- to add -->
+*In Figura: ecco come è organizzata una grande rete, come una rete WAN, in termini di ASs e aree (dette anche zone)*
+
+Il funzionamento generale può essere riassunto così:
+
+1. due router di confine appartenenti a due AS diversi stabiliscono una sessione BGP;
+2. si scambiano informazioni sulle reti che sanno raggiungere;
+3. ogni annuncio include vari attributi, tra cui spesso l'AS-PATH;
+4. ciascun router applica le proprie politiche locali per scegliere il percorso preferito;
+5. il percorso selezionato viene inserito nella tabella di routing e, se opportuno, annunciato ad altri peer BGP.
+
+La seguente figura rappresenta l'idea di base:
+
+<!-- to add -->
+*In Figura: più Autonomous Systems collegati tra loro, con router di bordo che si scambiano annunci BGP e selezionano i percorsi in base agli attributi e alle politiche locali*
+
+È importante distinguere due casi principali:
+
+- eBGP (external BGP), usato tra router appartenenti a sistemi autonomi differenti;
+- iBGP (internal BGP), usato all'interno dello stesso AS per distribuire tra router interni le informazioni apprese verso l'esterno.
+
+In pratica, eBGP serve a collegare domini amministrativi diversi, mentre iBGP serve a fare in modo che i router di uno stesso AS abbiano una visione coerente delle rotte esterne disponibili.
+
+Tra gli attributi di BGP più importanti, oltre all'AS-PATH, possiamo ricordare almeno i seguenti:
+
+- NEXT_HOP, che indica il prossimo router da raggiungere per usare una certa rotta;
+- LOCAL_PREF, usato all'interno di un AS per esprimere una preferenza verso certi percorsi;
+- MED (Multi-Exit Discriminator), usato per suggerire quale punto di ingresso sia preferibile tra più possibilità;
+- COMMUNITY, che permette di etichettare insiemi di rotte secondo criteri amministrativi.
+
+Non è necessario memorizzare in dettaglio tutti questi attributi in questa fase introduttiva, ma è importante capire l'idea generale: BGP sceglie i percorsi non soltanto in base alla raggiungibilità tecnica, bensì anche in base a informazioni descrittive e a politiche configurate dagli amministratori di rete.
+
+Un altro aspetto molto importante è che BGP privilegia stabilità e controllo rispetto a rapidità assoluta di convergenza. Su Internet globale i cambiamenti di routing possono coinvolgere migliaia di reti e milioni di prefissi: per questo motivo il protocollo deve essere prudente nel propagare e accettare gli aggiornamenti, così da evitare oscillazioni e instabilità eccessive. In altre parole, BGP è meno orientato alla reazione immediata di quanto non lo sia un protocollo interno come OSPF, ma è molto più adatto a governare la complessità del routing su scala mondiale.
+
+Dal punto di vista pratico, BGP è il protocollo che rende possibile la struttura reale di Internet come rete di reti. Quando un utente raggiunge un sito ospitato da un altro provider, oppure in un altro Paese, il traffico passa tipicamente attraverso più AS distinti. La capacità di annunciare prefissi IP, scegliere percorsi e coordinare le politiche tra domini diversi dipende proprio da BGP.
+
+In sintesi, BGP è il protocollo di routing interdomain per eccellenza: collega sistemi autonomi differenti, usa un approccio path vector, tiene conto di attributi e politiche amministrative e rende possibile l'instradamento globale di Internet. È più complesso e meno immediato di un protocollo interno come OSPF, ma è indispensabile quando il problema non è più semplicemente trovare un percorso dentro una rete, bensì coordinare il traffico tra reti appartenenti a organizzazioni diverse.
 
 ##### 04.06.08. Ping
 
