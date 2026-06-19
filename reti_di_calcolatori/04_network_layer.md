@@ -741,10 +741,46 @@ Dal punto di vista concettuale, la differenza più importante rispetto ai protoc
 In sintesi, Integrated IS-IS è un IGP di tipo link-state, molto vicino per filosofia a OSPF, ma con storia e struttura proprie. È un protocollo particolarmente adatto a reti grandi e ben organizzate, dove servono stabilità, gerarchia e buona scalabilità del routing interno.
 
 ##### 04.06.09. RIP (Routing Information Protocol)
-<!-- to do -->
+
+RIP (Routing Information Protocol) è uno dei protocolli di routing dinamico più classici e semplici della famiglia TCP/IP. Si tratta di un IGP di tipo DV (Distance Vector), quindi appartiene alla stessa famiglia concettuale degli algoritmi basati sui vettori delle distanze che abbiamo già studiato in precedenza. Il suo obiettivo è permettere ai router di uno stesso dominio amministrativo di scambiarsi informazioni sulle reti raggiungibili e di scegliere il next hop più conveniente.
+
+L'idea di fondo di RIP è molto semplice: ciascun router mantiene una tabella con le destinazioni conosciute e il numero di salti necessari per raggiungerle. La metrica fondamentale di RIP, infatti, è proprio l'hop count, cioè il numero di router attraversati lungo il percorso. In linea generale, il percorso preferito è quello con il minor numero di salti.
+
+Il funzionamento generale può essere riassunto così:
+
+1. ogni router conosce inizialmente le reti direttamente collegate a sé;
+2. periodicamente invia ai router vicini la propria tabella di routing, o una sua sintesi;
+3. quando un router riceve queste informazioni, aggiorna le proprie stime confrontando i nuovi percorsi con quelli già presenti;
+4. se un vicino offre un percorso con numero di salti minore, oppure rende raggiungibile una nuova rete, la tabella viene modificata;
+5. il processo continua finché tutti i router convergono verso una visione stabile delle destinazioni raggiungibili.
+
+RIP rappresenta quindi un'applicazione molto diretta dell'idea di distance vector. Proprio per questa semplicità è facile da comprendere e da implementare, ma presenta anche limiti importanti. Il più noto è che la metrica basata solo sul numero di salti è piuttosto povera: non distingue, ad esempio, tra collegamenti molto veloci e collegamenti lenti, oppure tra percorsi poco congestionati e percorsi molto congestionati.
+
+Un altro limite classico riguarda la scalabilità. In RIP un percorso con più di 15 salti viene considerato non raggiungibile; il valore 16 viene infatti interpretato come infinito. Questo rende il protocollo adatto solo a reti piccole, o al massimo di dimensioni moderate. Inoltre, essendo un protocollo DV, RIP può soffrire di convergenza lenta e di problemi come il count to infinity, che si cerca di mitigare con tecniche come split horizon, route poisoning e triggered updates.
+
+Dal punto di vista pratico, RIP è stato molto importante storicamente perché ha rappresentato uno dei primi protocolli di routing interni largamente diffusi nelle reti IP. Oggi, però, nelle reti più grandi e più esigenti viene spesso sostituito da protocolli più evoluti, come OSPF e IS-IS, che offrono una convergenza più rapida e una visione più accurata della rete.
+
+In sintesi, RIP è un IGP di tipo distance vector, semplice e didatticamente molto importante. I suoi punti di forza sono la semplicità e la facilità di configurazione; i suoi limiti principali sono invece la metrica elementare, la lenta convergenza e la scarsa adattezza a reti molto estese.
 
 ##### 04.06.10. IGRP (Interior-Gateway Routing Protocol) ed EIGRP (Enhanced IGRP)
-<!-- to do -->
+
+IGRP (Interior-Gateway Routing Protocol) ed EIGRP (Enhanced IGRP) sono due protocolli di routing interno sviluppati storicamente in ambiente Cisco per migliorare alcuni limiti dei protocolli DV più semplici, come RIP. Entrambi sono quindi IGP, ma tra i due esiste una differenza importante: IGRP è un protocollo più vecchio e più vicino al modello distance vector classico, mentre EIGRP rappresenta una sua evoluzione molto più sofisticata.
+
+IGRP nasce con l'obiettivo di superare i limiti di RIP, soprattutto la metrica troppo elementare e il numero massimo di salti troppo ridotto. A differenza di RIP, infatti, IGRP non valuta i percorsi soltanto in base all'hop count, ma usa una metrica composita che può tener conto di fattori come larghezza di banda, ritardo, affidabilità e carico. In questo modo la scelta del percorso può risultare più realistica e più adatta a reti non banali. Dal punto di vista concettuale, però, IGRP resta comunque un protocollo di tipo DV: i router si scambiano informazioni di routing con i vicini e aggiornano progressivamente le proprie tabelle.
+
+EIGRP è la versione evoluta di IGRP. Pur essendo spesso descritto come un advanced distance vector, quindi più vicino ai DV che ai LSs, introduce meccanismi molto più efficienti rispetto ai protocolli distance vector tradizionali. L'idea fondamentale è mantenere non solo informazioni sulla distanza verso le destinazioni, ma anche una struttura di informazioni che permette di reagire più rapidamente ai cambiamenti della rete.
+
+Uno degli aspetti più importanti di EIGRP è l'uso dell'algoritmo DUAL (Diffusing Update Algorithm). Senza entrare nei dettagli formali, è sufficiente capire che questo algoritmo aiuta i router a scegliere percorsi validi in modo più rapido e più stabile, riducendo il rischio di loop temporanei e migliorando la convergenza rispetto ai DV classici. Inoltre, EIGRP non si basa esclusivamente su aggiornamenti periodici completi: in molti casi invia aggiornamenti parziali e solo quando servono davvero, riducendo il traffico di controllo.
+
+Possiamo riassumere le differenze principali così:
+
+- IGRP: protocollo storico di tipo DV, con metrica più ricca di RIP ma oggi sostanzialmente superato;
+- EIGRP: protocollo più evoluto, spesso classificato come advanced distance vector, con convergenza più rapida e gestione più efficiente degli aggiornamenti;
+- entrambi restano protocolli IGP pensati per il routing interno a un dominio amministrativo.
+
+Dal punto di vista pratico, IGRP oggi ha soprattutto importanza storica e didattica, mentre EIGRP è stato a lungo apprezzato nelle reti Cisco per il buon compromesso tra semplicità operativa, rapidità di convergenza e qualità delle scelte di routing. Tuttavia, nelle reti moderne molto grandi, o multivendor, si preferiscono spesso protocolli standard e più universalmente adottati, come OSPF e IS-IS.
+
+In sintesi, IGRP ed EIGRP mostrano bene l'evoluzione dei protocolli IGP di area distance vector: dal modello più classico e limitato di IGRP si passa a EIGRP, che introduce meccanismi più intelligenti e prestazioni migliori, pur restando concettualmente più vicino ai DV che ai protocolli link-state.
 
 ##### 04.06.11. BGP (Border Gateway Protocol)
 
